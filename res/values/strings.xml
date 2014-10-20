@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="point"> | </string>
+    <string name="app_name">内推</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="MainAvtivity">主活动</string>
+	<string name="welcomeText">ProgrammerHu</string>
+	<string name="BelowTitle">互联网招聘第一品牌</string>
+	<string name="city_prompt">城市</string>
+	<string name="Android">Android</string>
+	<string name="ProductManager">产品经理</string>
+	<string name="ProductAssistant">产品助理</string>
+	<string name="ProductSpecialist">产品专员</string>
+	<string name="ProductPlanning">产品策划</string>
+	<string name="ProductDirector">产品总监</string>
+	<string name="Interactive">交互</string>
+	<string name="Designer">设计师</string>
+	<string name="Painting">原画</string>
+	<string name="DesignDirector">设计总监</string>
+	<string name="Motion_Business">运营</string>
+	<string name="OperatingDirector">运营总监</string>
+	<string name="Testing">测试</string>
+	<string name="Operation">运维</string>
+	<string name="Java">Java</string>
+    <string name="PHP">PHP</string>
+    <string name="CPP">C++</string>
+    <string name="CSharp">C#</string>
+    <string name="iOS">iOS</string>
+    <string name="Python">Python</string>
+    <string name="Framework">架构</string>
+    <string name="Algorithm">算法</string>
+    <string name="BigData">大数据</string>
+    <string name="FrontEnd">前端</string>
+    <string name="RearEnd">后端</string>
+    <string name="UI">UI</string>
+    <string name="UE">UE</string>
+    <string name="View">视觉</string>
+    <string name="Editor">编辑</string>
+    <string name="Plan">策划</string>
+    <string name="BD">BD</string>
+    <string name="Market">市场</string>
+    <string name="Business">商务</string>
+    <string name="Sale">销售</string>
+    <string name="HR">人力资源</string>
+    <string name="Chief">总监</string>
+    <string name="Always">设置常用</string>
+    <string name="Technology">技术</string>
+    <string name="Administration">行政</string>
+    <string name="Accounting">会计</string>
+    <string name="Style">设计</string>
+    <string name="Function">职能</string>
+    <string name="Product">产品</string>
+    <string name="SelectButtonTitle">选择我的常用标签</string>
+    
+    <string name="JobDetail">职位细节</string>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LoginTopLinear"
+        android:orientation="vertical"
+        >
+        <ImageButton 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TencentLogin"
+            android:background="@drawable/qq"
+            android:scaleType="fitXY"
+            />
+        <ImageButton 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/SinaLogin"
+            android:background="@drawable/sina"
+            />
+        
+    </LinearLayout>
+
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LoginBottomLinear"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/MainBlue"
+        >
+        <ImageButton 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/LoginGetBack"
+            android:background="@drawable/arrow"
+            />
+        <Button 
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="返回"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:gravity="center_vertical"
+            android:fontFamily="黑体"
+            android:background="@color/MainBlue"
+            android:id="@+id/LoginbtnGetBack"
+            />
+    </LinearLayout>
+</RelativeLayout>

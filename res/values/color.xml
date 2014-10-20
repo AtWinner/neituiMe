@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="MainBlue" type="color">#1F6692</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <color name="myGrary">#BEBEBE</color>
+    <color name="myRed">#FE4028</color>
+</resources>
