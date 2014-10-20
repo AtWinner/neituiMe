@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserCenterActivity extends Activity {
@@ -41,6 +42,7 @@ public class UserCenterActivity extends Activity {
 	private ScrollView  UserCenterSctollView;
 	private LinearLayout  UserCenterTop;
 	private ImageView UserCenterImageView;
+	private TextView UserCenterName;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -70,6 +72,7 @@ public class UserCenterActivity extends Activity {
 		UserCenterSctollView = (ScrollView)findViewById(R.id.UserCenterSctollView);
 		UserCenterTop = (LinearLayout)findViewById(R.id.UserCenterTop);
 		UserCenterImageView = (ImageView)findViewById(R.id.UserCenterImageView);
+		UserCenterName = (TextView)findViewById(R.id.UserCenterName);
 		setBackgroundWhite(UserCenterTop);
 	}
 	private void setParams()
