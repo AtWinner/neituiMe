@@ -76,7 +76,7 @@ public class UserCenterActivity extends Activity {
 		setBackgroundWhite(UserCenterTop);
 	}
 	private void setParams()
-	{
+	{//在这只测试Github
 		int height = Height / 13;
 		int width = height / 2;//返回图片的宽：高=7:11
 		LinearLayout.LayoutParams params = new LayoutParams(width, height);
