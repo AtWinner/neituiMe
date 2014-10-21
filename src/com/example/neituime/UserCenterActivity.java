@@ -1,11 +1,11 @@
 package com.example.neituime;
 
 import java.util.HashMap;
-
+import com.example.adapter.AdjustPageLayout;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,6 +43,7 @@ public class UserCenterActivity extends Activity {
 	private LinearLayout  UserCenterTop;
 	private ImageView UserCenterImageView;
 	private TextView UserCenterName;
+	private TextView UserCenterDescription;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -73,6 +74,7 @@ public class UserCenterActivity extends Activity {
 		UserCenterTop = (LinearLayout)findViewById(R.id.UserCenterTop);
 		UserCenterImageView = (ImageView)findViewById(R.id.UserCenterImageView);
 		UserCenterName = (TextView)findViewById(R.id.UserCenterName);
+		UserCenterDescription =(TextView)findViewById(R.id.UserCenterDescription);
 		setBackgroundWhite(UserCenterTop);
 	}
 	private void setParams()
@@ -160,8 +162,13 @@ public class UserCenterActivity extends Activity {
 		}
 		
 	}
+	@SuppressLint("ResourceAsColor")
 	private void BindData(HashMap<String, String> map)
 	{
-		
+		UserCenterName.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width) + 1);
+		UserCenterName.setText(map.get("realname"));
+		UserCenterDescription.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
+		UserCenterDescription.setText(map.get("descrip"));
+		UserCenterDescription.setTextColor(R.color.myGrary);
 	}
 }
