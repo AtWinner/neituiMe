@@ -94,6 +94,7 @@
 		            android:layout_gravity="right|right"
 		            android:layout_marginRight="10dp"
 		            />
+		        <!-- 
 		        <Spinner 
 			        android:id="@+id/city"
 			    	android:prompt="@string/city_prompt"
@@ -102,6 +103,7 @@
 			        android:background="@color/MainBlue"
 			        android:layout_gravity="right|center_vertical"
 		       		/>
+		       		 -->
 	        </LinearLayout>
 	    </RelativeLayout>
     </LinearLayout>

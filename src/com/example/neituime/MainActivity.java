@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
 	private GridView mGridView;
 	private SimpleAdapter sa;
 	private HorizontalScrollView scrollView;
-	private Spinner CitySpinner;
+	//private Spinner CitySpinner;
 	private int Width;//屏幕宽
 	private int Height;//屏幕高
 	private SharedPreferences ButtonInfo;
@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		imageMainAcitvityLogo = (ImageButton)findViewById(R.id.imageMainAcitvityLogo);
 		scrollView = (HorizontalScrollView)findViewById(R.id.scrollView);
-		CitySpinner = (Spinner)findViewById(R.id.city);
+		//CitySpinner = (Spinner)findViewById(R.id.city);
 		ButtonInfo = getSharedPreferences("ButtonInfo", MODE_PRIVATE);
 		setAlways = (ImageButton)findViewById(R.id.setAlways);
 		MainQuit = (ImageButton)findViewById(R.id.MainQuit);
@@ -154,7 +154,7 @@ public class MainActivity extends Activity {
 		setAlways.setLayoutParams(setAlwaysparams);
 		String[] items = getResources().getStringArray(R.array.cities);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
-		CitySpinner.setAdapter(adapter);
+		//CitySpinner.setAdapter(adapter);
 		int GridViewHeight = (int)(Height * 10.5) / 13;
 		RelativeLayout.LayoutParams GridViewParams = new RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, GridViewHeight);
 		mPullRefreshGridView.setLayoutParams(GridViewParams);
@@ -169,30 +169,30 @@ public class MainActivity extends Activity {
 	}
 	private void BindEvent()
 	{
-		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				Kcity = GetDataSource.GetCity(arg2);
-				if(IsFirst)
-				{
-					Page = 1;
-					CheckNetwork check = new CheckNetwork();
-					if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
-					{
-						progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
-						MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
-						m.start();
-					}
-				}	
-				IsFirst = true;
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				
-				
-			}
-		});
+//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//			@Override
+//			public void onItemSelected(AdapterView<?> arg0, View arg1,
+//					int arg2, long arg3) {
+//				Kcity = GetDataSource.GetCity(arg2);
+//				if(IsFirst)
+//				{
+//					Page = 1;
+//					CheckNetwork check = new CheckNetwork();
+//					if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
+//					{
+//						progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
+//						MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
+//						m.start();
+//					}
+//				}	
+//				IsFirst = true;
+//			}
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0) {
+//				
+//				
+//			}
+//		});
 		setAlways.setOnClickListener(new OnClickListener() {
 			
 			@Override
