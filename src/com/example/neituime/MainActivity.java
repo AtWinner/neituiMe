@@ -144,6 +144,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private LinearLayout.LayoutParams menuParams;
 	/**
+	 * content布局的参数，通过此参数来更改params。
+	 */
+	private LinearLayout.LayoutParams contentParams;
+	/**
 	 * 记录手指按下时的横坐标。
 	 */
 	private float xDown;
@@ -156,9 +160,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private float xUp;
 	/**
-	 * menu当前是显示还是隐藏。只有完全显示或隐藏menu时才会更改此值，滑动过程中此值无效。
+	 * city当前是显示还是隐藏。只有完全显示或隐藏menu时才会更改此值，滑动过程中此值无效。
 	 */
-	private boolean isMenuVisible;
+	private boolean isCityVisible;
 	/**
 	 * 用于计算手指滑动的速度。
 	 */
@@ -171,6 +175,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		setContentView(R.layout.main_activity);
 		//结束
 		init();
+		initMenuValues();
 		SetParams();
 		CreateButton();
 		BindEvent();
@@ -198,6 +203,25 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Keyword = "";
 		Kcity = "全国";
 		Page = 1;
+		isCityVisible = false;
+	}
+	/**
+	 * 初始化一些关键性数据。包括获取屏幕的宽度，给content布局重新设置宽度，给menu布局重新设置宽度和偏移距离等。
+	 */
+	private void initMenuValues()
+	{
+		menuPadding = Width * 3 / 10;
+		content = findViewById(R.id.content);
+		menu = findViewById(R.id.menuCity);
+		menuParams = (LinearLayout.LayoutParams)menu.getLayoutParams();
+		// 将menu的宽度设置为屏幕宽度减去menuPadding
+		menuParams.width = Width - menuPadding;
+		leftEdge =- menuPadding;
+		rightEdge = 0;  
+		contentParams = (LinearLayout.LayoutParams)content.getLayoutParams();
+		contentParams.leftMargin = 0;
+		contentParams.width = Width;
+		
 	}
 	private void SetParams()
 	{
@@ -252,6 +276,40 @@ public class MainActivity extends Activity implements OnTouchListener {
 //				
 //			}
 //		});
+		CityArrow.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				if(isCityVisible)
+				{
+					Log.e("", isCityVisible+"");
+					scrollToContent();
+				}
+				else
+				{
+					Log.e("", isCityVisible+"");
+					scrollToMenu();
+				}
+			}
+		});
+		btnBity.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				if(isCityVisible)
+				{
+					Log.e("", isCityVisible+"");
+					scrollToContent();
+				}
+				else
+				{
+					Log.e("", isCityVisible+"");
+					scrollToMenu();
+				}
+				
+			}
+		});
 		setAlways.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -648,7 +706,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			// 手指按下时，记录按下时的横坐标
-			Toast.makeText(MainActivity.this, "Down", Toast.LENGTH_SHORT).show();
+			Log.e("ss", "sss");
 			break;
 		case MotionEvent.ACTION_MOVE:
 			// 手指移动时，对比按下时的横坐标，计算出移动的距离，来调整menu的leftMargin值，从而显示和隐藏menu
@@ -673,5 +731,79 @@ public class MainActivity extends Activity implements OnTouchListener {
 			mVelocityTracker = VelocityTracker.obtain();
 		}
 		mVelocityTracker.addMovement(event);
+	}
+	/**
+	 * 将屏幕滚动到menu界面，滚动速度设定为5.原本是40,但是不细腻
+	 */
+	private void scrollToMenu() {
+		new ScrollTask().execute(-5);
+	}
+
+	/**
+	 * 将屏幕滚动到content界面，滚动速度设定为-5.
+	 */
+	private void scrollToContent() {
+		new ScrollTask().execute(5);
+	}
+	class ScrollTask extends AsyncTask<Integer, Integer, Integer> 
+	{
+		@Override
+		protected Integer doInBackground(Integer... speed) 
+		{
+			int leftMargin = contentParams.leftMargin;
+			Log.e("", leftMargin+"");
+			// 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
+			while (true) 
+			{
+				leftMargin = leftMargin + speed[0];
+				if (leftMargin > rightEdge) 
+				{
+					leftMargin = rightEdge;
+					break;
+				}
+				if (leftMargin < leftEdge) 
+				{
+					leftMargin = leftEdge;
+					break;
+				}
+				Log.e("", leftMargin+"");
+				publishProgress(leftMargin);
+				// 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
+				sleep(2);
+			}
+			if (speed[0] < 0) 
+			{
+				isCityVisible = true;
+			} 
+			else 
+			{
+				isCityVisible = false;
+			}
+			return leftMargin;
+		}
+		@Override
+		protected void onProgressUpdate(Integer... leftMargin) {
+			contentParams.leftMargin = leftMargin[0];
+			content.setLayoutParams(contentParams);
+		}
+
+		@Override
+		protected void onPostExecute(Integer leftMargin) {
+			contentParams.leftMargin = leftMargin;
+			content.setLayoutParams(contentParams);
+		}
+	}
+	/**
+	 * 使当前线程睡眠指定的毫秒数。
+	 * 
+	 * @param millis
+	 *            指定当前线程睡眠多久，以毫秒为单位
+	 */
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
