@@ -48,6 +48,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -71,7 +72,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnTouchListener {
 	static final int MENU_SET_MODE = 0;
 	private static final int MSG_SUCCESS = 0;// 获取成功的标识
 	private static final int MSG_FAILURE = 1;// 获取失败的标识
@@ -86,10 +87,13 @@ public class MainActivity extends Activity {
 	private ImageButton MainQuit;
 	private ImageButton imageMainAcitvityLogo;
 	private ImageButton MainActivityUserCenter;
+	private ImageButton CityArrow;
 	private PullToRefreshGridView mPullRefreshGridView;
 	private GridView mGridView;
 	private SimpleAdapter sa;
 	private HorizontalScrollView scrollView;
+	private Button btnBity;
+	
 	//private Spinner CitySpinner;
 	private int Width;//屏幕宽
 	private int Height;//屏幕高
@@ -107,6 +111,59 @@ public class MainActivity extends Activity {
 	
 	private Boolean IsFirst = false;
 	
+	/**
+	 * 滚动显示和隐藏menu时，手指滑动需要达到的速度。
+	 */
+	public static final int SNAP_VELOCITY = 200;
+	/**
+	 * 屏幕宽度值。
+	 */
+	private int screenWidth;
+	/**
+	 * menu最多可以滑动到的左边缘。值由menu布局的宽度来定，marginLeft到达此值之后，不能再减少。
+	 */
+	private int leftEdge;
+	/**
+	 * menu最多可以滑动到的右边缘。值恒为0，即marginLeft到达0之后，不能增加。
+	 */
+	private int rightEdge = 0;
+	/**
+	 * menu完全显示时，留给content的宽度值。
+	 */
+	private int menuPadding = 200;
+	/**
+	 * 主内容的布局。
+	 */
+	private View content;
+	/**
+	 * menu的布局。
+	 */
+	private View menu;
+	/**
+	 * menu布局的参数，通过此参数来更改leftMargin的值。
+	 */
+	private LinearLayout.LayoutParams menuParams;
+	/**
+	 * 记录手指按下时的横坐标。
+	 */
+	private float xDown;
+	/**
+	 * 记录手指移动时的横坐标。
+	 */
+	private float xMove;
+	/**
+	 * 记录手机抬起时的横坐标。
+	 */
+	private float xUp;
+	/**
+	 * menu当前是显示还是隐藏。只有完全显示或隐藏menu时才会更改此值，滑动过程中此值无效。
+	 */
+	private boolean isMenuVisible;
+	/**
+	 * 用于计算手指滑动的速度。
+	 */
+	private VelocityTracker mVelocityTracker;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -118,7 +175,6 @@ public class MainActivity extends Activity {
 		CreateButton();
 		BindEvent();
 		ForGridView();
-
 	}
 	
 	private void init()
@@ -131,7 +187,9 @@ public class MainActivity extends Activity {
 		ButtonInfo = getSharedPreferences("ButtonInfo", MODE_PRIVATE);
 		setAlways = (ImageButton)findViewById(R.id.setAlways);
 		MainQuit = (ImageButton)findViewById(R.id.MainQuit);
+		CityArrow = (ImageButton)findViewById(R.id.CityArrow);
 		MainActivityUserCenter = (ImageButton)findViewById(R.id.MainActivityUserCenter);
+		btnBity = (Button)findViewById(R.id.btnBity);
 		mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.pull_refresh_grid);
 		mGridView = mPullRefreshGridView.getRefreshableView();
 		mListItems = new LinkedList<String>();
@@ -162,6 +220,7 @@ public class MainActivity extends Activity {
 		int width = height / 2;//返回图片的宽：高=7:11
 		LinearLayout.LayoutParams QuitParams = new LayoutParams(width, height);
 		MainQuit.setLayoutParams(QuitParams);
+		CityArrow.setLayoutParams(QuitParams);
 		LinearLayout.LayoutParams userCenterParams = (LinearLayout.LayoutParams) MainActivityUserCenter.getLayoutParams();
 		userCenterParams.width=ViewHeight;
 		userCenterParams.height=ViewHeight;
@@ -578,5 +637,41 @@ public class MainActivity extends Activity {
 			}
 			super.run();
 		}
+	}
+	
+	//华丽丽的分割线************************************************************************************************************************************************************************
+	//下面是控制MainActivity的滑动效果
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		Toast.makeText(MainActivity.this, "Down", Toast.LENGTH_SHORT).show();
+		createVelocityTracker(event);
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			// 手指按下时，记录按下时的横坐标
+			Toast.makeText(MainActivity.this, "Down", Toast.LENGTH_SHORT).show();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			// 手指移动时，对比按下时的横坐标，计算出移动的距离，来调整menu的leftMargin值，从而显示和隐藏menu
+			
+			break;
+			
+		case MotionEvent.ACTION_UP:
+			// 手指抬起时，进行判断当前手势的意图，从而决定是滚动到menu界面，还是滚动到content界面
+			Toast.makeText(MainActivity.this, "Up", Toast.LENGTH_SHORT).show();
+			break;
+		}
+		return false;
+	}
+	/**
+	 * 创建VelocityTracker对象，并将触摸content界面的滑动事件加入到VelocityTracker当中。
+	 * 
+	 * @param event
+	 *            content界面的滑动事件
+	 */
+	private void createVelocityTracker(MotionEvent event) {
+		if (mVelocityTracker == null) {
+			mVelocityTracker = VelocityTracker.obtain();
+		}
+		mVelocityTracker.addMovement(event);
 	}
 }
