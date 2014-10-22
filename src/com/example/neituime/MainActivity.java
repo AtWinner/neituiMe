@@ -6,10 +6,15 @@ import java.util.LinkedList;
 import java.util.Map;
 
 
+
+
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GridViewAdapter;
+import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
+import com.example.view.AddLayoutView;
 import com.example.view.AnalyzeJson;
 import com.example.view.GridViewItem;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -570,6 +575,19 @@ public class MainActivity extends Activity implements OnTouchListener {
 		});
 		ButtonLinear.addView(btnAndroid);
 	}
+	private void addBtnCity(final LinearLayout linearLayout, final Context context, String innerText)
+	{
+		Button btnCity = new Button(context);
+		LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(menuPadding, (int)(menuPadding / 2.4));
+		btnCity.setLayoutParams(buttonParams);
+		btnCity.setText(innerText);
+		btnCity.setWidth(menuPadding);
+		btnCity.setHeight((int)(menuPadding / 2.4));
+		btnCity.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
+		btnCity.setTextColor(Color.WHITE);
+		btnCity.setBackgroundResource(R.drawable.city_item_background);
+		linearLayout.addView(btnCity);
+	}
 	/**
 	 * 在底部ScrollView中添加Button
 	 */
@@ -583,7 +601,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 		{
 			myButton(buttonLinear, MainActivity.this, name);
 		}
-		
+		for(int i=0; i<neituiValue.commonCityLength; i++)
+		{
+			addBtnCity(commonCity, MainActivity.this, AddLayoutView.GetInnerText(neituiValue.commonCity[i]));
+		}
+	
 	}
 
 	@Override
