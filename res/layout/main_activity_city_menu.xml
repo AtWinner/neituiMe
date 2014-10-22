@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--  第一个Tab 对应的布局  -->
-<LinearLayout 
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -12,18 +12,25 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
 	    android:id="@+id/TopCity"
+	    android:layout_alignParentBottom="true"
 	    >
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/SelectCommon"
+			android:background="@drawable/city_bottom_background"
 			android:text="热门"
+			android:textColor="@color/white"
+			android:fontFamily="微软雅黑"
 			></Button>
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:background="@drawable/city_bottom_background"
 			android:id="@+id/SelectAll"
 			android:text="全部"
+			android:textColor="@color/white"
+			android:fontFamily="微软雅黑"
 			></Button>
 	</LinearLayout>
 	<RelativeLayout
@@ -37,8 +44,19 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
 			android:id="@+id/commonCity"
-			android:layout_marginLeft="20dp"
 	        >
+	        <ScrollView 
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:id="@+id/commonCityScroll"
+	            >
+	            <LinearLayout 
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:id="@+id/commonCityInner"
+	                android:orientation="vertical"
+	                ></LinearLayout>
+	        </ScrollView>
 	    </LinearLayout>
 	    <LinearLayout 
 	        android:layout_width="match_parent"
@@ -46,8 +64,20 @@
 	        android:orientation="vertical"
 	        android:id="@+id/AllCity"
 	        >
+	        <ScrollView 
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:id="@+id/AllCityScroll"
+	            >
+	            <LinearLayout 
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:id="@+id/AllCityInner"
+	                android:orientation="vertical"
+	                ></LinearLayout>
+	        </ScrollView>
 	    </LinearLayout>
 	</RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
 
 

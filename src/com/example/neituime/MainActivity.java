@@ -9,6 +9,8 @@ import java.util.Map;
 
 
 
+
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GridViewAdapter;
 import com.example.model.neituiValue;
@@ -34,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnTouchListener {
@@ -98,12 +102,15 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private long mExitTime;
 	
 	private Boolean IsFirst = false;
+	private RelativeLayout bodyCity;	
 	private LinearLayout commonCity;
+	private LinearLayout commonCityInner;
 	private LinearLayout AllCity;
+	private LinearLayout AllCityInner;
 	private RelativeLayout.LayoutParams commonCityParams;
 	private RelativeLayout.LayoutParams AllCityParams;
 	private Boolean isCommonCity;
-	private Boolean haveChoosedCommonCity;
+	
 	/**
 	 * 记录显示在左侧的city
 	 */
@@ -209,9 +216,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 		SelectCommon = (Button)findViewById(R.id.SelectCommon);
 		SelectAll = (Button)findViewById(R.id.SelectAll);
 		commonCity = (LinearLayout)findViewById(R.id.commonCity);
+		commonCityInner = (LinearLayout)findViewById(R.id.commonCityInner);
 		AllCity = (LinearLayout)findViewById(R.id.AllCity);
+		AllCityInner = (LinearLayout)findViewById(R.id.AllCityInner);
+		bodyCity = (RelativeLayout)findViewById(R.id.bodyCity);
 		isCommonCity = true;
-		haveChoosedCommonCity = true;
 	}
 	/**
 	 * 初始化一些关键性数据。包括获取屏幕的宽度，给content布局重新设置宽度，给menu布局重新设置宽度和偏移距离等。
@@ -263,6 +272,17 @@ public class MainActivity extends Activity implements OnTouchListener {
 		userCenterParams.width=ViewHeight;
 		userCenterParams.height=ViewHeight;
 		MainActivityUserCenter.setLayoutParams(userCenterParams);
+		
+		RelativeLayout.LayoutParams cityScrollParams = (RelativeLayout.LayoutParams)bodyCity.getLayoutParams();
+		cityScrollParams.height = (int)(Height * 11.5 / 13);
+		bodyCity.setLayoutParams(cityScrollParams);
+		
+		LinearLayout.LayoutParams cityBottomBtnParams = (LinearLayout.LayoutParams)SelectCommon.getLayoutParams();
+		cityBottomBtnParams.height = Height / 13;
+		cityBottomBtnParams.width = Width * 3 / 20;
+		SelectCommon.setLayoutParams(cityBottomBtnParams);
+		SelectCommon.setTextColor(Color.BLACK);
+		SelectAll.setLayoutParams(cityBottomBtnParams);
 	}
 	private void BindEvent()
 	{
@@ -318,9 +338,13 @@ public class MainActivity extends Activity implements OnTouchListener {
 				break;
 			case R.id.SelectCommon:
 				ClickSelectCommonCity();
+				SelectCommon.setTextColor(Color.BLACK);
+				SelectAll.setTextColor(Color.WHITE);
 				break;
 			case R.id.SelectAll:
 				ClickSelectAllCity();
+				SelectAll.setTextColor(Color.BLACK);
+				SelectCommon.setTextColor(Color.WHITE);
 				break;
 			}
 		}
@@ -574,13 +598,35 @@ public class MainActivity extends Activity implements OnTouchListener {
 			}
 		});
 		ButtonLinear.addView(btnAndroid);
+	} 
+	/**
+	 * 添加城市选择layout的标签
+	 * @param linearLayout 要添加的layout
+	 * @param innerText 显示的文字
+	 */
+	private void addCityLabel(LinearLayout linearLayout, String innerText)
+	{
+		TextView cityLabel = new TextView(MainActivity.this);
+		LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(menuPadding, (int)(menuPadding / 2.4));
+		cityLabel.setLayoutParams(labelParams);
+		cityLabel.setText(innerText);
+		cityLabel.setGravity(Gravity.CENTER);
+		cityLabel.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
+		cityLabel.setTextColor(Color.rgb(249, 100, 10));//橘黄色
+		linearLayout.addView(cityLabel);
 	}
+	/**
+	 * 添加城市选择layout中的城市button
+	 * @param linearLayout 要添加的布局
+	 * @param context 添加的页面Activity
+	 * @param innerText Button要显示文字
+	 */
 	private void addBtnCity(final LinearLayout linearLayout, final Context context, String innerText)
 	{
 		Button btnCity = new Button(context);
 		LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(menuPadding, (int)(menuPadding / 2.4));
 		btnCity.setLayoutParams(buttonParams);
-		btnCity.setText(innerText);
+		btnCity.setText(AddLayoutView.GetInnerText(innerText));
 		btnCity.setWidth(menuPadding);
 		btnCity.setHeight((int)(menuPadding / 2.4));
 		btnCity.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
@@ -601,9 +647,29 @@ public class MainActivity extends Activity implements OnTouchListener {
 		{
 			myButton(buttonLinear, MainActivity.this, name);
 		}
-		for(int i=0; i<neituiValue.commonCityLength; i++)
+		for(String city : neituiValue.commonCity)
 		{
-			addBtnCity(commonCity, MainActivity.this, AddLayoutView.GetInnerText(neituiValue.commonCity[i]));
+			addBtnCity(commonCityInner, MainActivity.this, city);
+		}
+		addCityLabel(AllCityInner, "华北东北");
+		for(String city : neituiValue.NorthCity)
+		{//华北东北
+			addBtnCity(AllCityInner, MainActivity.this, city);
+		}
+		addCityLabel(AllCityInner, "华东地区");
+		for(String city : neituiValue.EastCity)
+		{//华东
+			addBtnCity(AllCityInner, MainActivity.this, city);
+		}
+		addCityLabel(AllCityInner, "华南地区");
+		for(String city : neituiValue.SouthCity)
+		{//华南
+			addBtnCity(AllCityInner, MainActivity.this, city);
+		}
+		addCityLabel(AllCityInner, "中部西部");
+		for(String city : neituiValue.MiddleAndWestCity)
+		{//中西部
+			addBtnCity(AllCityInner, MainActivity.this, city);
 		}
 	
 	}
