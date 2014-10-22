@@ -7,11 +7,57 @@
 	android:orientation="vertical" 
 	android:id="@+id/menuCity"
 	>
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="aa"
-		></Button>
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:id="@+id/TopCity"
+	    >
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/SelectCommon"
+			android:text="热门"
+			></Button>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/SelectAll"
+			android:text="全部"
+			></Button>
+	</LinearLayout>
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:id="@+id/bodyCity"
+	    >
+	    <LinearLayout 
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:id="@+id/commonCity"
+			android:layout_marginLeft="20dp"
+	        >
+	        <Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="热门"
+				></Button>
+	    </LinearLayout>
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:id="@+id/AllCity"
+	        >
+	        <Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="全部"
+				></Button>
+	    </LinearLayout>
+	</RelativeLayout>
 </LinearLayout>
 
 

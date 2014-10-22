@@ -74,6 +74,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private HorizontalScrollView scrollView;
 	private Button btnBity;
 	private TabHost cityTabHost;
+	private Button SelectCommon;
+	private Button SelectAll;
 	
 	//private Spinner CitySpinner;
 	private int Width;//屏幕宽
@@ -91,6 +93,20 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private long mExitTime;
 	
 	private Boolean IsFirst = false;
+	private LinearLayout commonCity;
+	private LinearLayout AllCity;
+	private RelativeLayout.LayoutParams commonCityParams;
+	private RelativeLayout.LayoutParams AllCityParams;
+	private Boolean isCommonCity;
+	private Boolean haveChoosedCommonCity;
+	/**
+	 * 记录显示在左侧的city
+	 */
+	private int cityLeft;
+	/**
+	 * 记录隐藏在右侧的city
+	 */
+	private int cityRight;
 	
 	/**
 	 * 滚动显示和隐藏menu时，手指滑动需要达到的速度。
@@ -185,6 +201,12 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Kcity = "全国";
 		Page = 1;
 		isCityVisible = false;
+		SelectCommon = (Button)findViewById(R.id.SelectCommon);
+		SelectAll = (Button)findViewById(R.id.SelectAll);
+		commonCity = (LinearLayout)findViewById(R.id.commonCity);
+		AllCity = (LinearLayout)findViewById(R.id.AllCity);
+		isCommonCity = true;
+		haveChoosedCommonCity = true;
 	}
 	/**
 	 * 初始化一些关键性数据。包括获取屏幕的宽度，给content布局重新设置宽度，给menu布局重新设置宽度和偏移距离等。
@@ -202,7 +224,13 @@ public class MainActivity extends Activity implements OnTouchListener {
 		contentParams = (LinearLayout.LayoutParams)content.getLayoutParams();
 		contentParams.leftMargin = 0;
 		contentParams.width = Width;
-		
+		commonCityParams = (RelativeLayout.LayoutParams)commonCity.getLayoutParams();
+		AllCityParams = (RelativeLayout.LayoutParams)AllCity.getLayoutParams();
+		//默认显示commonCity，因此初始化为commonCity的leftMargin为0，AllCity的为menuPadding
+		AllCityParams.leftMargin = menuPadding;
+		commonCityParams.leftMargin = 0;
+		cityLeft = 0;
+		cityRight = menuPadding;
 	}
 	private void SetParams()
 	{
@@ -257,91 +285,130 @@ public class MainActivity extends Activity implements OnTouchListener {
 //				
 //			}
 //		});
-		CityArrow.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				if(isCityVisible)
-				{
-					Log.e("", isCityVisible+"");
-					scrollToContent();
-				}
-				else
-				{
-					Log.e("", isCityVisible+"");
-					scrollToMenu();
-				}
-			}
-		});
-		btnBity.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				
-				if(isCityVisible)
-				{
-					Log.e("", isCityVisible+"");
-					scrollToContent();
-				}
-				else
-				{
-					Log.e("", isCityVisible+"");
-					scrollToMenu();
-				}
-				
-			}
-		});
-		setAlways.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				Intent intent = new Intent(MainActivity.this, ChooseBtnActivity.class);
-				// TODO 加入切换模式
-				startActivityForResult(intent, 100);
-				overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-			}
-		});
-		imageMainAcitvityLogo.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				progressDialog.dismiss();
-				 if ((System.currentTimeMillis() - mExitTime) > 2000) {
-                     Object mHelperUtils;
-                     Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-                     mExitTime = System.currentTimeMillis();
-
-             } else {
-                     finish();
-                     System.exit(0);//会将进程完全杀死
-             }
-			}
-		});
-		MainActivityUserCenter.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mTencent = Tencent.createInstance(AppID, MainActivity.this);
-				if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
-				{//已使用qq登录
-					String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
-					String OpenId = mTencent.getOpenId();
-					PostStr += ("otherid=" + OpenId);
-					MThread myThread = new MThread(PostStr, MSG_GETUID);
-					myThread.start();
-				}
-				else if(false)
-				{//这里放新浪的
-					
-				}
-				else
-				{
-					Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-					startActivityForResult(loginIntent, 0);
-					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-				}
-			}
-		});
+		CityArrow.setOnClickListener(new MyListener());
+		btnBity.setOnClickListener(new MyListener());
+		setAlways.setOnClickListener(new MyListener());
+		imageMainAcitvityLogo.setOnClickListener(new  MyListener());
+		MainActivityUserCenter.setOnClickListener(new MyListener());
+		SelectCommon.setOnClickListener(new MyListener());
+		SelectAll.setOnClickListener(new MyListener());
 	}
+	
+	private class MyListener implements OnClickListener{
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.CityArrow:
+			case R.id.btnBity:
+				ClickCityArrow();
+				break;
+			case R.id.setAlways:
+				ClicksetAlways();
+				break;
+			case R.id.imageMainAcitvityLogo:
+				ClickimageMainAcitvityLogo();
+				break;
+			case R.id.MainActivityUserCenter:
+				ClickMainActivityUserCenter();
+				break;
+			case R.id.SelectCommon:
+				ClickSelectCommonCity();
+				break;
+			case R.id.SelectAll:
+				ClickSelectAllCity();
+				break;
+			}
+		}
+	}
+
+	/**
+	 * 点击CityArrow触发的操作
+	 */
+	private void ClickCityArrow()
+	{
+		if(isCityVisible)
+		{
+			Log.e("", isCityVisible+"");
+			scrollToContent();
+		}
+		else
+		{
+			Log.e("", isCityVisible+"");
+			scrollToMenu();
+		}
+	}
+	/**
+	 * 点击setAlways触发的操作
+	 */
+	private void ClicksetAlways()
+	{
+		Intent intent = new Intent(MainActivity.this, ChooseBtnActivity.class);
+		// TODO 加入切换模式
+		startActivityForResult(intent, 100);
+		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+	}
+	/**
+	 * 点击imageMainAcitvityLogo触发的操作
+	 */
+	private void ClickimageMainAcitvityLogo()
+	{
+		progressDialog.dismiss();
+		if ((System.currentTimeMillis() - mExitTime) > 2000) 
+		{
+			Object mHelperUtils;
+			Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+		} 
+		else 
+		{
+            finish();
+            System.exit(0);//会将进程完全杀死
+		}
+	}
+	/**
+	 * 点击MainActivityUserCenter触发的操作
+	 */
+	private void ClickMainActivityUserCenter()
+	{
+		mTencent = Tencent.createInstance(AppID, MainActivity.this);
+		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+		{//已使用qq登录
+			String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
+			String OpenId = mTencent.getOpenId();
+			PostStr += ("otherid=" + OpenId);
+			MThread myThread = new MThread(PostStr, MSG_GETUID);
+			myThread.start();
+		}
+		else if(false)
+		{//这里放新浪的
+			
+		}
+		else
+		{
+			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+			startActivityForResult(loginIntent, 0);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
+	}
+	/**
+	 * 点击SelectCommon触发的操作
+	 */
+	private void ClickSelectCommonCity()
+	{
+		if(!isCommonCity)
+		{//标记选择的是常见city
+			new CityScrollTask().execute(-4);
+		}
+	}
+	
+	private void ClickSelectAllCity()
+	{
+		if(isCommonCity)
+		{
+			new CityScrollTask().execute(4);
+		}
+	}
+	
 	/**
 	 * 处理关于GridView的相关事务
 	 */
@@ -725,6 +792,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private void scrollToContent() {
 		new ScrollTask().execute(5);
 	}
+	/**
+	 * 由于切换content和menu的操作
+	 * @author Coder
+	 *
+	 */
 	class ScrollTask extends AsyncTask<Integer, Integer, Integer> 
 	{
 		@Override
@@ -748,7 +820,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				}
 				Log.e("", leftMargin+"");
 				publishProgress(leftMargin);
-				// 为了要有滚动效果产生，每次循环使线程睡眠20毫秒，这样肉眼才能够看到滚动动画。
+				// 为了要有滚动效果产生，每次循环使线程睡眠2毫秒，这样肉眼才能够看到滚动动画。
 				sleep(2);
 			}
 			if (speed[0] < 0) 
@@ -771,6 +843,56 @@ public class MainActivity extends Activity implements OnTouchListener {
 		protected void onPostExecute(Integer leftMargin) {
 			contentParams.leftMargin = leftMargin;
 			content.setLayoutParams(contentParams);
+		}
+	}
+	class CityScrollTask extends AsyncTask<Integer, Integer, Integer> 
+	{
+		protected Integer doInBackground(Integer... speed) 
+		{
+			int  leftMargin = commonCityParams.leftMargin;
+			Log.e("", leftMargin+"");
+			while(true)
+			{
+				leftMargin = leftMargin + speed[0];
+				if (leftMargin < cityLeft) 
+				{
+					leftMargin = cityLeft;
+					break;
+				}
+				if (leftMargin > cityRight) 
+				{
+					leftMargin = cityRight;
+					break;
+				}
+				Log.e("", leftMargin+"");
+				publishProgress(leftMargin);
+				// 为了要有滚动效果产生，每次循环使线程睡眠2毫秒，这样肉眼才能够看到滚动动画。
+				sleep(2);
+			}
+			if (speed[0] > 0) 
+			{
+				isCommonCity = false;
+			} 
+			else 
+			{
+				isCommonCity = true;
+			}
+			return leftMargin;
+		}
+		@Override
+		protected void onProgressUpdate(Integer... leftMargin) {
+			commonCityParams.leftMargin = leftMargin[0];
+			AllCityParams.leftMargin = cityRight - leftMargin[0];
+			commonCity.setLayoutParams(commonCityParams);
+			AllCity.setLayoutParams(AllCityParams);
+		}
+
+		@Override
+		protected void onPostExecute(Integer leftMargin) {
+			commonCityParams.leftMargin = leftMargin;
+			AllCityParams.leftMargin = cityRight - leftMargin;
+			commonCity.setLayoutParams(commonCityParams);
+			AllCity.setLayoutParams(AllCityParams);
 		}
 	}
 	/**
