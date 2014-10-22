@@ -1,21 +1,15 @@
 package com.example.neituime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
-import com.example.adapter.GetDataSource;
 import com.example.adapter.GridViewAdapter;
-import com.example.neituime.R.string;
 import com.example.network.CheckNetwork;
-import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
-import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
 import com.example.view.GridViewItem;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -24,21 +18,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.tencent.tauth.Tencent;
 
-import android.R.color;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.media.Image;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,27 +36,22 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
-@SuppressLint("NewApi")
 public class MainActivity extends Activity implements OnTouchListener {
 	static final int MENU_SET_MODE = 0;
 	private static final int MSG_SUCCESS = 0;// 获取成功的标识
@@ -93,6 +73,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private SimpleAdapter sa;
 	private HorizontalScrollView scrollView;
 	private Button btnBity;
+	private TabHost cityTabHost;
 	
 	//private Spinner CitySpinner;
 	private int Width;//屏幕宽
@@ -411,7 +392,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 				}
 				else
 					mPullRefreshGridView.onRefreshComplete();
-				
 			}
 
 			@Override
