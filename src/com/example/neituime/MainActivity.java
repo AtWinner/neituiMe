@@ -7,10 +7,6 @@ import java.util.Map;
 
 
 
-
-
-
-
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GridViewAdapter;
 import com.example.model.neituiValue;
@@ -45,6 +41,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -187,6 +184,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		initMenuValues();
 		SetParams();
 		CreateButton();
+		CreateCityButton();
 		BindEvent();
 		ForGridView();
 	}
@@ -286,30 +284,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 	private void BindEvent()
 	{
-//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//			@Override
-//			public void onItemSelected(AdapterView<?> arg0, View arg1,
-//					int arg2, long arg3) {
-//				Kcity = GetDataSource.GetCity(arg2);
-//				if(IsFirst)
-//				{
-//					Page = 1;
-//					CheckNetwork check = new CheckNetwork();
-//					if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
-//					{
-//						progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
-//						MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
-//						m.start();
-//					}
-//				}	
-//				IsFirst = true;
-//			}
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0) {
-//				
-//				
-//			}
-//		});
 		CityArrow.setOnClickListener(new MyListener());
 		btnBity.setOnClickListener(new MyListener());
 		setAlways.setOnClickListener(new MyListener());
@@ -621,7 +595,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 * @param context 添加的页面Activity
 	 * @param innerText Button要显示文字
 	 */
-	private void addBtnCity(final LinearLayout linearLayout, final Context context, String innerText)
+	private void addBtnCity(final LinearLayout linearLayout, final Context context, final String innerText)
 	{
 		Button btnCity = new Button(context);
 		LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(menuPadding, (int)(menuPadding / 2.4));
@@ -632,6 +606,58 @@ public class MainActivity extends Activity implements OnTouchListener {
 		btnCity.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 		btnCity.setTextColor(Color.WHITE);
 		btnCity.setBackgroundResource(R.drawable.city_item_background);
+//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//		@Override
+//		public void onItemSelected(AdapterView<?> arg0, View arg1,
+//				int arg2, long arg3) {
+//			Kcity = GetDataSource.GetCity(arg2);
+//			if(IsFirst)
+//			{
+//				Page = 1;
+//				CheckNetwork check = new CheckNetwork();
+//				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
+//				{
+//					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
+//					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
+//					m.start();
+//				}
+//			}	
+//			IsFirst = true;
+//		}
+//		@Override
+//		public void onNothingSelected(AdapterView<?> arg0) {
+//			
+//			
+//		}
+//	});
+		btnCity.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Button thisBtn = (Button)arg0;
+				View parent = (View) thisBtn.getParent();//找到这个button的父节点
+				for(int i=0; i<((ViewGroup) parent).getChildCount(); i++)
+				{
+					View v=((ViewGroup) parent).getChildAt(i);
+					if(v instanceof Button)
+					{
+						((Button)v).setTextColor(Color.WHITE);//全部变白
+					}
+				}
+				thisBtn.setTextColor(Color.rgb(31, 102, 146));//再变蓝
+				btnBity.setText(innerText);
+				Page = 1;
+				Kcity = innerText;
+				CheckNetwork check = new CheckNetwork();
+				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
+				{
+					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
+					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
+					m.start();
+				}
+				scrollToContent();
+			}
+		});
+		
 		linearLayout.addView(btnCity);
 	}
 	/**
@@ -647,6 +673,12 @@ public class MainActivity extends Activity implements OnTouchListener {
 		{
 			myButton(buttonLinear, MainActivity.this, name);
 		}
+	}
+	/**
+	 * 在城市侧栏中添加button
+	 */
+	private void CreateCityButton()
+	{
 		for(String city : neituiValue.commonCity)
 		{
 			addBtnCity(commonCityInner, MainActivity.this, city);
@@ -671,7 +703,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		{//中西部
 			addBtnCity(AllCityInner, MainActivity.this, city);
 		}
-	
 	}
 
 	@Override
