@@ -1,6 +1,8 @@
 package com.example.neituime;
 
 
+import com.example.adapter.GetScreenSize;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -37,6 +39,7 @@ public class WelcomeActivity extends Activity {
 //		WelcomePage.addView(Logo);
 		int screenWidth  = getWindowManager().getDefaultDisplay().getWidth();       // 屏幕宽  
 		int screenHeight = getWindowManager().getDefaultDisplay().getHeight();      // 屏幕高
+		screenHeight = GetScreenSize.getUsefulScreenHeight(WelcomeActivity.this, screenHeight);
 		int ImageWidth = (int)(screenWidth * 0.6);
 		int Margen = (int)(screenWidth * 0.2);
 		ImageLinearLayout = (LinearLayout)findViewById(R.id.ImageLinearLayout);

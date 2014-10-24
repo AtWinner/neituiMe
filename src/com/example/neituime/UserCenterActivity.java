@@ -1,10 +1,13 @@
 package com.example.neituime;
 
 import java.util.HashMap;
+
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -63,6 +66,7 @@ public class UserCenterActivity extends Activity {
 	{
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(UserCenterActivity.this, Height);
 		
 		Intent beforeIntent = getIntent();
 		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
@@ -86,6 +90,8 @@ public class UserCenterActivity extends Activity {
 		
 		RelativeLayout.LayoutParams scrollViewParams = new RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, height * 12);
 		UserCenterSctollView.setLayoutParams(scrollViewParams);
+		
+		UserCenterbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
 	private void bindEvent()
 	{

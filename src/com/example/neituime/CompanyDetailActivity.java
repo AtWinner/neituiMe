@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
 import com.example.network.CheckNetwork;
 import com.example.network.DocumentsSelect;
@@ -99,6 +100,7 @@ public class CompanyDetailActivity extends Activity {
 		PageItemCount = 0;
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(CompanyDetailActivity.this, Height);
 		beforeIntent = getIntent();
 		PageUrl = beforeIntent.getStringExtra("CompanyUrl");
 		CompanyLogoUrl = beforeIntent.getStringExtra("CompanyLogo");
@@ -122,8 +124,10 @@ public class CompanyDetailActivity extends Activity {
 		CompanyGetBack.setLayoutParams(params);
 		CompanyName.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 		RelativeLayout.LayoutParams bodyParams = (RelativeLayout.LayoutParams)CompanyDetailBodyId.getLayoutParams();//new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int)(Height * 11.5 / 13));
-		bodyParams.height = (int)(Height * 11.5 / 13);
+		bodyParams.height = (int)(Height * 12 / 13);
 		CompanyDetailBodyId.setLayoutParams(bodyParams);
+		
+		CompanybtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
 	private void BindEvent()
 	{

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.w3c.dom.UserDataHandler;
 
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
@@ -80,6 +81,7 @@ public class ResumeActivity extends Activity {
 		
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(ResumeActivity.this, Height);
 		
 		ResumeBottomLinear = (LinearLayout)findViewById(R.id.ResumeBottomLinear);
 		ResumebtnGetBack = (Button)findViewById(R.id.ResumebtnGetBack);
@@ -102,12 +104,12 @@ public class ResumeActivity extends Activity {
 		photoParams.width = photoParams.height = Width / 4;
 		UserPhoto.setLayoutParams(photoParams);
 		
-		int scrollViewHeight = (int)(height * 11.5);
+		int scrollViewHeight = (int)(height * 12);
 		RelativeLayout.LayoutParams scrollViewParams = (RelativeLayout.LayoutParams)ResumeLinearTop.getLayoutParams();
 		scrollViewParams.height = scrollViewHeight;
 		ResumeLinearTop.setLayoutParams(scrollViewParams);
 		
-		
+		ResumebtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 		
 	}
 	private void BindEvent()

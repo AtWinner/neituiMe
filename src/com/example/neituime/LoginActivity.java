@@ -2,6 +2,8 @@
 
 import java.util.HashMap;
 
+import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.network.GetHtml;
 import com.example.tencent.MyIUiListener;
 import com.example.view.AnalyzeJson;
@@ -59,6 +61,7 @@ public class LoginActivity extends Activity {
 	{
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(LoginActivity.this, Height);
 		
 		LoginBottomLinear = (LinearLayout)findViewById(R.id.LoginBottomLinear);
 		LoginbtnGetBack = (Button)findViewById(R.id.LoginbtnGetBack);
@@ -87,6 +90,8 @@ public class LoginActivity extends Activity {
 		sinaParams.setMargins((int)(Width-(Width / 3.5)) / 2, 0, width / 4, 0);
 		sinaParams.width = sinaParams.height = (int)(Width / 3.5);
 		SinaLogin.setLayoutParams(sinaParams);
+		
+		LoginbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
 	/**
 	 * 绑定页面上的事件

@@ -75,8 +75,8 @@
 		            android:background="@drawable/arrow"
 		            />
 		        <ImageButton
-		            android:layout_width="130sp"
-		        	android:layout_height="90sp"
+		            android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"
 		        	android:background="@drawable/main_acitvity_logo"
 		        	android:id="@+id/imageMainAcitvityLogo"
 		            ></ImageButton>
@@ -99,11 +99,11 @@
 		        <Button
 			        android:id="@+id/btnBity"
 			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"    
+			        android:layout_height="match_parent"    
 			        android:background="@color/MainBlue"
 			        android:layout_gravity="right|center_vertical"
 			        android:text="城市"
-			        android:textSize="27sp"
+			        android:textSize="25sp"
 			        android:textColor="@color/white"
 			        android:fontFamily="微软雅黑"
 		       		/>

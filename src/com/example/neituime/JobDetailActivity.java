@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.neituime.R.string;
 import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
@@ -101,6 +102,7 @@ public class JobDetailActivity extends Activity{
 		URL = beforeIntent.getStringExtra("URL");
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(JobDetailActivity.this, Height);
 		JobGetBack = (ImageButton)findViewById(R.id.JobGetBack);
 		JobScrollview = (ScrollView)findViewById(R.id.JobScrollview);
 		CreaterInfo = (TextView)findViewById(R.id.CreaterInfo);
@@ -124,9 +126,12 @@ public class JobDetailActivity extends Activity{
 		int width = height / 2;//返回图片的宽：高=7:11
 		LinearLayout.LayoutParams params = new LayoutParams(width, height);
 		JobGetBack.setLayoutParams(params);
-		LinearLayout.LayoutParams scrollParams = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(height * 11.5));
+		LinearLayout.LayoutParams scrollParams = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(height * 12));
 		JobScrollview.setLayoutParams(scrollParams);
 		//JobMainLinear.setBackgroundResource(R.drawable.boder_detail);
+		JobbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+		
+		Login.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
 	private void BindEvent()
 	{

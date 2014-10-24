@@ -3,6 +3,7 @@ package com.example.neituime;
 import java.util.Map;
 
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.neituime.R.string;
 
 import android.R.color;
@@ -62,6 +63,7 @@ public class ChooseBtnActivity extends Activity {
 	{
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(ChooseBtnActivity.this, Height);
 		GetBack = (ImageButton)findViewById(R.id.GetBack);
 		btnGetBack = (Button)findViewById(R.id.btnGetBack);
 		BottomLinear = (LinearLayout)findViewById(R.id.BottomLinear);
@@ -78,7 +80,7 @@ public class ChooseBtnActivity extends Activity {
 		int width = height / 2;//返回图片的宽：高=7:11
 		LinearLayout.LayoutParams params = new LayoutParams(width, height);
 		GetBack.setLayoutParams(params);
-		LinearLayout.LayoutParams scrollParams = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(height * 11.5));
+		LinearLayout.LayoutParams scrollParams = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(height * 12));
 		selectButtonScrollview.setLayoutParams(scrollParams);
 		
 		RelativeLayout.LayoutParams EditParams = (RelativeLayout.LayoutParams)SearchEditText.getLayoutParams();
@@ -88,6 +90,8 @@ public class ChooseBtnActivity extends Activity {
 		RelativeLayout.LayoutParams ButtonParams = (RelativeLayout.LayoutParams)SearchButton.getLayoutParams();
 		ButtonParams.width = ButtonParams.height = (int)(height * 0.8);
 		SearchButton.setLayoutParams(ButtonParams);
+		
+		btnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
 	private void CreateView()
 	{

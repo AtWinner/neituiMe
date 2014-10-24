@@ -7,7 +7,9 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
+import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
@@ -187,12 +189,14 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CreateCityButton();
 		BindEvent();
 		ForGridView();
+		Toast.makeText(MainActivity.this, GetScreenSize.getStatusBarHeight(MainActivity.this) +"", Toast.LENGTH_SHORT).show();
 	}
 	
 	private void init()
 	{
 		Width  = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
+		Height = GetScreenSize.getUsefulScreenHeight(MainActivity.this, Height);
 		imageMainAcitvityLogo = (ImageButton)findViewById(R.id.imageMainAcitvityLogo);
 		scrollView = (HorizontalScrollView)findViewById(R.id.scrollView);
 		//CitySpinner = (Spinner)findViewById(R.id.city);
@@ -258,7 +262,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		String[] items = getResources().getStringArray(R.array.cities);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
 		//CitySpinner.setAdapter(adapter);
-		int GridViewHeight = (int)(Height * 10.5) / 13;
+		int GridViewHeight = (int)(Height * 11) / 13;
 		RelativeLayout.LayoutParams GridViewParams = new RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, GridViewHeight);
 		mPullRefreshGridView.setLayoutParams(GridViewParams);
 		int height = Height / 13;
@@ -270,9 +274,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 		userCenterParams.width=ViewHeight;
 		userCenterParams.height=ViewHeight;
 		MainActivityUserCenter.setLayoutParams(userCenterParams);
+		btnBity.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 		
 		RelativeLayout.LayoutParams cityScrollParams = (RelativeLayout.LayoutParams)bodyCity.getLayoutParams();
-		cityScrollParams.height = (int)(Height * 11.5 / 13);
+		cityScrollParams.height = (int)(Height * 12 / 13);
 		bodyCity.setLayoutParams(cityScrollParams);
 		
 		LinearLayout.LayoutParams cityBottomBtnParams = (LinearLayout.LayoutParams)SelectCommon.getLayoutParams();
@@ -813,6 +818,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 						userIntent.putExtra("LoginStyle", "Tencent");
 						userIntent.putExtra("Token", userMap.get("token"));
 						startActivity(userIntent);
+						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 				}
 				else if(userMap.get("uid").equals("0"))
 				{
