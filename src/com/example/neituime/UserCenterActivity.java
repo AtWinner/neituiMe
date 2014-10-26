@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -44,9 +45,39 @@ public class UserCenterActivity extends Activity {
 	private Button UserCenterbtnGetBack;
 	private ScrollView  UserCenterSctollView;
 	private LinearLayout  UserCenterTop;
+	private LinearLayout userCenterBottom;
+	
 	private ImageView UserCenterImageView;
 	private TextView UserCenterName;
 	private TextView UserCenterDescription;
+	
+	private RelativeLayout RelativeHaveSend;
+	private ImageView arrowHaveSend;
+	private Button txHaveSend;
+	
+	private RelativeLayout RelativeSearch;
+	private ImageView arrowSearch;
+	private Button txSearch;
+	
+	private RelativeLayout RelativeResumeCollection;
+	private ImageView arrowResumeCollection;
+	private Button txResumeCollection;
+	
+	private RelativeLayout RelativeMyResume;
+	private ImageView arrowMyResume;
+	private Button txMyResume;
+	
+	private RelativeLayout RelativeJobCollection;
+	private ImageView arrowJobCollection;
+	private Button txJobCollection;
+	
+	private RelativeLayout RelativeSuggestion;
+	private ImageView arrowSuggestion;
+	private Button txSuggestion;
+	
+	private RelativeLayout RelativeQuit;
+	private ImageView arrowQuit;
+	private Button txQuit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -71,7 +102,7 @@ public class UserCenterActivity extends Activity {
 		Intent beforeIntent = getIntent();
 		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
 		Token = beforeIntent.getStringExtra("Token");
-		
+		userCenterBottom = (LinearLayout)findViewById(R.id.userCenterBottom);
 		UserCenterGetBack = (ImageButton)findViewById(R.id.UserCenterGetBack);
 		UserCenterbtnGetBack = (Button)findViewById(R.id.UserCenterbtnGetBack);
 		UserCenterSctollView = (ScrollView)findViewById(R.id.UserCenterSctollView);
@@ -79,6 +110,27 @@ public class UserCenterActivity extends Activity {
 		UserCenterImageView = (ImageView)findViewById(R.id.UserCenterImageView);
 		UserCenterName = (TextView)findViewById(R.id.UserCenterName);
 		UserCenterDescription =(TextView)findViewById(R.id.UserCenterDescription);
+		RelativeHaveSend = (RelativeLayout)findViewById(R.id.RelativeHaveSend);
+		arrowHaveSend = (ImageView)findViewById(R.id.arrowHaveSend);
+		txHaveSend = (Button)findViewById(R.id.txHaveSend);
+		RelativeJobCollection = (RelativeLayout)findViewById(R.id.RelativeJobCollection);
+		arrowJobCollection = (ImageView)findViewById(R.id.arrowJobCollection);
+		txJobCollection = (Button)findViewById(R.id.txJobCollection);
+		RelativeMyResume = (RelativeLayout)findViewById(R.id.RelativeMyResume);
+		arrowMyResume = (ImageView)findViewById(R.id.arrowMyResume);
+		txMyResume = (Button)findViewById(R.id.txMyResume);
+		RelativeResumeCollection = (RelativeLayout)findViewById(R.id.RelativeResumeCollection);
+		arrowResumeCollection = (ImageView)findViewById(R.id.arrowResumeCollection);
+		txResumeCollection = (Button)findViewById(R.id.txResumeCollection);
+		RelativeSearch = (RelativeLayout)findViewById(R.id.RelativeSearch);
+		arrowSearch = (ImageView)findViewById(R.id.arrowSearch);
+		txSearch = (Button)findViewById(R.id.txSearch);
+		RelativeSuggestion = (RelativeLayout)findViewById(R.id.RelativeSuggestion);
+		arrowSuggestion = (ImageView)findViewById(R.id.arrowSuggestion);
+		txSuggestion = (Button)findViewById(R.id.txSuggestion);
+		RelativeQuit = (RelativeLayout)findViewById(R.id.RelativeQuit);
+		arrowQuit = (ImageView)findViewById(R.id.arrowQuit);
+		txQuit = (Button)findViewById(R.id.txQuit);
 		setBackgroundWhite(UserCenterTop);
 	}
 	private void setParams()
@@ -92,23 +144,46 @@ public class UserCenterActivity extends Activity {
 		UserCenterSctollView.setLayoutParams(scrollViewParams);
 		
 		UserCenterbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+		
+		setParamsHelp(arrowHaveSend, txHaveSend);
+		setParamsHelp(arrowJobCollection, txJobCollection);
+		setParamsHelp(arrowMyResume, txMyResume);
+		setParamsHelp(arrowResumeCollection, txResumeCollection);
+		setParamsHelp(arrowSearch, txSearch);
+		setParamsHelp(arrowSuggestion, txSuggestion);
+		setParamsHelp(arrowQuit, txQuit);
+	}
+	private void setParamsHelp(ImageView imageView, Button button)
+	{
+		int height = Height / 13;
+		int width = height / 2;//返回图片的宽：高=7:11
+		LinearLayout.LayoutParams params = new LayoutParams(width, height);
+		imageView.setLayoutParams(params);
+		button.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 	}
 	private void bindEvent()
 	{
-		UserCenterbtnGetBack.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
+		RelativeHaveSend.setOnClickListener(new mOnClickListener());
+		txHaveSend.setOnClickListener(new mOnClickListener());
+		UserCenterbtnGetBack.setOnClickListener(new mOnClickListener());
+		UserCenterGetBack.setOnClickListener(new mOnClickListener());
+	}
+	private class mOnClickListener implements OnClickListener 
+	{
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.UserCenterbtnGetBack:
+			case R.id.UserCenterGetBack:
 				UserCenterActivity.this.finish();
+				break;
+			case R.id.RelativeHaveSend:
+			case R.id.txHaveSend:
+				Toast.makeText(UserCenterActivity.this, "text", Toast.LENGTH_SHORT).show();
+				break;
 			}
-		});
-		UserCenterGetBack.setOnClickListener(new OnClickListener() {
 			
-			@Override
-			public void onClick(View v) {
-				UserCenterActivity.this.finish();
-			}
-		});
+		}
 	}
 	private void setBackgroundWhite(View myView)
 	{
