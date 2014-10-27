@@ -43,6 +43,8 @@ public class ResumeActivity extends Activity {
 	private static final int IMG_SUCCESS = 3 ;// 获取图片成功
 	private static final int MSG_REFRESH = 4;// 刷新
 	
+	private int ResponseNumber;
+	
 	private int Width;
 	private int Height;
 	private String Token;
@@ -76,6 +78,7 @@ public class ResumeActivity extends Activity {
 		Intent beforeIntent = getIntent();
 		Token = beforeIntent.getStringExtra("Token");
 		UID = beforeIntent.getStringExtra("UID");
+		ResponseNumber = beforeIntent.getIntExtra("ResponseNumber", 0);//2代表需要投递简历
 		ResumeURL = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=resume&token="
 			+ Token;
 		

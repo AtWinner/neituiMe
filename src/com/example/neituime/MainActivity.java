@@ -8,9 +8,11 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
+import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
@@ -387,6 +389,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 			PostStr += ("otherid=" + OpenId);
 			MThread myThread = new MThread(PostStr, MSG_GETUID);
 			myThread.start();
+			progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
 		}
 		else if(false)
 		{//这里放新浪的
@@ -763,8 +768,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		progressDialog.dismiss();
 		 if (keyCode == KeyEvent.KEYCODE_BACK) {
-			 progressDialog.dismiss();
+			 
              if ((System.currentTimeMillis() - mExitTime) > 2000) {
                      Object mHelperUtils;
                      Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -791,9 +797,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 			
 			String JsonStr = (String)msg.obj;
 			GridViewItem item = new GridViewItem(JsonStr); 
-			//Toast.makeText(getApplicationContext(), msg.obj.toString(), Toast.LENGTH_SHORT).show();
-			//DocumentsSelect DS = new DocumentsSelect((Document) msg.obj);
-			//Toast.makeText(getApplicationContext(), DS.GetList().toString(), Toast.LENGTH_SHORT).show();
 			switch(msg.what)
 			{
 			case REFRESH:

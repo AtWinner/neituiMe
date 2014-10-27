@@ -60,6 +60,7 @@ public class JobDetailActivity extends Activity{
 	private static final int IMG_COMPANY = 4;// 公司logo获取成功
 	private static final int MSG_GETUID = 5;// 通过第三方登录之后获取uid
 	
+	private static final int ResponseNumber = 2; //
 	private String UID;
 	private String Token;
 	private static final String AppID = "101016468";
@@ -160,6 +161,7 @@ public class JobDetailActivity extends Activity{
 					{
 						resumeIntent.putExtra("UID", UID);
 						resumeIntent.putExtra("Token", Token);
+						resumeIntent.putExtra("ResponseNumber", ResponseNumber);
 						startActivity(resumeIntent);
 						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 					}

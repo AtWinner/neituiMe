@@ -7,6 +7,7 @@ import com.example.adapter.GetScreenSize;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
+import com.tencent.tauth.Tencent;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -35,6 +36,8 @@ public class UserCenterActivity extends Activity {
 	private static final int IMG_SUCCESS = 1; //图片获取成功
 	private static final int MSG_FAILED = 2; //获取失败
 	
+	private static final String AppID = "101016468";
+	private Tencent mTencent;
 	
 	private int Width;
 	private int Height;
@@ -95,6 +98,7 @@ public class UserCenterActivity extends Activity {
 	}
 	private void init()
 	{
+		mTencent = Tencent.createInstance(AppID, UserCenterActivity.this);
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(UserCenterActivity.this, Height);
@@ -166,6 +170,7 @@ public class UserCenterActivity extends Activity {
 		txHaveSend.setOnClickListener(new mOnClickListener());
 		UserCenterbtnGetBack.setOnClickListener(new mOnClickListener());
 		UserCenterGetBack.setOnClickListener(new mOnClickListener());
+		RelativeQuit.setOnClickListener(new mOnClickListener());
 	}
 	private class mOnClickListener implements OnClickListener 
 	{
@@ -180,7 +185,23 @@ public class UserCenterActivity extends Activity {
 			case R.id.txHaveSend:
 				Toast.makeText(UserCenterActivity.this, "text", Toast.LENGTH_SHORT).show();
 				break;
+			case R.id.RelativeQuit:
+				ClickQuit();
+				break;
 			}
+			
+		}
+	}
+	private void ClickQuit()
+	{
+		//需要添加一个提示
+		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+		{//已使用qq登录
+			mTencent.logout(UserCenterActivity.this);
+			UserCenterActivity.this.finish();
+		}
+		else if(false)
+		{//放sina
 			
 		}
 	}
