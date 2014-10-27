@@ -98,7 +98,6 @@ public class UserCenterActivity extends Activity {
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(UserCenterActivity.this, Height);
-		
 		Intent beforeIntent = getIntent();
 		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
 		Token = beforeIntent.getStringExtra("Token");

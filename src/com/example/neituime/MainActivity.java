@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private static final int IMG_SUCCESS = 4;
 	private static final int MSG_GETUID = 5;// 通过第三方登录之后获取uid
 	
+	private static final int ResponseNumber = 1;//跳转到UserCenter或Login
 	private Tencent mTencent;
 	private static final String AppID = "101016468";
 	
@@ -394,7 +395,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 		else
 		{
 			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-			startActivityForResult(loginIntent, 0);
+			loginIntent.putExtra("ResponseNumber", ResponseNumber);
+			startActivityForResult(loginIntent, ResponseNumber);
 			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 		}
 	}

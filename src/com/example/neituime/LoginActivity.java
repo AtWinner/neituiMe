@@ -30,6 +30,7 @@ public class LoginActivity extends Activity {
 	private static final int MSG_FAILED = 2; // 网络请求失败
 	private static final String AppID = "101016468";
 	
+	private int ResponseNumber;
 	
 	private int Width;
 	private int Height;
@@ -59,6 +60,8 @@ public class LoginActivity extends Activity {
 	 */
 	private void init()
 	{
+		Intent intent = getIntent();
+		ResponseNumber = intent.getIntExtra("ResponseNumber", 0);
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(LoginActivity.this, Height);
@@ -182,7 +185,16 @@ public class LoginActivity extends Activity {
 				//Toast.makeText(LoginActivity.this, JsonStr, Toast.LENGTH_LONG).show();
 				UID = userMap.get("uid");
 				Token = userMap.get("token");
-				
+				if(ResponseNumber == 1)
+				{
+					Intent userIntent = new Intent(LoginActivity.this, UserCenterActivity.class);
+					userIntent.putExtra("LoginStyle", "Tencent");
+					userIntent.putExtra("Token", userMap.get("token"));
+					userIntent.putExtra("ResponseNumber", ResponseNumber);
+					startActivity(userIntent);
+					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+					LoginActivity.this.finish();
+				}
 				break;
 
 			case MSG_FAILED:
