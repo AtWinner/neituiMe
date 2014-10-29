@@ -363,7 +363,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private void ClickimageMainAcitvityLogo()
 	{
-		progressDialog.dismiss();
 		if ((System.currentTimeMillis() - mExitTime) > 2000) 
 		{
 			Object mHelperUtils;
@@ -432,7 +431,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CheckNetwork check = new CheckNetwork();
 		if(check.isNetworkConnected(this) || check.OpenNetwork(this))
 		{
-			progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+			showDialog();
 			Kcity = "全国";
 			Keyword = "";
 			Page = 1;
@@ -576,7 +575,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				}
 				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
 				{
-					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+					showDialog();
 					Page = 1;
 					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
 					m.start();
@@ -662,7 +661,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				CheckNetwork check = new CheckNetwork();
 				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
 				{
-					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
+					showDialog();
 					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
 					m.start();
 				}
@@ -724,7 +723,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		{//2表示点击的搜索按钮
 			Toast.makeText(MainActivity.this, data.getStringExtra("Value"), Toast.LENGTH_SHORT).show();
 			Keyword = data.getStringExtra("Value");
-			progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+			showDialog();
 			Kcity = "全国";
 			Page = 1;
 			MThread mythread = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
@@ -768,7 +767,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		progressDialog.dismiss();
 		 if (keyCode == KeyEvent.KEYCODE_BACK) {
 			 
              if ((System.currentTimeMillis() - mExitTime) > 2000) {
@@ -1037,5 +1035,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	private void showDialog()
+	{
+		progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+		progressDialog.setCancelable(false);
+		progressDialog.setOnKeyListener(new myOnKeyListener());
 	}
 }
