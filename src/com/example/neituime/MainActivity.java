@@ -9,9 +9,11 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
+import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
@@ -95,7 +97,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private ImageButton setAlways;
 	private LinkedList<String> mListItems;
 	private ArrayAdapter<String> mAdapter;
-	private ProgressDialog progressDialog = null;
+	private myProgressDialog progressDialog = null;
 	private int point = 0;
 	private String MainURL;
 	private String Keyword;
@@ -388,9 +390,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 			PostStr += ("otherid=" + OpenId);
 			MThread myThread = new MThread(PostStr, MSG_GETUID);
 			myThread.start();
-			progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
-			progressDialog.setCancelable(false);
-			progressDialog.setOnKeyListener(new myOnKeyListener());
+			showDialog();
 		}
 		else if(false)
 		{//这里放新浪的
@@ -1038,8 +1038,15 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 	private void showDialog()
 	{
-		progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
-		progressDialog.setCancelable(false);
-		progressDialog.setOnKeyListener(new myOnKeyListener());
+//		progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
+//		progressDialog.setCancelable(false);
+//		progressDialog.setOnKeyListener(new myOnKeyListener());
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(MainActivity.this);
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
+		
 	}
 }
