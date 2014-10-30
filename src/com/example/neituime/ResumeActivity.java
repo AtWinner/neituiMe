@@ -6,6 +6,8 @@ import org.w3c.dom.UserDataHandler;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
@@ -60,12 +62,12 @@ public class ResumeActivity extends Activity {
     private LinearLayout UserMainInfo;
     private LinearLayout ResumeLinearTop;
     
-    private ProgressDialog progressDialog = null;
+    private myProgressDialog progressDialog = null;
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.resume_activity);
-		progressDialog = ProgressDialog.show(this, "请稍等...", "拼命数据获取中...", true);
+		showDialog();
 		init();
 		SetParams();
 		BindEvent();
@@ -307,5 +309,15 @@ public class ResumeActivity extends Activity {
 		
 		super.finish();
 	}
-
+	private void showDialog()
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(ResumeActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
+	}
 }

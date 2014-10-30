@@ -73,7 +73,7 @@ public class GetHtml {
 	{
 		try
 		{
-			Document doc = Jsoup.connect(Url).timeout(1000).get();
+			Document doc = Jsoup.connect(Url).timeout(10000).get();
 			myDoc = doc;
 		}
 		catch(IOException e)

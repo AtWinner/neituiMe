@@ -9,6 +9,8 @@ import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.neituime.R.string;
 import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
@@ -82,7 +84,7 @@ public class JobDetailActivity extends Activity{
 	private LinearLayout CompanyBody;
 	private LinearLayout DetailTop;
 	private LinearLayout DetailBottom;
-	private ProgressDialog progressDialog = null;
+	private  myProgressDialog progressDialog = null;
 	private Button Login;
 	private Tencent mTencent;
 	@Override
@@ -115,11 +117,11 @@ public class JobDetailActivity extends Activity{
 		CompanyBody = (LinearLayout)findViewById(R.id.CompanyBody);
 		Creater = (ImageButton)findViewById(R.id.Creater);
 		CompanyLogo = (ImageButton)findViewById(R.id.CompanyLogo);
-		progressDialog = ProgressDialog.show(JobDetailActivity.this, "请稍等...", "拼命数据获取中...", true);
 		DetailBottom = (LinearLayout)findViewById(R.id.DetailBottom);
 		DetailTop = (LinearLayout)findViewById(R.id.DetailTop);
 		Login = (Button)findViewById(R.id.QQ);
 		mTencent = Tencent.createInstance(AppID, JobDetailActivity.this);
+		showDialog();
 	}
 	private void SetParams()
 	{
@@ -497,6 +499,16 @@ public class JobDetailActivity extends Activity{
 		SetData();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+	private void showDialog()
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(JobDetailActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
+	}
 	
 }

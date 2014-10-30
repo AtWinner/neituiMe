@@ -72,4 +72,9 @@ public class myProgressDialog extends Dialog {
         return customProgressDialog;
     }
 
+	@Override
+	public void setCancelable(boolean flag) {
+		super.setCancelable(flag);
+	}
+
 }

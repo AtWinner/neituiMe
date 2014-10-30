@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.network.GetHtml;
 import com.example.tencent.MyIUiListener;
 import com.example.view.AnalyzeJson;
@@ -41,7 +43,7 @@ public class LoginActivity extends Activity {
 	private ImageButton TencentLogin;
 	private ImageButton SinaLogin;
 	
-	private ProgressDialog progressDialog = null;
+	private myProgressDialog progressDialog = null;
 	private Tencent mTencent;
 	private String UID;
 	private String Token;
@@ -127,7 +129,7 @@ public class LoginActivity extends Activity {
 				}
 				else
 				{//执行登录
-					progressDialog = ProgressDialog.show(LoginActivity.this, "请稍等...", "拼命数据获取中...", true);
+					showDialog();
 					String SCOPE = "get_info,get_user_info,get_simple_userinfo,get_user_profile,get_app_friends,check_page_fans,add_t,del_t,add_pic_t,get_repost_list,"
 							+ "get_other_info,get_fanslist,get_idollist,add_idol,del_idol";
 					
@@ -236,6 +238,16 @@ public class LoginActivity extends Activity {
 			}
 			super.run();
 		}
-		
+	}
+	private void showDialog()
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(LoginActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
 	}
 }

@@ -7,16 +7,26 @@
     android:minWidth="180dp"  
     android:gravity="center"  
     android:padding="10dp"  >
-     <ImageView 
-        android:id="@+id/loadingImageView" 
-        android:layout_width="50dp" 
-        android:layout_height="50dp" 
-        android:background="@anim/progress_round"/> 
-	<TextView 
-        android:id="@+id/id_tv_loadingmsg" 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:layout_marginLeft="20dp"
-        android:layout_gravity="center_vertical" 
-        android:textSize="18dp"/> 
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:background="@color/white"
+        android:padding="30dp"
+        >
+         <ImageView 
+	        android:id="@+id/loadingImageView" 
+	        android:layout_width="50dp" 
+	        android:layout_height="50dp" 
+	        android:background="@anim/progress_round"/> 
+		<TextView 
+	        android:id="@+id/id_tv_loadingmsg" 
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content" 
+	        android:layout_marginLeft="20dp"
+	        android:textColor="@color/Black"
+	        android:layout_gravity="center_vertical" 
+	        android:textSize="18dp"/> 
+    </LinearLayout>
+    
 </LinearLayout>

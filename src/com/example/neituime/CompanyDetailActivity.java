@@ -8,6 +8,8 @@ import org.jsoup.nodes.Document;
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.network.CheckNetwork;
 import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
@@ -71,7 +73,7 @@ public class CompanyDetailActivity extends Activity {
 	private LinearLayout CompanyDetailBodyId;
 	private PullToRefreshGridView pull_refresh_grid_company_detail;
 	private GridView mGridView;
-	private ProgressDialog progressDialog = null;
+	private myProgressDialog progressDialog = null;
 	
 	private ArrayList<HashMap<String, Object>> al;
 	
@@ -86,7 +88,7 @@ public class CompanyDetailActivity extends Activity {
 		CheckNetwork check = new CheckNetwork();
 		if(check.isNetworkConnected(CompanyDetailActivity.this) || check.OpenNetwork(CompanyDetailActivity.this))
 		{
-			progressDialog = ProgressDialog.show(CompanyDetailActivity.this, "请稍等...", "拼命数据获取中...", true);
+			showDialog();
 			(new mThread(PageUrl, MSG_SUCCESS)).start();
 			(new mThread(CompanyLogoUrl, IMG_SUCCESS)).start();
 			(new mThread(GetJsonUrl(), JSON_SUCCESS)).start();
@@ -411,5 +413,17 @@ public class CompanyDetailActivity extends Activity {
 		JsonUrl = "http://www.neitui.me/index.php?name=company&handle=detail&type=job&jsonp=1&version=1.0.4&itemnum=10&" 
 				+ JsonUrl + "&page=" + PageNumber;
 		return JsonUrl;
+	}
+	
+	private void showDialog()
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(CompanyDetailActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
 	}
 }

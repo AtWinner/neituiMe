@@ -4,4 +4,5 @@
     <item name="white" type="color">#FFFFFF</item>
     <color name="myGrary">#BEBEBE</color>
     <color name="myRed">#FE4028</color>
+    <color name="Black">#000000</color>
 </resources>

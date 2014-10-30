@@ -792,7 +792,13 @@ public class MainActivity extends Activity implements OnTouchListener {
 		@Override
 		public void handleMessage(Message msg) 
 		{
-			
+			if(msg.obj == null || msg.obj.equals(""))
+			{//先判断请求得到的数据是否为空
+				Toast.makeText(MainActivity.this, "网络请求失败", Toast.LENGTH_SHORT).show();
+				progressDialog.dismiss();
+				mPullRefreshGridView.onRefreshComplete();
+				return;
+			}
 			String JsonStr = (String)msg.obj;
 			GridViewItem item = new GridViewItem(JsonStr); 
 			switch(msg.what)
@@ -804,7 +810,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				mGridView.setStackFromBottom(false);//不要定位到GridView底部
 				break;
 			case LOADMORE:
-				point = al.size() - 1;//保存刷新之前的地步
+				point = al.size() - 1;//保存刷新之前的位置
 				al.addAll(item.GetGridViewItemsByJson());
 				Toast.makeText(getApplicationContext(), al.size()+"", Toast.LENGTH_SHORT).show();
 				mGridView.setAdapter(new GridViewAdapter(MainActivity.this, al, R.layout.gridlist, Width));
@@ -1044,6 +1050,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 		if(progressDialog == null)
 		{
 			progressDialog = myProgressDialog.createDialog(MainActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
 			progressDialog.setMessage("拼命获取数据中...");
 		}
 		progressDialog.show();		

@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
@@ -35,6 +37,8 @@ public class UserCenterActivity extends Activity {
 	private static final int JSON_SUCCESS = 0; //json获取成功
 	private static final int IMG_SUCCESS = 1; //图片获取成功
 	private static final int MSG_FAILED = 2; //获取失败
+	
+	private myProgressDialog progressDialog = null;
 	
 	private static final String AppID = "101016468";
 	private Tencent mTencent;
@@ -95,6 +99,7 @@ public class UserCenterActivity extends Activity {
 			mThread UserInfoThread = new mThread(JSON_SUCCESS, JsonUrl);
 			UserInfoThread.start();
 		}
+		showDialog();
 	}
 	private void init()
 	{
@@ -231,6 +236,7 @@ public class UserCenterActivity extends Activity {
 				
 				break;
 			}
+			progressDialog.dismiss();
 			super.handleMessage(msg);
 		}
 		
@@ -271,5 +277,16 @@ public class UserCenterActivity extends Activity {
 		UserCenterDescription.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
 		UserCenterDescription.setText(map.get("descrip"));
 		UserCenterDescription.setTextColor(R.color.myGrary);
+	}
+	private void showDialog()
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(UserCenterActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
 	}
 }
