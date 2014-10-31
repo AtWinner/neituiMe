@@ -30,7 +30,8 @@ import android.widget.LinearLayout.LayoutParams;
 public class LoginActivity extends Activity {
 	private static final int JSON_SUCCESS = 1; // 获取Json成功
 	private static final int MSG_FAILED = 2; // 网络请求失败
-	private static final String AppID = "101016468";
+	private static final String SinaAppKey = "";//新浪微博登录的AppKey
+	private static final String AppID = "101016468";//腾讯登录的ID
 	
 	private int ResponseNumber;
 	

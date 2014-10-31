@@ -11,6 +11,7 @@ import com.example.event.myOnKeyListener;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
+import com.example.network.GetResume;
 import com.example.view.AnalyzeJson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -26,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -44,6 +46,7 @@ public class ResumeActivity extends Activity {
 	private static final int MSG_FAILED = 2; // 网络请求失败
 	private static final int IMG_SUCCESS = 3 ;// 获取图片成功
 	private static final int MSG_REFRESH = 4;// 刷新
+	private static final int MSG_DOWNLOAD = 5;//下载
 	
 	private int ResponseNumber;
 	
@@ -52,6 +55,7 @@ public class ResumeActivity extends Activity {
 	private String Token;
 	private String UID;
 	private String ResumeURL;
+	private String ResumeName;
 	
 	private ImageButton ResumeGetBack;
 	private Button ResumebtnGetBack;
@@ -176,6 +180,7 @@ public class ResumeActivity extends Activity {
 				SetData(ResumeMap);
 				//Toast.makeText(ResumeActivity.this, ResumeMap.toString(), Toast.LENGTH_LONG).show();
 				String PhotoUrl = ResumeMap.get("photo");
+				ResumeName = ResumeMap.get("attach");
 				mThread imageThread = new mThread(IMG_SUCCESS, PhotoUrl);
 				imageThread.start();
 				break;
@@ -192,7 +197,6 @@ public class ResumeActivity extends Activity {
 			progressDialog.dismiss();
 			super.handleMessage(msg);
 		}
-		
 	};
 	private class mThread extends Thread 
 	{
@@ -223,6 +227,17 @@ public class ResumeActivity extends Activity {
 				{
 					Bitmap bitmap = GetImage.returnBitMap(URL);
 					mHandler.obtainMessage(KIND, bitmap).sendToTarget();
+				}
+				break;
+			case MSG_DOWNLOAD :
+				if(ResumeName != null)
+				{
+					GetResume GR = new GetResume();
+					GR.GetFile(URL, ResumeName);
+				}
+				else
+				{
+					Toast.makeText(ResumeActivity.this, "您没有附件简历", Toast.LENGTH_SHORT).show();
 				}
 				break;
 			}
@@ -291,6 +306,7 @@ public class ResumeActivity extends Activity {
 		AddTextView("最后一次修改时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("createtime"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 		
+		AddDownloadButton();
 		//UserDetailInfo.addView(tt);
 	}
 	private void AddTextView(String innerText, int TextSize, LinearLayout myLinear)
@@ -303,6 +319,22 @@ public class ResumeActivity extends Activity {
 			myTextView.setTextColor(Color.GRAY);
 		}
 		myLinear.addView(myTextView);
+	}
+	private void AddDownloadButton()
+	{
+		Button button = new Button(ResumeActivity.this);
+		button.setText("下载附件简历：");
+		final String DownLoadUrl = "http://www.neitui.me/neitui/resumeattach/ruid="+UID+"&deal=download.html";
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(ResumeActivity.this, DownLoadUrl, Toast.LENGTH_SHORT).show();
+				mThread mthread = new mThread(MSG_DOWNLOAD, DownLoadUrl);
+				mthread.start();
+			}
+		});
+		
+		UserDetailInfo.addView(button);
 	}
 	@Override
 	public void finish() {
