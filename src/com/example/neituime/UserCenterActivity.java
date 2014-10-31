@@ -38,6 +38,8 @@ public class UserCenterActivity extends Activity {
 	private static final int IMG_SUCCESS = 1; //图片获取成功
 	private static final int MSG_FAILED = 2; //获取失败
 	
+	private static final int ResponseNumber = 1;
+	
 	private myProgressDialog progressDialog = null;
 	
 	private static final String AppID = "101016468";
@@ -176,6 +178,7 @@ public class UserCenterActivity extends Activity {
 		UserCenterbtnGetBack.setOnClickListener(new mOnClickListener());
 		UserCenterGetBack.setOnClickListener(new mOnClickListener());
 		RelativeQuit.setOnClickListener(new mOnClickListener());
+		RelativeMyResume.setOnClickListener(new mOnClickListener());
 	}
 	private class mOnClickListener implements OnClickListener 
 	{
@@ -193,8 +196,27 @@ public class UserCenterActivity extends Activity {
 			case R.id.RelativeQuit:
 				ClickQuit();
 				break;
+			case R.id.RelativeMyResume:
+				ClickMyResume();
+				break;
 			}
 			
+		}
+	}
+	private void  ClickMyResume()
+	{
+		if(!Token.equals(""))
+		{
+			Intent intent = new Intent(UserCenterActivity.this, ResumeActivity.class);
+			intent.putExtra("ResponseNumber", ResponseNumber);
+			intent.putExtra("Token",Token);
+			intent.putExtra("UID", "");//UID暂时在Resume中用不到
+			startActivity(intent);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
+		else
+		{
+			Toast.makeText(UserCenterActivity.this, "登录信息不存在，请重新登录", Toast.LENGTH_SHORT).show();
 		}
 	}
 	private void ClickQuit()

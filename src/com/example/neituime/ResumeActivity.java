@@ -49,7 +49,7 @@ public class ResumeActivity extends Activity {
 	private static final int MSG_DOWNLOAD = 5;//下载
 	
 	private int ResponseNumber;
-	
+	private String JobID;
 	private int Width;
 	private int Height;
 	private String Token;
@@ -84,7 +84,11 @@ public class ResumeActivity extends Activity {
 		Intent beforeIntent = getIntent();
 		Token = beforeIntent.getStringExtra("Token");
 		UID = beforeIntent.getStringExtra("UID");
-		ResponseNumber = beforeIntent.getIntExtra("ResponseNumber", 0);//2代表需要投递简历
+		ResponseNumber = beforeIntent.getIntExtra("ResponseNumber", 0);//2代表需要投递简历,1代表只是查看简历信息
+		if(ResponseNumber == 2)
+		{
+			JobID = beforeIntent.getStringExtra("JobID");
+		}
 		ResumeURL = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=resume&token="
 			+ Token;
 		

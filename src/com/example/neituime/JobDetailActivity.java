@@ -62,6 +62,8 @@ public class JobDetailActivity extends Activity{
 	private static final int IMG_COMPANY = 4;// 公司logo获取成功
 	private static final int MSG_GETUID = 5;// 通过第三方登录之后获取uid
 	
+	private String JobID;
+	
 	private static final int ResponseNumber = 2; //
 	private String UID;
 	private String Token;
@@ -103,6 +105,7 @@ public class JobDetailActivity extends Activity{
 	{
 		beforeIntent = getIntent();
 		URL = beforeIntent.getStringExtra("URL");
+		JobID = beforeIntent.getStringExtra("id");
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(JobDetailActivity.this, Height);
@@ -164,6 +167,7 @@ public class JobDetailActivity extends Activity{
 						resumeIntent.putExtra("UID", UID);
 						resumeIntent.putExtra("Token", Token);
 						resumeIntent.putExtra("ResponseNumber", ResponseNumber);
+						resumeIntent.putExtra("JobID", JobID);
 						startActivity(resumeIntent);
 						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 					}
@@ -180,6 +184,7 @@ public class JobDetailActivity extends Activity{
 				else
 				{//如果没登录就去登录界面
 					Intent loginIntent = new Intent(JobDetailActivity.this, LoginActivity.class);
+					loginIntent.putExtra("ResponseNumber", ResponseNumber);
 					startActivityForResult(loginIntent, 1);
 					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 				}

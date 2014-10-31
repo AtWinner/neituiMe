@@ -4,9 +4,12 @@ package com.example.neituime;
 import com.example.adapter.GetScreenSize;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -74,7 +77,7 @@ public class WelcomeActivity extends Activity {
             }  
         }, 2000);  
 		
-		
+		GetLocation();
 	}
 
 	@Override
@@ -108,6 +111,14 @@ public class WelcomeActivity extends Activity {
 		view.measure(w, h);
 		return view.getMeasuredHeight();
 	}
-	
+	private void GetLocation()
+	{
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);  
+		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//		double latitude = location.getLatitude();     //经度   
+//		double longitude = location.getLongitude(); //纬度   
+//		double altitude =  location.getAltitude();     //海拔  
+//		Log.v("tag", "latitude " + latitude + "  longitude:" + longitude + " altitude:" + altitude);
+	}
 
 }

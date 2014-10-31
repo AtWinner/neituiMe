@@ -186,6 +186,7 @@ public class CompanyDetailActivity extends Activity {
 				String DetailUrl = "http://www.neitui.me/mobile/detail/id=" + mymap.get("id").toString() + ".html";//链接
 				Intent intent = new Intent(CompanyDetailActivity.this, JobDetailActivity.class);
 				intent.putExtra("URL", DetailUrl);
+				intent.putExtra("id", mymap.get("id").toString());
 				intent.putExtra("position", mymap.get("positionfull").toString());
 				intent.putExtra("department", mymap.get("departmentfull").toString());
 				//intent.putExtra("cmail", mymap.get("cmail").toString());

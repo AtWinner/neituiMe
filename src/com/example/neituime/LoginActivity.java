@@ -34,6 +34,7 @@ public class LoginActivity extends Activity {
 	private static final String AppID = "101016468";//腾讯登录的ID
 	
 	private int ResponseNumber;
+	private String JobID;
 	
 	private int Width;
 	private int Height;
@@ -65,6 +66,10 @@ public class LoginActivity extends Activity {
 	{
 		Intent intent = getIntent();
 		ResponseNumber = intent.getIntExtra("ResponseNumber", 0);
+		if(ResponseNumber == 2)
+		{
+			JobID = intent.getStringExtra("JobID");
+		}
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(LoginActivity.this, Height);
@@ -195,6 +200,16 @@ public class LoginActivity extends Activity {
 					userIntent.putExtra("Token", userMap.get("token"));
 					userIntent.putExtra("ResponseNumber", ResponseNumber);
 					startActivity(userIntent);
+					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+					LoginActivity.this.finish();
+				}
+				else if(ResponseNumber == 2)
+				{
+					Intent resumeIntent = new Intent(LoginActivity.this, ResumeActivity.class);
+					resumeIntent.putExtra("Token", userMap.get("token"));
+					resumeIntent.putExtra("ResponseNumber", ResponseNumber);
+					resumeIntent.putExtra("JobID", JobID);
+					startActivity(resumeIntent);
 					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 					LoginActivity.this.finish();
 				}
