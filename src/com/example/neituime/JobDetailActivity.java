@@ -16,6 +16,7 @@ import com.example.neituime.R.string;
 import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
+import com.example.tencent.CheckOnlineState;
 import com.example.tencent.MyIUiListener;
 import com.example.view.AnalyzeJson;
 import com.tencent.connect.common.Constants;
@@ -27,7 +28,9 @@ import com.tencent.tauth.UiError;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -90,6 +93,7 @@ public class JobDetailActivity extends Activity{
 	private  myProgressDialog progressDialog = null;
 	private Button Login;
 	private Tencent mTencent;
+	private SharedPreferences OnlineInfo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -104,6 +108,9 @@ public class JobDetailActivity extends Activity{
 	}
 	private void init()
 	{
+		OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
+		UID = OnlineInfo.getString("UID", "");
+		Token = OnlineInfo.getString("Token", "");
 		beforeIntent = getIntent();
 		URL = beforeIntent.getStringExtra("URL");
 		JobID = beforeIntent.getStringExtra("id");
@@ -161,7 +168,7 @@ public class JobDetailActivity extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
-				if (mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+				if (CheckOnlineState.IsOnline(OnlineInfo)) 
 				{//去简历界面
 					Intent resumeIntent = new Intent(JobDetailActivity.this, ResumeActivity.class);
 					if(UID != null && Token != null)
@@ -196,7 +203,7 @@ public class JobDetailActivity extends Activity{
 	}
 	private void SetData()
 	{
-		if(mTencent.isSessionValid() && mTencent.getOpenId() != null)
+		if(CheckOnlineState.IsOnline(OnlineInfo))
 		{
 			Login.setText("投递简历");
 		}

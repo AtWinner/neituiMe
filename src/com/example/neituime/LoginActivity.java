@@ -13,7 +13,10 @@ import com.tencent.tauth.Tencent;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -185,6 +188,7 @@ public class LoginActivity extends Activity {
 
 		@Override
 		public void handleMessage(Message msg) {
+			
 			switch (msg.what) {
 			case JSON_SUCCESS:
 				String JsonStr = (String)msg.obj;
@@ -193,6 +197,12 @@ public class LoginActivity extends Activity {
 				//Toast.makeText(LoginActivity.this, JsonStr, Toast.LENGTH_LONG).show();
 				UID = userMap.get("uid");
 				Token = userMap.get("token");
+				SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
+				Editor editor = OnlineInfo.edit();
+				editor.putString("UID", UID);
+				editor.putString("Token", Token);
+				editor.putString("LoginStyle", "Tencent");
+				editor.commit();//将用户信息保存到本地，知道点击退出时删除
 				if(ResponseNumber == 1)
 				{
 					Intent userIntent = new Intent(LoginActivity.this, UserCenterActivity.class);

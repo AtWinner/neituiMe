@@ -11,6 +11,7 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
@@ -19,6 +20,7 @@ import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
+import com.example.tencent.CheckOnlineState;
 import com.example.view.AddLayoutView;
 import com.example.view.AnalyzeJson;
 import com.example.view.GridViewItem;
@@ -384,20 +386,30 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private void ClickMainActivityUserCenter()
 	{
-		mTencent = Tencent.createInstance(AppID, MainActivity.this);
-		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
-		{//已使用qq登录
-			String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
-			String OpenId = mTencent.getOpenId();
-			PostStr += ("otherid=" + OpenId);
-			MThread myThread = new MThread(PostStr, MSG_GETUID);
-			myThread.start();
-			showDialog();
+		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
+		if(CheckOnlineState.IsOnline(OnlineInfo))
+		{
+			Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
+			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
+			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
+			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
+			startActivity(userIntent);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 		}
-		else if(false)
-		{//这里放新浪的
-			
-		}
+//		mTencent = Tencent.createInstance(AppID, MainActivity.this);
+//		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+//		{//已使用qq登录
+//			String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
+//			String OpenId = mTencent.getOpenId();
+//			PostStr += ("otherid=" + OpenId);
+//			MThread myThread = new MThread(PostStr, MSG_GETUID);
+//			myThread.start();
+//			showDialog();
+//		}
+//		else if(false)
+//		{//这里放新浪的
+//			
+//		}
 		else
 		{
 			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -561,12 +573,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 					if(v instanceof Button)
 					{
 						((Button)v).setTextColor(Color.BLACK);
-						//((Button)v).setBackground(null);//去掉边框
 					}
 				}
 				Button thisBtn = (Button)arg0;
 				thisBtn.setTextColor(Color.rgb(31, 102, 146));
-				//thisBtn.setBackgroundResource(R.drawable.button_border);//加边框
 				CheckNetwork check = new CheckNetwork();
 				if(thisBtn.getText().toString().equals("全部职位"))
 				{
@@ -820,23 +830,23 @@ public class MainActivity extends Activity implements OnTouchListener {
 				mGridView.setStackFromBottom(true);
 				mGridView.setSelection(point);//将Selection定位到GridView底部
 				break;
-			case MSG_GETUID:
-				String userInfo = (String)msg.obj;
-				AnalyzeJson aj = new AnalyzeJson(userInfo);
-				HashMap<String, String> userMap = aj.GetUserInfoByJson();
-				if(userMap.get("message").equals("ok") && userMap.get("className").equals("success") && !userMap.get("uid").equals("0"))
-				{
-						Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
-						userIntent.putExtra("LoginStyle", "Tencent");
-						userIntent.putExtra("Token", userMap.get("token"));
-						startActivity(userIntent);
-						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-				}
-				else if(userMap.get("uid").equals("0"))
-				{
-					Toast.makeText(MainActivity.this, "没有找到您的简历，请到网页版完善", Toast.LENGTH_SHORT).show();
-				}
-				break;
+//			case MSG_GETUID:
+//				String userInfo = (String)msg.obj;
+//				AnalyzeJson aj = new AnalyzeJson(userInfo);
+//				HashMap<String, String> userMap = aj.GetUserInfoByJson();
+//				if(userMap.get("message").equals("ok") && userMap.get("className").equals("success") && !userMap.get("uid").equals("0"))
+//				{
+//						Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
+//						userIntent.putExtra("LoginStyle", "Tencent");
+//						userIntent.putExtra("Token", userMap.get("token"));
+//						startActivity(userIntent);
+//						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+//				}
+//				else if(userMap.get("uid").equals("0"))
+//				{
+//					Toast.makeText(MainActivity.this, "没有找到您的简历，请到网页版完善", Toast.LENGTH_SHORT).show();
+//				}
+//				break;
 		
 			}
 			progressDialog.dismiss();

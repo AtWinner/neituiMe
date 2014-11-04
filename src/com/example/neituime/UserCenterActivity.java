@@ -14,12 +14,16 @@ import com.tencent.tauth.Tencent;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,6 +119,7 @@ public class UserCenterActivity extends Activity {
 		Intent beforeIntent = getIntent();
 		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
 		Token = beforeIntent.getStringExtra("Token");
+		Log.e(Token, LoginStyle);
 		userCenterBottom = (LinearLayout)findViewById(R.id.userCenterBottom);
 		UserCenterGetBack = (ImageButton)findViewById(R.id.UserCenterGetBack);
 		UserCenterbtnGetBack = (Button)findViewById(R.id.UserCenterbtnGetBack);
@@ -182,6 +187,7 @@ public class UserCenterActivity extends Activity {
 		UserCenterbtnGetBack.setOnClickListener(new mOnClickListener());
 		UserCenterGetBack.setOnClickListener(new mOnClickListener());
 		RelativeQuit.setOnClickListener(new mOnClickListener());
+		RelativeQuit.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		RelativeMyResume.setOnClickListener(new mOnClickListener());
 		RelativeMyResume.setOnTouchListener(new myOnTouchListenerChangeBackground());
 	}
@@ -237,6 +243,11 @@ public class UserCenterActivity extends Activity {
 		{//放sina
 			
 		}
+		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
+		Editor editor =OnlineInfo.edit();
+		editor.clear();
+		editor.commit();
+		UserCenterActivity.this.finish();
 	}
 	private void setBackgroundWhite(View myView)
 	{

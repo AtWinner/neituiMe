@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
