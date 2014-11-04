@@ -79,7 +79,7 @@
 			                android:gravity="center_vertical|left"
 			                android:text="我发的职位"
 			                android:fontFamily="微软雅黑"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:id="@+id/txHaveSend"
 			                />
 		            
@@ -113,7 +113,7 @@
 			                android:layout_height="match_parent"
 			                android:gravity="center_vertical|left"
 			                android:text="搜索简历"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:fontFamily="微软雅黑"
 			                android:id="@+id/txSearch"
 			                />
@@ -147,7 +147,7 @@
 			                android:layout_width="wrap_content"
 			                android:layout_height="match_parent"
 			                android:gravity="center_vertical|left"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:text="简历收藏"
 			                android:fontFamily="微软雅黑"
 			                android:id="@+id/txResumeCollection"
@@ -191,7 +191,7 @@
 			                android:gravity="center_vertical|left"
 			                android:text="我的简历"
 			                android:fontFamily="微软雅黑"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:id="@+id/txMyResume"
 			                />
 		            
@@ -226,7 +226,7 @@
 			                android:gravity="center_vertical|left"
 			                android:text="职位收藏"
 			                android:fontFamily="微软雅黑"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:id="@+id/txJobCollection"
 			                />
 		            
@@ -261,7 +261,7 @@
 			                android:layout_height="match_parent"
 			                android:gravity="center_vertical|left"
 			                android:text="意见反馈"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:fontFamily="微软雅黑"
 			                android:id="@+id/txSuggestion"
 			                />
@@ -303,7 +303,7 @@
 			                android:layout_height="match_parent"
 			                android:gravity="center_vertical|left"
 			                android:text="退出"
-			                android:background="@color/white"
+			                android:background="@color/noBackground"
 			                android:fontFamily="微软雅黑"
 			                android:id="@+id/txQuit"
 			                />

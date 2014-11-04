@@ -6,6 +6,7 @@ import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
+import com.example.event.myOnTouchListenerChangeBackground;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.view.AnalyzeJson;
@@ -20,8 +21,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -174,12 +177,15 @@ public class UserCenterActivity extends Activity {
 	private void bindEvent()
 	{
 		RelativeHaveSend.setOnClickListener(new mOnClickListener());
+		RelativeHaveSend.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		txHaveSend.setOnClickListener(new mOnClickListener());
 		UserCenterbtnGetBack.setOnClickListener(new mOnClickListener());
 		UserCenterGetBack.setOnClickListener(new mOnClickListener());
 		RelativeQuit.setOnClickListener(new mOnClickListener());
 		RelativeMyResume.setOnClickListener(new mOnClickListener());
+		RelativeMyResume.setOnTouchListener(new myOnTouchListenerChangeBackground());
 	}
+	
 	private class mOnClickListener implements OnClickListener 
 	{
 		@Override

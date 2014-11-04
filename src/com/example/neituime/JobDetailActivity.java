@@ -11,6 +11,7 @@ import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
+import com.example.event.myOnTouchListenerChangeBackground;
 import com.example.neituime.R.string;
 import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
@@ -141,6 +142,7 @@ public class JobDetailActivity extends Activity{
 	}
 	private void BindEvent()
 	{
+		DetailBottom.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		JobGetBack.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -241,7 +243,7 @@ public class JobDetailActivity extends Activity{
 				}
 				final String CompanyUrl = map.get("CompanyHref");
 				final String CompanyLogoo = map.get("CompanyImageSrc");
-				CompanyLogo.setOnClickListener(new OnClickListener() {
+				DetailBottom.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View arg0) {
@@ -250,8 +252,6 @@ public class JobDetailActivity extends Activity{
 						companyIntent.putExtra("CompanyLogo", CompanyLogoo);
 						startActivity(companyIntent);
 						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-					
-						
 					}
 				});
 				break;
