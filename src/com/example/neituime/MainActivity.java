@@ -10,6 +10,7 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
@@ -21,6 +22,7 @@ import com.example.network.GetHtml;
 import com.example.view.AddLayoutView;
 import com.example.view.AnalyzeJson;
 import com.example.view.GridViewItem;
+import com.exmple.data.SetCode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -445,7 +447,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				HashMap<String, Object> mymap = (HashMap<String,Object>)mGridView.getItemAtPosition(arg2);
-				String DetailUrl = "http://www.neitui.me/mobile/detail/id=" + mymap.get("id").toString() + ".html";//链接
+				String DetailUrl = "http://www.neitui.me/index.php?name=mobile&handle=detail&id=" + mymap.get("id").toString() + "&code=" + SetCode.weChatCode();//链接
 				Intent intent = new Intent(MainActivity.this, JobDetailActivity.class);
 				intent.putExtra("URL", DetailUrl);
 				intent.putExtra("id", mymap.get("id").toString());
