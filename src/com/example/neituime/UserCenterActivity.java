@@ -14,7 +14,9 @@ import com.tencent.tauth.Tencent;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -233,21 +235,28 @@ public class UserCenterActivity extends Activity {
 	}
 	private void ClickQuit()
 	{
-		//需要添加一个提示
-		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
-		{//已使用qq登录
-			mTencent.logout(UserCenterActivity.this);
-			UserCenterActivity.this.finish();
-		}
-		else if(false)
-		{//放sina
+		new AlertDialog.Builder(UserCenterActivity.this).setTitle("确定要退出吗？")
+		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			
-		}
-		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
-		Editor editor =OnlineInfo.edit();
-		editor.clear();
-		editor.commit();
-		UserCenterActivity.this.finish();
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				//需要添加一个提示
+				if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+				{//已使用qq登录
+					mTencent.logout(UserCenterActivity.this);
+				}
+				else if(false)
+				{//放sina
+					
+				}
+				SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
+				Editor editor =OnlineInfo.edit();
+				editor.clear();
+				editor.commit();
+				UserCenterActivity.this.finish();
+			}
+		}).setNegativeButton("取消", null).show();
+		
 	}
 	private void setBackgroundWhite(View myView)
 	{

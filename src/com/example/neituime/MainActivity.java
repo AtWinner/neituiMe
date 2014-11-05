@@ -499,8 +499,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 				}
 				else
 					mPullRefreshGridView.onRefreshComplete();
-				
-				
 			}		
 		});
 	}

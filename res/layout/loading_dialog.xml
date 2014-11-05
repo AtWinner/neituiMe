@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" 
-        android:background="@color/white"
+        android:background="@color/noneWhite"
         android:padding="30dp"
         >
          <ImageView 
