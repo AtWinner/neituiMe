@@ -77,7 +77,8 @@ public class CompanyDetailActivity extends Activity {
 	private myProgressDialog progressDialog = null;
 	
 	private ArrayList<HashMap<String, Object>> al;
-	
+	private int LabelMaxHeight;//记录Label展示是实际高度
+	private Boolean IsOpen = false;//记录Label是否打开
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -131,6 +132,7 @@ public class CompanyDetailActivity extends Activity {
 		CompanyDetailBodyId.setLayoutParams(bodyParams);
 		
 		CompanybtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+		
 	}
 	private void BindEvent()
 	{
@@ -304,24 +306,67 @@ public class CompanyDetailActivity extends Activity {
 		CompanyDetail.setText(map.get("Area")+"\n"+map.get("Scale")+"\n"+map.get("Financing"));
 		
 		double StringLength = 0;
-		int j=10;//保存的是LinearLayout的ID
-		LinearLayout innerLinear = CreateLinearLayout(j);
+		int jID=10;//保存的是LinearLayout的ID
+		LinearLayout innerLinear = CreateLinearLayout(jID);
+		int MaxWidth = Width / 10*9;
+		int LabelWidthSum = 0;
+		int LabelHeight = 0;
 		for(int i=0; map.get("CompanyTag"+i) != null; i++)
 		{
+			TextView myTextView = CreateTextViewLabel(map.get("CompanyTag"+i), (LinearLayout)findViewById(jID));
+			LabelHeight = GetViewHeight(myTextView);
+			LabelWidthSum += GetViewWidth(myTextView);
 			String LabelText = map.get("CompanyTag"+i);
-			StringLength += LabelText.length();
-			StringLength += 1.5;
-			if(StringLength >= 30.5)//每行显示28字，超过强制换行
+			if(LabelWidthSum > MaxWidth)//StringLength >= 30.5)//每行显示28字，超过强制换行
 			{
-				j++;
-				CreateLinearLayout(j);
-				StringLength = 0;
-				StringLength += LabelText.length();
+				jID++;
+				CreateLinearLayout(jID);
+				LabelWidthSum = 0;
+				LabelWidthSum += GetViewWidth(myTextView);
 			}
-			CreateTextViewLabel(map.get("CompanyTag"+i), (LinearLayout)findViewById(j));
+			((LinearLayout)findViewById(jID)).addView(myTextView); 
 		}
+		LabelMaxHeight = GetViewHeight(CompanyLabel);
+		LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+		labelParams.height = LabelHeight;
+		final int height = LabelHeight;
+		CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
+		CompanyLabel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(IsOpen)
+				{//已经打开
+					LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+					labelParams.height = height;
+					CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
+					IsOpen = false;
+				}
+				else
+				{//没有打开
+					LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+					labelParams.height = LabelMaxHeight;
+					CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
+					IsOpen = true;
+				}
+			}
+		});
 	}
-	private void CreateTextViewLabel(String InnerText, LinearLayout layoutbody)
+	private int GetViewHeight(View view)
+	{
+		int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		view.measure(width, height);//获取控件的宽度和高度
+		return view.getMeasuredHeight();
+	}
+	private int GetViewWidth(View view)
+	{
+		int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		view.measure(width, height);//获取控件的宽度和高度
+		return view.getMeasuredWidth();
+	}
+	private TextView CreateTextViewLabel(String InnerText, LinearLayout layoutbody)
 	{//添加公司标签
 		TextView myView = new TextView(CompanyDetailActivity.this);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -331,7 +376,7 @@ public class CompanyDetailActivity extends Activity {
 		myView.setPadding(5, 0, 5, 5);
 		myView.setTextSize(15);
 		myView.setBackgroundResource(R.drawable.border);
-		layoutbody.addView(myView);
+		return myView;
 	}
 	private LinearLayout CreateLinearLayout(int j)
 	{

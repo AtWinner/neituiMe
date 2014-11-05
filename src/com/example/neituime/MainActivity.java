@@ -465,9 +465,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 				intent.putExtra("id", mymap.get("id").toString());
 				intent.putExtra("position", mymap.get("positionfull").toString());
 				intent.putExtra("department", mymap.get("departmentfull").toString());
-				intent.putExtra("cmail", mymap.get("cmail").toString());
+				//intent.putExtra("cmail", mymap.get("cmail").toString());
 				intent.putExtra("createdate", mymap.get("createdate").toString());
-				intent.putExtra("realname", mymap.get("realname").toString());
 				intent.putExtra("avatar", mymap.get("avatar").toString());
 				intent.putExtra("salary", mymap.get("salary").toString());
 				intent.putExtra("city", mymap.get("city").toString());

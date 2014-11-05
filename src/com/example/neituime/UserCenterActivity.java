@@ -183,6 +183,14 @@ public class UserCenterActivity extends Activity {
 	}
 	private void bindEvent()
 	{
+		RelativeJobCollection.setOnClickListener(new mOnClickListener());
+		RelativeJobCollection.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		RelativeResumeCollection.setOnClickListener(new mOnClickListener());
+		RelativeResumeCollection.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		RelativeSearch.setOnClickListener(new mOnClickListener());
+		RelativeSearch.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		RelativeSuggestion.setOnClickListener(new mOnClickListener());
+		RelativeSuggestion.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		RelativeHaveSend.setOnClickListener(new mOnClickListener());
 		RelativeHaveSend.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		txHaveSend.setOnClickListener(new mOnClickListener());
@@ -235,9 +243,8 @@ public class UserCenterActivity extends Activity {
 	}
 	private void ClickQuit()
 	{
-		new AlertDialog.Builder(UserCenterActivity.this).setTitle("确定要退出吗？")
+		new AlertDialog.Builder(UserCenterActivity.this).setTitle("提示").setMessage("确定要退出吗？")
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
 				//需要添加一个提示
