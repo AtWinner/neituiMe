@@ -94,6 +94,8 @@ public class JobDetailActivity extends Activity{
 	private Button Login;
 	private Tencent mTencent;
 	private SharedPreferences OnlineInfo;
+	
+	private int LabelHeight;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -248,6 +250,10 @@ public class JobDetailActivity extends Activity{
 				{
 					CreateTextViewLabel(map.get("CompanyTag"+ CompanyTag) );
 				}
+				LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyBody.getLayoutParams();
+				labelParams.height = LabelHeight;
+				CompanyBody.setLayoutParams(labelParams);
+				
 				final String CompanyUrl = map.get("CompanyHref");
 				final String CompanyLogoo = map.get("CompanyImageSrc");
 				DetailBottom.setOnClickListener(new OnClickListener() {
@@ -465,6 +471,15 @@ public class JobDetailActivity extends Activity{
 		myView.setTextSize(15);
 		myView.setBackgroundResource(R.drawable.border);
 		CompanyBody.addView(myView);
+		LabelHeight = GetViewHeight(myView);
+		
+	}
+	private int GetViewHeight(View view)
+	{
+		int width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+		view.measure(width, height);//获取控件的宽度和高度
+		return view.getMeasuredHeight();
 	}
 	private void CreateImageView(String ImageUrl, int foot)
 	{
