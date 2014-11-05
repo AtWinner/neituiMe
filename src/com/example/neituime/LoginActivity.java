@@ -141,17 +141,14 @@ public class LoginActivity extends Activity {
 					showDialog();
 					String SCOPE = "get_info,get_user_info,get_simple_userinfo,get_user_profile,get_app_friends,check_page_fans,add_t,del_t,add_pic_t,get_repost_list,"
 							+ "get_other_info,get_fanslist,get_idollist,add_idol,del_idol";
-					
 					mTencent.login(LoginActivity.this, SCOPE, new MyIUiListener(LoginActivity.this));          
 				}
 			}
 		});
 		SinaLogin.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Toast.makeText(LoginActivity.this, "无法获取APP的AppKey和AppSecrect，因此无法实现", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
