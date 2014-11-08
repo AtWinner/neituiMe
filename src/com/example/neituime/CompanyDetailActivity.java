@@ -71,7 +71,7 @@ public class CompanyDetailActivity extends Activity {
 	private TextView CompanyName;
 	private TextView CompanyDetail;
 	private LinearLayout CompanyLabel; //2010.8.25 260 
-	private LinearLayout.LayoutParams labelParams;
+	private RelativeLayout.LayoutParams labelParams;
 	private LinearLayout CompanyDetailBodyId;
 	private PullToRefreshGridView pull_refresh_grid_company_detail;
 	private GridView mGridView;
@@ -81,11 +81,17 @@ public class CompanyDetailActivity extends Activity {
 	private int LabelMaxHeight;//记录Label展示是实际高度
 	private int LabelHeight = 0;
 	private Boolean IsOpen = false;//记录Label是否打开
+	
+	private ImageView triangle;
+	private RelativeLayout.LayoutParams triangleParams;
+	private RelativeLayout ParentCompanyLabel;
+	private LinearLayout.LayoutParams ParentCompanyLabelParams;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.company_detail_activity);
+		showDialog();//加载页面之后马上显示
 		init();
 		SetParams();
 		BindEvent();
@@ -120,6 +126,9 @@ public class CompanyDetailActivity extends Activity {
 		CompanyDetailBodyId = (LinearLayout)findViewById(R.id.CompanyDetailBodyId);
 		pull_refresh_grid_company_detail = (PullToRefreshGridView)findViewById(R.id.pull_refresh_grid_company_detail);
 		mGridView = pull_refresh_grid_company_detail.getRefreshableView();
+		triangle = (ImageView)findViewById(R.id.triangle);
+		triangle.setVisibility(View.INVISIBLE);//获得数据之前把三角形隐藏掉
+		ParentCompanyLabel = (RelativeLayout)findViewById(R.id.ParentCompanyLabel);
 		GetJsonUrl();
 	}
 	private void SetParams()
@@ -132,9 +141,7 @@ public class CompanyDetailActivity extends Activity {
 		RelativeLayout.LayoutParams bodyParams = (RelativeLayout.LayoutParams)CompanyDetailBodyId.getLayoutParams();//new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int)(Height * 11.5 / 13));
 		bodyParams.height = (int)(Height * 12 / 13);
 		CompanyDetailBodyId.setLayoutParams(bodyParams);
-		
 		CompanybtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
-		
 	}
 	private void BindEvent()
 	{
@@ -176,7 +183,6 @@ public class CompanyDetailActivity extends Activity {
 				}
 				else
 					pull_refresh_grid_company_detail.onRefreshComplete();
-				
 			}		
 		});
 		pull_refresh_grid_company_detail.setOnItemClickListener(new OnItemClickListener() {
@@ -191,7 +197,6 @@ public class CompanyDetailActivity extends Activity {
 				intent.putExtra("id", mymap.get("id").toString());
 				intent.putExtra("position", mymap.get("positionfull").toString());
 				intent.putExtra("department", mymap.get("departmentfull").toString());
-				//intent.putExtra("cmail", mymap.get("cmail").toString());
 				intent.putExtra("createdate", mymap.get("createdate").toString());
 				intent.putExtra("avatar", mymap.get("avatar").toString());
 				intent.putExtra("salary", mymap.get("salary").toString());
@@ -200,12 +205,9 @@ public class CompanyDetailActivity extends Activity {
 				overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 			}
 		});
-		
-		
 	}
 	private Handler mHandler = new Handler()
 	{
-
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
@@ -283,7 +285,6 @@ public class CompanyDetailActivity extends Activity {
 					//获取列表中显示数据的Json
 					GetHtml gh = new GetHtml();
 					mHandler.obtainMessage(KIND, gh.GetJsonByUrl(JsonUrl)).sendToTarget();//如果成功需要返回依着在GridView中显示的结果集
-					
 					break;
 				case LOADE_MORE:
 					//上拉获取更多
@@ -310,7 +311,7 @@ public class CompanyDetailActivity extends Activity {
 		double StringLength = 0;
 		int jID=10;//保存的是LinearLayout的ID
 		LinearLayout innerLinear = CreateLinearLayout(jID);
-		int MaxWidth = Width / 10*9;
+		int MaxWidth = Width / 10 * 9;
 		int LabelWidthSum = 0;
 		
 		for(int i=0; map.get("CompanyTag"+i) != null; i++)
@@ -328,11 +329,16 @@ public class CompanyDetailActivity extends Activity {
 			}
 			((LinearLayout)findViewById(jID)).addView(myTextView); 
 		}
+		ParentCompanyLabelParams = (LinearLayout.LayoutParams)ParentCompanyLabel.getLayoutParams();
 		LabelMaxHeight = GetViewHeight(CompanyLabel);
-		labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+		labelParams = (RelativeLayout.LayoutParams)CompanyLabel.getLayoutParams();
 		labelParams.height = LabelHeight;
+		ParentCompanyLabelParams.height = LabelHeight+20;
+		ParentCompanyLabelParams.weight = LayoutParams.MATCH_PARENT;
+		Toast.makeText(CompanyDetailActivity.this, GetViewWidth(ParentCompanyLabel) + "," + GetViewWidth(CompanyLabel), Toast.LENGTH_SHORT).show();
 		final int height = LabelHeight;
 		CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
+		//ParentCompanyLabel.setLayoutParams(ParentCompanyLabelParams);
 		CompanyLabel.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -349,6 +355,12 @@ public class CompanyDetailActivity extends Activity {
 				}
 			}
 		});
+		//设置三角形的布局文件
+		triangleParams = (RelativeLayout.LayoutParams)triangle.getLayoutParams();
+		triangleParams.height = LabelHeight / 2;
+		triangleParams.width = LabelHeight * 4;
+		triangle.setLayoutParams(triangleParams);
+		triangle.setVisibility(View.VISIBLE);
 	}
 	private int GetViewHeight(View view)
 	{

@@ -47,14 +47,29 @@
 		                />
 		        </LinearLayout>
 		    </LinearLayout>
-		    <LinearLayout 
+		    <RelativeLayout 
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:orientation="vertical"
-		        android:id="@+id/CompanyLabel"
-		        android:layout_marginTop="5dp"
+		        android:id="@+id/ParentCompanyLabel"
 		        >
-		    </LinearLayout>
+			    <LinearLayout 
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="vertical"
+			        android:id="@+id/CompanyLabel"
+			        android:layout_marginTop="5dp"
+			        >
+			    </LinearLayout>
+			    <ImageView 
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:id="@+id/triangle"
+			        android:src="@drawable/triangle"
+			        android:layout_alignParentRight="true"
+			        android:layout_alignParentBottom="true"
+			        />
+		    </RelativeLayout>
 	    </LinearLayout>
 	    <com.handmark.pulltorefresh.library.PullToRefreshGridView
 	        xmlns:ptr="http://schemas.android.com/apk/res-auto"
