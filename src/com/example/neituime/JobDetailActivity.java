@@ -33,7 +33,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -538,6 +537,5 @@ public class JobDetailActivity extends Activity{
 		}
 		progressDialog.show();		
 	}
-	
 	
 }

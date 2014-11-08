@@ -71,7 +71,9 @@ public class CompanyDetailActivity extends Activity {
 	private TextView CompanyName;
 	private TextView CompanyDetail;
 	private LinearLayout CompanyLabel; //2010.8.25 260 
-	private RelativeLayout.LayoutParams labelParams;
+
+	private LinearLayout.LayoutParams labelParams;
+
 	private LinearLayout CompanyDetailBodyId;
 	private PullToRefreshGridView pull_refresh_grid_company_detail;
 	private GridView mGridView;
@@ -79,13 +81,8 @@ public class CompanyDetailActivity extends Activity {
 	
 	private ArrayList<HashMap<String, Object>> al;
 	private int LabelMaxHeight;//记录Label展示是实际高度
-	private int LabelHeight = 0;
 	private Boolean IsOpen = false;//记录Label是否打开
 	
-	private ImageView triangle;
-	private RelativeLayout.LayoutParams triangleParams;
-	private RelativeLayout ParentCompanyLabel;
-	private LinearLayout.LayoutParams ParentCompanyLabelParams;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -126,9 +123,6 @@ public class CompanyDetailActivity extends Activity {
 		CompanyDetailBodyId = (LinearLayout)findViewById(R.id.CompanyDetailBodyId);
 		pull_refresh_grid_company_detail = (PullToRefreshGridView)findViewById(R.id.pull_refresh_grid_company_detail);
 		mGridView = pull_refresh_grid_company_detail.getRefreshableView();
-		triangle = (ImageView)findViewById(R.id.triangle);
-		triangle.setVisibility(View.INVISIBLE);//获得数据之前把三角形隐藏掉
-		ParentCompanyLabel = (RelativeLayout)findViewById(R.id.ParentCompanyLabel);
 		GetJsonUrl();
 	}
 	private void SetParams()
@@ -313,7 +307,7 @@ public class CompanyDetailActivity extends Activity {
 		LinearLayout innerLinear = CreateLinearLayout(jID);
 		int MaxWidth = Width / 10 * 9;
 		int LabelWidthSum = 0;
-		
+		int LabelHeight = 0;
 		for(int i=0; map.get("CompanyTag"+i) != null; i++)
 		{
 			TextView myTextView = CreateTextViewLabel(map.get("CompanyTag"+i), (LinearLayout)findViewById(jID));
@@ -329,38 +323,33 @@ public class CompanyDetailActivity extends Activity {
 			}
 			((LinearLayout)findViewById(jID)).addView(myTextView); 
 		}
-		ParentCompanyLabelParams = (LinearLayout.LayoutParams)ParentCompanyLabel.getLayoutParams();
 		LabelMaxHeight = GetViewHeight(CompanyLabel);
-		labelParams = (RelativeLayout.LayoutParams)CompanyLabel.getLayoutParams();
+		labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+
 		labelParams.height = LabelHeight;
-		ParentCompanyLabelParams.height = LabelHeight+20;
-		ParentCompanyLabelParams.weight = LayoutParams.MATCH_PARENT;
-		Toast.makeText(CompanyDetailActivity.this, GetViewWidth(ParentCompanyLabel) + "," + GetViewWidth(CompanyLabel), Toast.LENGTH_SHORT).show();
 		final int height = LabelHeight;
 		CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
-		//ParentCompanyLabel.setLayoutParams(ParentCompanyLabelParams);
 		CompanyLabel.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				if(IsOpen)
 				{//已经打开
-					(new LabelScrollTask()).execute(-1);
+					LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+					labelParams.height = height;
+					CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
 					IsOpen = false;
 				}
 				else
 				{//没有打开
-					(new LabelScrollTask()).execute(1);
+					LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+					labelParams.height = LabelMaxHeight;
+					CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
 					IsOpen = true;
 				}
 			}
 		});
-		//设置三角形的布局文件
-		triangleParams = (RelativeLayout.LayoutParams)triangle.getLayoutParams();
-		triangleParams.height = LabelHeight / 2;
-		triangleParams.width = LabelHeight * 4;
-		triangle.setLayoutParams(triangleParams);
-		triangle.setVisibility(View.VISIBLE);
+
 	}
 	private int GetViewHeight(View view)
 	{
@@ -479,72 +468,5 @@ public class CompanyDetailActivity extends Activity {
 			progressDialog.setMessage("拼命获取数据中...");
 		}
 		progressDialog.show();		
-	}
-	class LabelScrollTask extends AsyncTask<Integer, Integer, Integer> 
-	{
-		protected Integer doInBackground(Integer... speed) 
-		{
-			int  myLabelHeight =IsOpen ? LabelHeight : LabelMaxHeight;
-			Log.e("", myLabelHeight+"");
-			while(true)
-			{
-				myLabelHeight = myLabelHeight + speed[0];
-				if (myLabelHeight < LabelHeight) 
-				{
-					myLabelHeight = LabelHeight;
-					break;
-				}
-				if (myLabelHeight > LabelMaxHeight) 
-				{
-					myLabelHeight = LabelMaxHeight;
-					break;
-				}
-				Log.e("", myLabelHeight+"");
-				publishProgress(myLabelHeight);
-				// 为了要有滚动效果产生，每次循环使线程睡眠2毫秒，这样肉眼才能够看到滚动动画。
-				sleep(2);
-			}
-//			if (speed[0] > 0) 
-//			{
-//				isCommonCity = false;
-//			} 
-//			else 
-//			{
-//				isCommonCity = true;
-//			}
-			return myLabelHeight;
-		}
-		@Override
-		protected void onProgressUpdate(Integer... height) {
-			labelParams.height = height[0];
-			CompanyLabel.setLayoutParams(labelParams);
-//			commonCityParams.leftMargin = leftMargin[0];
-//			AllCityParams.leftMargin = cityRight - leftMargin[0];
-//			commonCity.setLayoutParams(commonCityParams);
-//			AllCity.setLayoutParams(AllCityParams);
-		}
-
-		@Override
-		protected void onPostExecute(Integer height) {
-			labelParams.height = height;
-			CompanyLabel.setLayoutParams(labelParams);
-//			commonCityParams.leftMargin = leftMargin;
-//			AllCityParams.leftMargin = cityRight - leftMargin;
-//			commonCity.setLayoutParams(commonCityParams);
-//			AllCity.setLayoutParams(AllCityParams);
-		}
-	}
-	/**
-	 * 使当前线程睡眠指定的毫秒数。
-	 * 
-	 * @param millis
-	 *            指定当前线程睡眠多久，以毫秒为单位
-	 */
-	private void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

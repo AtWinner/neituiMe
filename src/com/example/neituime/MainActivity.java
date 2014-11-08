@@ -751,6 +751,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 //			Toast.makeText(getApplicationContext(), "没改过", Toast.LENGTH_SHORT).show();
 //		}
 	}
+	
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
