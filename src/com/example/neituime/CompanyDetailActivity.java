@@ -71,9 +71,12 @@ public class CompanyDetailActivity extends Activity {
 	private TextView CompanyName;
 	private TextView CompanyDetail;
 	private LinearLayout CompanyLabel; //2010.8.25 260 
+<<<<<<< HEAD
 
 	private LinearLayout.LayoutParams labelParams;
 
+=======
+>>>>>>> parent of fa34a3f... 为label加入动画效果
 	private LinearLayout CompanyDetailBodyId;
 	private PullToRefreshGridView pull_refresh_grid_company_detail;
 	private GridView mGridView;
@@ -324,8 +327,12 @@ public class CompanyDetailActivity extends Activity {
 			((LinearLayout)findViewById(jID)).addView(myTextView); 
 		}
 		LabelMaxHeight = GetViewHeight(CompanyLabel);
+<<<<<<< HEAD
 		labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
 
+=======
+		LinearLayout.LayoutParams labelParams = (LinearLayout.LayoutParams)CompanyLabel.getLayoutParams();
+>>>>>>> parent of fa34a3f... 为label加入动画效果
 		labelParams.height = LabelHeight;
 		final int height = LabelHeight;
 		CompanyLabel.setLayoutParams(labelParams);//设置只显示一行标签
