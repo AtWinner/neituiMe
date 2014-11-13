@@ -1,7 +1,11 @@
 package com.example.neituime;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.http.NameValuePair;
 import org.w3c.dom.UserDataHandler;
 
 import com.example.adapter.AdjustPageLayout;
@@ -12,6 +16,7 @@ import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.network.GetResume;
+import com.example.network.httpPost;
 import com.example.view.AnalyzeJson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -46,7 +51,7 @@ public class ResumeActivity extends Activity {
 	private static final int MSG_FAILED = 2; // 网络请求失败
 	private static final int IMG_SUCCESS = 3 ;// 获取图片成功
 	private static final int MSG_REFRESH = 4;// 刷新
-	private static final int MSG_DOWNLOAD = 5;//下载
+	private static final int MSG_RESUME= 5;//下载
 	
 	private int ResponseNumber;
 	private String JobID;
@@ -233,11 +238,17 @@ public class ResumeActivity extends Activity {
 					mHandler.obtainMessage(KIND, bitmap).sendToTarget();
 				}
 				break;
-			case MSG_DOWNLOAD :
+			case MSG_RESUME :
 				if(ResumeName != null)
 				{
-					GetResume GR = new GetResume();
-					GR.GetFile(URL, ResumeName);
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					httpPost post = new httpPost();
+					Map<String, String> map = new HashMap<String, String>();
+					//map.put("Content-Length", "7");
+					//map.put("Accept-Encoding", "gzip");
+					map.put("click", "1");
+					String a = post.sendhttpclient_postrequest(URL, map);
+					Log.e("", a);
 				}
 				else
 				{
@@ -309,8 +320,8 @@ public class ResumeActivity extends Activity {
 
 		AddTextView("最后一次修改时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("createtime"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
-		
-		AddDownloadButton();
+		if(ResponseNumber == 2)
+			AddSentResumeButton();
 		//UserDetailInfo.addView(tt);
 	}
 	private void AddTextView(String innerText, int TextSize, LinearLayout myLinear)
@@ -324,16 +335,19 @@ public class ResumeActivity extends Activity {
 		}
 		myLinear.addView(myTextView);
 	}
-	private void AddDownloadButton()
+	/**
+	 * 创建投递简历的按钮
+	 */
+	private void AddSentResumeButton()
 	{
 		Button button = new Button(ResumeActivity.this);
-		button.setText("下载附件简历：");
-		final String DownLoadUrl = "http://www.neitui.me/neitui/resumeattach/ruid="+UID+"&deal=download.html";
+		button.setText("点击投递简历");
+		final String ResumeUrl = "http://www.neitui.me//?dev=android&version=1.0.4&name=neitui&json=1&handle=sendresume&id=" + JobID 
+				+ "&token=" + Token + "&type=online";
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(ResumeActivity.this, DownLoadUrl, Toast.LENGTH_SHORT).show();
-				mThread mthread = new mThread(MSG_DOWNLOAD, DownLoadUrl);
+				mThread mthread = new mThread(MSG_RESUME, ResumeUrl);
 				mthread.start();
 			}
 		});
@@ -342,7 +356,6 @@ public class ResumeActivity extends Activity {
 	}
 	@Override
 	public void finish() {
-		
 		super.finish();
 	}
 	private void showDialog()
@@ -353,6 +366,17 @@ public class ResumeActivity extends Activity {
 			progressDialog.setCancelable(false);
 			progressDialog.setOnKeyListener(new myOnKeyListener());
 			progressDialog.setMessage("拼命获取数据中...");
+		}
+		progressDialog.show();		
+	}
+	private void showDiaLog(String showText)
+	{
+		if(progressDialog == null)
+		{
+			progressDialog = myProgressDialog.createDialog(ResumeActivity.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setOnKeyListener(new myOnKeyListener());
+			progressDialog.setMessage("简历提交中...");
 		}
 		progressDialog.show();		
 	}
