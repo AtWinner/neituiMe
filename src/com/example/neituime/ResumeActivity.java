@@ -351,7 +351,6 @@ public class ResumeActivity extends Activity {
 				mthread.start();
 			}
 		});
-		
 		UserDetailInfo.addView(button);
 	}
 	@Override
