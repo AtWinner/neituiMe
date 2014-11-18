@@ -122,9 +122,13 @@ public class JobDetailActivity extends Activity{
 		JobGetBack = (ImageButton)findViewById(R.id.JobGetBack);
 		JobScrollview = (ScrollView)findViewById(R.id.JobScrollview);
 		CreaterInfo = (TextView)findViewById(R.id.CreaterInfo);
+		CreaterInfo.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 		JobInfo = (TextView)findViewById(R.id.JobInfo);
+		JobInfo.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
 		JobTitle = (TextView)findViewById(R.id.JobTitle);
+		JobTitle.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
 		JobTitleDetail = (TextView)findViewById(R.id.JobTitleDetail);
+		JobTitleDetail.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
 		JobMainLinear = (LinearLayout)findViewById(R.id.JobMainLinear);
 		JobbtnGetBack = (Button)findViewById(R.id.JobbtnGetBack);
 		CompanyBody = (LinearLayout)findViewById(R.id.CompanyBody);
@@ -437,7 +441,7 @@ public class JobDetailActivity extends Activity{
 		TextView myView = new TextView(JobDetailActivity.this);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		myView.setText(Html.fromHtml(InnerText));
-		myView.setTextSize(17);
+		myView.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 17));
 		//myView.setLineSpacing(add, mult);
 		myView.setLayoutParams(params);
 		JobMainLinear.addView(myView);
