@@ -147,4 +147,22 @@ public class AnalyzeJson {
 		}
 		return map;
 	}
+	public HashMap<String, String> GetSendResumeInfo()
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		try 
+		{
+			JSONObject myJson = new JSONObject(JsonStr);
+			map.put("message", myJson.getString("message"));
+			map.put("className", myJson.getString("className"));
+			map.put("code", myJson.getString("code"));
+			map.put("jumptext", myJson.getString("jumptext"));
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return map;
+	}
 }

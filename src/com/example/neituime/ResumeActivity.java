@@ -197,6 +197,11 @@ public class ResumeActivity extends Activity {
 			case IMG_SUCCESS:
 				Bitmap bitmap = (Bitmap)msg.obj;
 				UserPhoto.setImageBitmap(bitmap);
+				break; 
+			case MSG_RESUME:
+				AnalyzeJson resumeJson = new AnalyzeJson((String)msg.obj);
+				HashMap<String, String> ResumeHashmap = resumeJson.GetSendResumeInfo();
+				Toast.makeText(ResumeActivity.this, ResumeHashmap.get("message"), Toast.LENGTH_SHORT).show();
 				break;
 			case MSG_FAILED:
 				
@@ -247,8 +252,9 @@ public class ResumeActivity extends Activity {
 					//map.put("Content-Length", "7");
 					//map.put("Accept-Encoding", "gzip");
 					map.put("click", "1");
-					String a = post.sendhttpclient_postrequest(URL, map);
-					Log.e("", a);
+					String requestStr = post.sendhttpclient_postrequest(URL, map);
+					Log.e("", requestStr);
+					mHandler.obtainMessage(MSG_RESUME, requestStr).sendToTarget();
 				}
 				else
 				{
