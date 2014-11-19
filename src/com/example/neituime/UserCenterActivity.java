@@ -213,7 +213,7 @@ public class UserCenterActivity extends Activity {
 				break;
 			case R.id.RelativeHaveSend:
 			case R.id.txHaveSend:
-				Toast.makeText(UserCenterActivity.this, "text", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(UserCenterActivity.this, "text", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.RelativeQuit:
 				ClickQuit();
@@ -278,7 +278,7 @@ public class UserCenterActivity extends Activity {
 				String UserInfo = (String)msg.obj;
 				AnalyzeJson AJ = new AnalyzeJson(UserInfo);
 				HashMap<String, String> UserInfoMap = AJ.GetUserCenterInfo();
-				Toast.makeText(UserCenterActivity.this, UserInfoMap.toString(), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(UserCenterActivity.this, UserInfoMap.toString(), Toast.LENGTH_SHORT).show();
 				mThread ImageThread = new mThread(IMG_SUCCESS, UserInfoMap.get("avatar"));
 				ImageThread.start();
 				BindData(UserInfoMap);

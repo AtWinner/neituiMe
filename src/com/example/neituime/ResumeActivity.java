@@ -201,7 +201,7 @@ public class ResumeActivity extends Activity {
 			case MSG_RESUME:
 				AnalyzeJson resumeJson = new AnalyzeJson((String)msg.obj);
 				HashMap<String, String> ResumeHashmap = resumeJson.GetSendResumeInfo();
-				Toast.makeText(ResumeActivity.this, ResumeHashmap.get("message"), Toast.LENGTH_SHORT).show();
+				//Toast.makeText(ResumeActivity.this, ResumeHashmap.get("message"), Toast.LENGTH_SHORT).show();
 				break;
 			case MSG_FAILED:
 				

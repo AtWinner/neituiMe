@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CreateCityButton();
 		BindEvent();
 		ForGridView();
-		Toast.makeText(MainActivity.this, GetScreenSize.getStatusBarHeight(MainActivity.this) +"", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(MainActivity.this, GetScreenSize.getStatusBarHeight(MainActivity.this) +"", Toast.LENGTH_SHORT).show();
 	}
 	
 	private void init()
@@ -389,7 +389,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
 		if(CheckOnlineState.IsOnline(OnlineInfo))
 		{
-			Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
 			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
 			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
 			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
@@ -815,14 +815,14 @@ public class MainActivity extends Activity implements OnTouchListener {
 			{
 			case REFRESH:
 				al = item.GetGridViewItemsByJson();
-				Toast.makeText(getApplicationContext(), al.size()+"", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), al.size()+"", Toast.LENGTH_SHORT).show();//列表的行数量
 				mGridView.setAdapter(new GridViewAdapter(MainActivity.this, al, R.layout.gridlist, Width));
 				mGridView.setStackFromBottom(false);//不要定位到GridView底部
 				break;
 			case LOADMORE:
 				point = al.size() - 1;//保存刷新之前的位置
 				al.addAll(item.GetGridViewItemsByJson());
-				Toast.makeText(getApplicationContext(), al.size()+"", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), al.size()+"", Toast.LENGTH_SHORT).show();
 				mGridView.setAdapter(new GridViewAdapter(MainActivity.this, al, R.layout.gridlist, Width));
 				mGridView.setStackFromBottom(true);
 				mGridView.setSelection(point);//将Selection定位到GridView底部

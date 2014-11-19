@@ -526,7 +526,7 @@ public class JobDetailActivity extends Activity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		UID = data.getStringExtra("UID");
 		Token = data.getStringExtra("Token");
-		Toast.makeText(JobDetailActivity.this, data.getStringExtra("UID")+"，"+ data.getStringExtra("Token"), Toast.LENGTH_SHORT).show();
+		//Toast.makeText(JobDetailActivity.this, data.getStringExtra("UID")+"，"+ data.getStringExtra("Token"), Toast.LENGTH_SHORT).show();
 		SetData();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
