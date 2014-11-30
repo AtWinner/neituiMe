@@ -12,6 +12,7 @@ import java.util.Map;
 
 
 
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
@@ -20,6 +21,7 @@ import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
+import com.example.network.SendMail;
 import com.example.tencent.CheckOnlineState;
 import com.example.view.AddLayoutView;
 import com.example.view.AnalyzeJson;
@@ -866,8 +868,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 		}
 		@Override
 		public void run() {
+//			SendMail sm = new SendMail();
+//			sm.sendMailController("小蘑菇是笨蛋");
 			if(MISSION == MSG_GETUID)
 			{
+				
 				GetHtml gh = new GetHtml();
 				String jsonStr = gh.GetJsonByUrl(URL);
 				mHandler.obtainMessage(MISSION, gh.GetJsonByUrl(URL)).sendToTarget();
