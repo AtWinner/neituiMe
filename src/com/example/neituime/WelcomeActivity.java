@@ -1,6 +1,8 @@
 package com.example.neituime;
 
 
+import java.util.UUID;
+
 import com.example.adapter.GetScreenSize;
 import com.example.network.DoSend;
 import com.example.network.GetHtml;
@@ -14,6 +16,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +29,7 @@ import android.widget.TextView;
 
 public class WelcomeActivity extends Activity {
 	private LinearLayout ImageLinearLayout;
+	private String uniqueId = "";//机器识别码
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,7 +41,8 @@ public class WelcomeActivity extends Activity {
 		}
 		catch(Exception e)
 		{
-			Toast.makeText(WelcomeActivity.this, "信息获取失败", Toast.LENGTH_SHORT).show();
+			Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			Log.e("error", e.getMessage());
 		}
 		
 //		RelativeLayout WelcomePage = (RelativeLayout)findViewById(R.id.WelcomePage);
@@ -128,6 +134,14 @@ public class WelcomeActivity extends Activity {
 	}
 	private void PostMail()
 	{
+		final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+		final String tmDevice, tmSerial, tmPhone, androidId;
+		tmDevice = "" + tm.getDeviceId();
+		tmSerial = "" + tm.getSimSerialNumber();
+		androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+		UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+		uniqueId = deviceUuid.toString();
+		
 		LocationManager loctionManager;
 		String contextService=Context.LOCATION_SERVICE;
 		//通过系统服务，取得LocationManager对象
@@ -143,7 +157,18 @@ public class WelcomeActivity extends Activity {
 		String provider = loctionManager.getBestProvider(criteria, true);
 		//获得最后一次变化的位置
 		Location location = loctionManager.getLastKnownLocation(provider);
-		mThread mythread = new mThread(false, location.getLatitude(), location.getLongitude());
+		double la = 0;//纬度
+		double lo= 0;//经度
+		try
+		{
+			la = location.getLatitude();
+			lo = location.getLongitude();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		mThread mythread = new mThread(la, lo);
 		mythread.start();
 	}
 	private Handler mhandler = new Handler()
@@ -155,18 +180,10 @@ public class WelcomeActivity extends Activity {
 	};
 	private class mThread extends Thread
 	{
-		Boolean IsPostMail;
 		double mLatitude;
 		double mLongitude;
-		String City;
-		public mThread(Boolean isPostMail, String CityJson)
+		public mThread(double Latitude, double Longitude)
 		{
-			IsPostMail = isPostMail;
-			City = CityJson;
-		}
-		public mThread(Boolean isPostMail, double Latitude, double Longitude)
-		{
-			IsPostMail = isPostMail;
 			mLatitude = Latitude;
 			mLongitude = Longitude;
 		}
@@ -176,12 +193,28 @@ public class WelcomeActivity extends Activity {
 				String url = "http://api.map.baidu.com/geocoder?output=json&location="+mLatitude+","+mLongitude+"&key=APP_KEY";
 				String GetCityJson = (new GetHtml()).GetJsonByUrl(url);
 				DoSend.sendMail("依然是测试邮件\n" 
+						+ "机器码：" + uniqueId + "\n"
 						+ "Android " + android.os.Build.VERSION.RELEASE  + "\n"
 						+ "" + android.os.Build.MODEL + "\n"
 						+ "SDK：" +android.os.Build.VERSION.SDK + "\n"
 						+ android.os.Build.HOST + "\n"
 						+ android.os.Build.CPU_ABI + "\n"
 						+ android.os.Build.USER + "\n"
+						+ android.os.Build.BOARD + "\n"
+						+ android.os.Build.BOOTLOADER + "\n"
+						+ android.os.Build.BRAND+ "\n"
+						+ android.os.Build.CPU_ABI2+ "\n"
+						+ android.os.Build.DEVICE + "\n"
+						+ android.os.Build.DISPLAY + "\n"
+						+ android.os.Build.FINGERPRINT + "\n"
+						+ android.os.Build.HARDWARE + "\n"
+						+ android.os.Build.ID + "\n"
+						+ android.os.Build.MANUFACTURER + "\n"
+						+ android.os.Build.PRODUCT + "\n"
+						+ android.os.Build.TIME+ "\n"
+						+ android.os.Build.UNKNOWN + "\n"
+						+ android.os.Build.RADIO + "\n"
+						+ android.os.Build.TYPE + "\n"
 						+"城市："+ GetCityJson + "\n"
 						+ "纬度：" + mLatitude + "\n"
 						+ "经度：" + mLongitude+ "\n");//邮箱
