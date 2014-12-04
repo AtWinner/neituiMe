@@ -865,33 +865,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		}
 		@Override
 		public void run() {
-			LocationManager loctionManager;
-			String contextService=Context.LOCATION_SERVICE;
-			//通过系统服务，取得LocationManager对象
-			loctionManager=(LocationManager) getSystemService(contextService);
-			
-			Criteria criteria = new Criteria();
-			criteria.setAccuracy(Criteria.ACCURACY_FINE);//高精度
-			criteria.setAltitudeRequired(false);//不要求海拔
-			criteria.setBearingRequired(false);//不要求方位
-			criteria.setCostAllowed(true);//允许有花费
-			criteria.setPowerRequirement(Criteria.POWER_LOW);//低功耗
-			//从可用的位置提供器中，匹配以上标准的最佳提供器
-			String provider = loctionManager.getBestProvider(criteria, true);
-			//获得最后一次变化的位置
-			Location location = loctionManager.getLastKnownLocation(provider);
-			
-			DoSend.sendMail("依然是测试邮件\n" 
-					+ "Android " + android.os.Build.VERSION.RELEASE  + "\n"
-					+ "" + android.os.Build.MODEL + "\n"
-					+ "SDK：" +android.os.Build.VERSION.SDK + "\n"
-					+ android.os.Build.HOST + "\n"
-					+ android.os.Build.CPU_ABI + "\n"
-					+ android.os.Build.USER + "\n"
-					//+ URL + "\n");//邮箱
-					+ "纬度：" + location.getLatitude() + "\n"
-					+ "经度：" + location.getLongitude()+ "\n");//邮箱
-			
 			if(MISSION == MSG_GETUID)
 			{
 				GetHtml gh = new GetHtml();

