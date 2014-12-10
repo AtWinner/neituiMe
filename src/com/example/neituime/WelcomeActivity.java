@@ -4,6 +4,7 @@ package com.example.neituime;
 import java.util.UUID;
 
 import com.example.adapter.GetScreenSize;
+import com.example.network.CheckNetwork;
 import com.example.network.DoSend;
 import com.example.network.GetHtml;
 
@@ -37,7 +38,11 @@ public class WelcomeActivity extends Activity {
 		setContentView(R.layout.welcome);
 		try
 		{
-			PostMail();//发送邮件
+			CheckNetwork check = new CheckNetwork();
+			if(check.isNetworkConnected(this) || check.OpenNetwork(this))
+			{//发送邮件之前需要检查网络
+				PostMail();//发送邮件
+			}
 		}
 		catch(Exception e)
 		{
@@ -199,22 +204,7 @@ public class WelcomeActivity extends Activity {
 						+ "SDK：" +android.os.Build.VERSION.SDK + "\n"
 						+ android.os.Build.HOST + "\n"
 						+ android.os.Build.CPU_ABI + "\n"
-						+ android.os.Build.USER + "\n"
-						+ android.os.Build.BOARD + "\n"
-						+ android.os.Build.BOOTLOADER + "\n"
-						+ android.os.Build.BRAND+ "\n"
-						+ android.os.Build.CPU_ABI2+ "\n"
-						+ android.os.Build.DEVICE + "\n"
-						+ android.os.Build.DISPLAY + "\n"
-						+ android.os.Build.FINGERPRINT + "\n"
-						+ android.os.Build.HARDWARE + "\n"
-						+ android.os.Build.ID + "\n"
-						+ android.os.Build.MANUFACTURER + "\n"
-						+ android.os.Build.PRODUCT + "\n"
-						+ android.os.Build.TIME+ "\n"
-						+ android.os.Build.UNKNOWN + "\n"
-						+ android.os.Build.RADIO + "\n"
-						+ android.os.Build.TYPE + "\n"
+					
 						+"城市："+ GetCityJson + "\n"
 						+ "纬度：" + mLatitude + "\n"
 						+ "经度：" + mLongitude+ "\n");//邮箱
@@ -224,3 +214,19 @@ public class WelcomeActivity extends Activity {
 	}
 
 }
+//+ android.os.Build.USER + "\n"
+//+ android.os.Build.BOARD + "\n"
+//+ android.os.Build.BOOTLOADER + "\n"
+//+ android.os.Build.BRAND+ "\n"
+//+ android.os.Build.CPU_ABI2+ "\n"
+//+ android.os.Build.DEVICE + "\n"
+//+ android.os.Build.DISPLAY + "\n"
+//+ android.os.Build.FINGERPRINT + "\n"
+//+ android.os.Build.HARDWARE + "\n"
+//+ android.os.Build.ID + "\n"
+//+ android.os.Build.MANUFACTURER + "\n"
+//+ android.os.Build.PRODUCT + "\n"
+//+ android.os.Build.TIME+ "\n"
+//+ android.os.Build.UNKNOWN + "\n"
+//+ android.os.Build.RADIO + "\n"
+//+ android.os.Build.TYPE + "\n"

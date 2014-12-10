@@ -8,6 +8,7 @@ import java.util.Map;
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
+import com.example.adapter.myAlertDialog;
 import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
@@ -25,9 +26,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.tencent.tauth.Tencent;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -50,6 +54,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
@@ -188,7 +193,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
 		//结束
-		
 		init();
 		initMenuValues();
 		SetParams();
@@ -196,8 +200,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CreateCityButton();
 		BindEvent();
 		ForGridView();
-		//Toast.makeText(MainActivity.this, GetScreenSize.getStatusBarHeight(MainActivity.this) +"", Toast.LENGTH_SHORT).show();
-	
+
 	}
 	
 	private void init()
@@ -321,7 +324,18 @@ public class MainActivity extends Activity implements OnTouchListener {
 				ClickimageMainAcitvityLogo();
 				break;
 			case R.id.MainActivityUserCenter:
-				ClickMainActivityUserCenter();
+				myAlertDialog mm = new myAlertDialog(MainActivity.this, Width, Height);
+				mm.setTextSize(20, R.id.DialogUserCenter);
+				mm.setTextSize(20, R.id.DialogAbout);
+				mm.setOnclickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						Toast.makeText(MainActivity.this, "text", Toast.LENGTH_SHORT).show();
+						
+					}
+				}, R.id.DialogAbout);
+				mm.setGravity(Gravity.BOTTOM);
+//				ClickMainActivityUserCenter();
 				break;
 			case R.id.SelectCommon:
 				ClickSelectCommonCity();
@@ -385,37 +399,42 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private void ClickMainActivityUserCenter()
 	{
-		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
-		if(CheckOnlineState.IsOnline(OnlineInfo))
-		{
-			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
-			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
-			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
-			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
-			startActivity(userIntent);
-			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-		}
-//		mTencent = Tencent.createInstance(AppID, MainActivity.this);
-//		if(mTencent.isSessionValid() && mTencent.getOpenId() != null) 
-//		{//已使用qq登录
-//			String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
-//			String OpenId = mTencent.getOpenId();
-//			PostStr += ("otherid=" + OpenId);
-//			MThread myThread = new MThread(PostStr, MSG_GETUID);
-//			myThread.start();
-//			showDialog();
+		String [] as= {"个人中心", "关于"};
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this).setItems(as, new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				Toast.makeText(MainActivity.this, "asas", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes(); 
+		layoutParams.width = Width / 3 * 2;
+		layoutParams.height = LayoutParams.WRAP_CONTENT; 
+		
+		dialog.getWindow().setAttributes(layoutParams);  
+		dialog.getWindow().setGravity(Gravity.BOTTOM);
+		
+//		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
+//		if(CheckOnlineState.IsOnline(OnlineInfo))
+//		{
+//			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
+//			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
+//			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
+//			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
+//			startActivity(userIntent);
+//			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 //		}
-//		else if(false)
-//		{//这里放新浪的
-//			
+
+//		else
+//		{
+//			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//			loginIntent.putExtra("ResponseNumber", ResponseNumber);
+//			startActivityForResult(loginIntent, ResponseNumber);
+//			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 //		}
-		else
-		{
-			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-			loginIntent.putExtra("ResponseNumber", ResponseNumber);
-			startActivityForResult(loginIntent, ResponseNumber);
-			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-		}
 	}
 	/**
 	 * 点击SelectCommon触发的操作
@@ -826,24 +845,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 				mGridView.setStackFromBottom(true);
 				mGridView.setSelection(point);//将Selection定位到GridView底部
 				break;
-//			case MSG_GETUID:
-//				String userInfo = (String)msg.obj;
-//				AnalyzeJson aj = new AnalyzeJson(userInfo);
-//				HashMap<String, String> userMap = aj.GetUserInfoByJson();
-//				if(userMap.get("message").equals("ok") && userMap.get("className").equals("success") && !userMap.get("uid").equals("0"))
-//				{
-//						Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
-//						userIntent.putExtra("LoginStyle", "Tencent");
-//						userIntent.putExtra("Token", userMap.get("token"));
-//						startActivity(userIntent);
-//						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-//				}
-//				else if(userMap.get("uid").equals("0"))
-//				{
-//					Toast.makeText(MainActivity.this, "没有找到您的简历，请到网页版完善", Toast.LENGTH_SHORT).show();
-//				}
-//				break;
-		
 			}
 			progressDialog.dismiss();
 			mPullRefreshGridView.onRefreshComplete();
@@ -1053,9 +1054,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 	private void showDialog()
 	{
-//		progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命获取数据中...", true);
-//		progressDialog.setCancelable(false);
-//		progressDialog.setOnKeyListener(new myOnKeyListener());
 		if(progressDialog == null)
 		{
 			progressDialog = myProgressDialog.createDialog(MainActivity.this);
