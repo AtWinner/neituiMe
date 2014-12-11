@@ -374,7 +374,7 @@ public class ResumeActivity extends Activity {
 		}
 		progressDialog.show();		
 	}
-	private void showDiaLog(String showText)
+	private void showDialog(String showText)
 	{
 		if(progressDialog == null)
 		{
@@ -384,5 +384,14 @@ public class ResumeActivity extends Activity {
 			progressDialog.setMessage("简历提交中...");
 		}
 		progressDialog.show();		
+	}
+	private void onClickShare()
+	{
+		Intent intent=new Intent(Intent.ACTION_SEND); 
+		intent.setType("text/plain"); 
+		intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
+		intent.putExtra(Intent.EXTRA_TEXT, "text");  
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+		startActivity(Intent.createChooser(intent, getTitle())); 
 	}
 }

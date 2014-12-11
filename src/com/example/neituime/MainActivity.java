@@ -13,11 +13,9 @@ import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
-import com.example.network.DoSend;
 import com.example.network.GetHtml;
 import com.example.tencent.CheckOnlineState;
 import com.example.view.AddLayoutView;
-import com.example.view.AnalyzeJson;
 import com.example.view.GridViewItem;
 import com.exmple.data.SetCode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -26,18 +24,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.tencent.tauth.Tencent;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,7 +45,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
@@ -200,7 +193,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CreateCityButton();
 		BindEvent();
 		ForGridView();
-
 	}
 	
 	private void init()
@@ -324,18 +316,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 				ClickimageMainAcitvityLogo();
 				break;
 			case R.id.MainActivityUserCenter:
-				myAlertDialog mm = new myAlertDialog(MainActivity.this, Width, Height);
-				mm.setTextSize(20, R.id.DialogUserCenter);
-				mm.setTextSize(20, R.id.DialogAbout);
-				mm.setOnclickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						Toast.makeText(MainActivity.this, "text", Toast.LENGTH_SHORT).show();
-						
-					}
-				}, R.id.DialogAbout);
-				mm.setGravity(Gravity.BOTTOM);
-//				ClickMainActivityUserCenter();
+				ClickMainActivityUserCenter();
+				Tip();//转一圈
 				break;
 			case R.id.SelectCommon:
 				ClickSelectCommonCity();
@@ -350,7 +332,39 @@ public class MainActivity extends Activity implements OnTouchListener {
 			}
 		}
 	}
-
+	private void ClickMainActivityUserCenter()
+	{
+		final myAlertDialog mm = new myAlertDialog(MainActivity.this, Width, Height);
+		mm.setTextSize(20, R.id.DialogUserCenter);
+		mm.setTextSize(20, R.id.DialogAbout);
+		mm.setOnclickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				GotoAbout();
+				mm.dismiss();
+			}
+		}, R.id.DialogAbout);
+		mm.setOnclickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				GotoUserCenter();
+				mm.dismiss();
+			}
+		}, R.id.DialogUserCenter);
+		mm.setGravity(Gravity.BOTTOM);
+		mm.setOntouchColor();
+	}
+	/**
+	 * UserCenter按钮旋转
+	 */
+	private void Tip()
+	{
+		Animation operatingAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.usercenter_tip);
+		LinearInterpolator lin = new LinearInterpolator();
+		operatingAnim.setInterpolator(lin);
+		MainActivityUserCenter.startAnimation(operatingAnim);
+	}
 	/**
 	 * 点击CityArrow触发的操作
 	 */
@@ -373,7 +387,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private void ClicksetAlways()
 	{
 		Intent intent = new Intent(MainActivity.this, ChooseBtnActivity.class);
-		// TODO 加入切换模式
 		startActivityForResult(intent, 100);
 		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 	}
@@ -395,46 +408,39 @@ public class MainActivity extends Activity implements OnTouchListener {
 		}
 	}
 	/**
-	 * 点击MainActivityUserCenter触发的操作
+	 * 点击个人中心触发的操作
 	 */
-	private void ClickMainActivityUserCenter()
+	private void GotoUserCenter()
 	{
-		String [] as= {"个人中心", "关于"};
-		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this).setItems(as, new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				Toast.makeText(MainActivity.this, "asas", Toast.LENGTH_SHORT).show();
-			}
-		});
 		
-		AlertDialog dialog = builder.create();
-		dialog.show();
-		WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes(); 
-		layoutParams.width = Width / 3 * 2;
-		layoutParams.height = LayoutParams.WRAP_CONTENT; 
-		
-		dialog.getWindow().setAttributes(layoutParams);  
-		dialog.getWindow().setGravity(Gravity.BOTTOM);
-		
-//		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
-//		if(CheckOnlineState.IsOnline(OnlineInfo))
-//		{
-//			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
-//			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
-//			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
-//			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
-//			startActivity(userIntent);
-//			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-//		}
+		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
+		if(CheckOnlineState.IsOnline(OnlineInfo))
+		{
+			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
+			Intent userIntent = new Intent(MainActivity.this, UserCenterActivity.class);
+			userIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
+			userIntent.putExtra("Token", OnlineInfo.getString("Token",""));
+			startActivity(userIntent);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
 
-//		else
-//		{
-//			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-//			loginIntent.putExtra("ResponseNumber", ResponseNumber);
-//			startActivityForResult(loginIntent, ResponseNumber);
-//			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-//		}
+		else
+		{
+			Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+			loginIntent.putExtra("ResponseNumber", ResponseNumber);
+			startActivityForResult(loginIntent, ResponseNumber);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
+	}
+	/**
+	 * 点击关于时触发的操作
+	 */
+	private void GotoAbout()
+	{
+		Toast.makeText(MainActivity.this, "text", Toast.LENGTH_SHORT).show();
+		Intent aboucIntent = new Intent(MainActivity.this, AboutMeActivity.class);
+		startActivity(aboucIntent);
+		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 	}
 	/**
 	 * 点击SelectCommon触发的操作

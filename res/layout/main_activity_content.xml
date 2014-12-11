@@ -95,6 +95,7 @@
 		            android:id="@+id/MainActivityUserCenter"
 		            android:layout_gravity="right|right"
 		            android:layout_marginRight="10dp"
+		            android:scaleType="center"
 		            /> 
 		        <Button
 			        android:id="@+id/btnBity"

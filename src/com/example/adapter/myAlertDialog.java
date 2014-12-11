@@ -1,14 +1,23 @@
 package com.example.adapter;
 
+import com.example.event.myOnTouchListenerChangeBackground;
+import com.example.neituime.MainActivity;
 import com.example.neituime.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.view.Window;
 import android.webkit.WebView.FindListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -43,8 +52,19 @@ public class myAlertDialog
 		LinearLayout.LayoutParams noParams = (LinearLayout.LayoutParams)HaveNo.getLayoutParams();
 		noParams.height = Height / 13;
 		HaveNo.setLayoutParams(noParams);
+		bindEvent();
 	}
-
+	private void bindEvent()
+	{
+		HaveNo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+				
+			}
+		});
+	}
 	public void setItem(String text)
 	{
 //		TextView item = new TextView(context);
@@ -81,8 +101,16 @@ public class myAlertDialog
 			break;
 		}
 	}
-	public void setOntouchColor(int color)
+	/**
+	 * 设置点击颜色
+	 */
+	public void setOntouchColor()
 	{
-		
+		DialogAbout.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		DialogUserCenter.setOnTouchListener(new myOnTouchListenerChangeBackground());
+	}
+	public void dismiss()
+	{
+		this.dialog.dismiss();
 	}
 }

@@ -2,15 +2,15 @@ package com.example.neituime;
 
 
 import java.util.UUID;
-
 import com.example.adapter.GetScreenSize;
 import com.example.network.CheckNetwork;
 import com.example.network.DoSend;
 import com.example.network.GetHtml;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -94,8 +95,18 @@ public class WelcomeActivity extends Activity {
         }, 2000);  
 		
 		GetLocation();
+		getScreenSize();
 	}
-
+	@SuppressLint("NewApi")
+	private void getScreenSize()
+	{
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+		Toast.makeText(WelcomeActivity.this, "width"+width+"height"+ height, Toast.LENGTH_LONG).show();
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
