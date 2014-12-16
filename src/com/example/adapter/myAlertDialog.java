@@ -57,11 +57,9 @@ public class myAlertDialog
 	private void bindEvent()
 	{
 		HaveNo.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
 				dialog.dismiss();
-				
 			}
 		});
 	}

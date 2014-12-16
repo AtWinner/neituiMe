@@ -287,9 +287,14 @@ public class ResumeActivity extends Activity {
 		AddTextView("简历标签", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("experiencetags"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 		
-		
 		AddTextView("工作经验", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("experience"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
+
+		AddTextView("附加信息", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
+		String link = ResumeMap.get("social");
+		link = link.replace(",", "\n");
+		link = link.replace("|", "：");
+		AddTextView(link, AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 		
 		AddTextView("教育经历", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("education"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);

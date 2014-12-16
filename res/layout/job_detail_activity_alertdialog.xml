@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+    >
+	<LinearLayout 
+	    android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+	    android:background="@color/white"
+	    android:id="@+id/JobDetailDialogLinear"
+	    >
+	    <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="个人中心"
+	        android:id="@+id/JobDetailDialogShare"
+	        android:padding="10dp"
+	        ></TextView>
+	    <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="关于"
+	        android:id="@+id/JobDetailDialogSend"
+	        android:padding="10dp"
+	        ></TextView>
+	</LinearLayout>
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/JobDetailHaveNo"
+	    android:orientation="vertical"
+	    ></LinearLayout>
+</LinearLayout>

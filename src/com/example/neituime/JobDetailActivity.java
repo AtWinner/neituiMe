@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.JobDetailAlertDialog;
 import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
 import com.example.event.myOnTouchListenerChangeBackground;
@@ -53,6 +54,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +92,7 @@ public class JobDetailActivity extends Activity{
 	private LinearLayout CompanyBody;
 	private LinearLayout DetailTop;
 	private LinearLayout DetailBottom;
+	private RelativeLayout JobBottomRelative;
 	private  myProgressDialog progressDialog = null;
 	private Button Login;
 	private Tencent mTencent;
@@ -137,6 +140,7 @@ public class JobDetailActivity extends Activity{
 		DetailBottom = (LinearLayout)findViewById(R.id.DetailBottom);
 		DetailTop = (LinearLayout)findViewById(R.id.DetailTop);
 		Login = (Button)findViewById(R.id.QQ);
+		JobBottomRelative = (RelativeLayout)findViewById(R.id.JobBottomRelative);
 		mTencent = Tencent.createInstance(AppID, JobDetailActivity.this);
 		showDialog();
 	}
@@ -150,6 +154,10 @@ public class JobDetailActivity extends Activity{
 		JobScrollview.setLayoutParams(scrollParams);
 		//JobMainLinear.setBackgroundResource(R.drawable.boder_detail);
 		JobbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+		
+		RelativeLayout.LayoutParams JobBottomRelativeParams = (RelativeLayout.LayoutParams)JobBottomRelative.getLayoutParams();
+		JobBottomRelativeParams.height = height;
+		JobBottomRelative.setLayoutParams(JobBottomRelativeParams);
 		
 		Login.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 	}
@@ -174,38 +182,51 @@ public class JobDetailActivity extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
-				if (CheckOnlineState.IsOnline(OnlineInfo)) 
-				{//去简历界面
-					Intent resumeIntent = new Intent(JobDetailActivity.this, ResumeActivity.class);
-					if(UID != null && Token != null)
-					{
-						resumeIntent.putExtra("UID", UID);
-						resumeIntent.putExtra("Token", Token);
-						resumeIntent.putExtra("ResponseNumber", ResponseNumber);
-						resumeIntent.putExtra("JobID", JobID);
-						startActivity(resumeIntent);
-						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-					}
-					else 
-					{
-						String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
-						String OpenId = mTencent.getOpenId();
-						PostStr += ("otherid=" + OpenId);
-						mThread uidThread = new mThread(MSG_GETUID, PostStr);
-						uidThread.start();
-						//在请求一次服务器，如果依旧为null就真没有了
-					}
-				}
-				else
-				{//如果没登录就去登录界面
-					Intent loginIntent = new Intent(JobDetailActivity.this, LoginActivity.class);
-					loginIntent.putExtra("ResponseNumber", ResponseNumber);
-					startActivityForResult(loginIntent, 1);
-					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-				}
-
+				ShowAlertDialog();
 			}
 		});
+	}
+	/**
+	 * 显示自定义AlertDialog
+	 */
+	private void ShowAlertDialog()
+	{
+		JobDetailAlertDialog dialog = new JobDetailAlertDialog(JobDetailActivity.this, Width, Height);
+	}
+	/**
+	 * 投递简历
+	 */
+	private void GoToSend()
+	{
+		if (CheckOnlineState.IsOnline(OnlineInfo)) 
+		{//去简历界面
+			Intent resumeIntent = new Intent(JobDetailActivity.this, ResumeActivity.class);
+			if(UID != null && Token != null)
+			{
+				resumeIntent.putExtra("UID", UID);
+				resumeIntent.putExtra("Token", Token);
+				resumeIntent.putExtra("ResponseNumber", ResponseNumber);
+				resumeIntent.putExtra("JobID", JobID);
+				startActivity(resumeIntent);
+				overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+			}
+			else 
+			{
+				String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
+				String OpenId = mTencent.getOpenId();
+				PostStr += ("otherid=" + OpenId);
+				mThread uidThread = new mThread(MSG_GETUID, PostStr);
+				uidThread.start();
+				//在请求一次服务器，如果依旧为null就真没有了
+			}
+		}
+		else
+		{//如果没登录就去登录界面
+			Intent loginIntent = new Intent(JobDetailActivity.this, LoginActivity.class);
+			loginIntent.putExtra("ResponseNumber", ResponseNumber);
+			startActivityForResult(loginIntent, 1);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
 	}
 	private void SetData()
 	{

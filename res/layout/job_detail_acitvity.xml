@@ -141,41 +141,49 @@
     </LinearLayout>   
     
 
-    <LinearLayout 
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/JobBottomLinear"
+        android:id="@+id/JobBottomRelative"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="@color/MainBlue"
         >
-        <ImageButton 
+        <LinearLayout 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/JobGetBack"
-            android:background="@drawable/arrow"
-            />
-        <Button 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="返回"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:gravity="center_vertical"
-            android:fontFamily="黑体"
-            android:background="@color/MainBlue"
-            android:id="@+id/JobbtnGetBack"
-            />
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true"
+            >
+            <ImageButton 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:id="@+id/JobGetBack"
+	            android:background="@drawable/arrow"
+	            />
+	        <Button 
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:text="返回"
+	            android:textColor="@color/white"
+	            android:textSize="30sp"
+	            android:gravity="center_vertical"
+	            android:fontFamily="黑体"
+	            android:background="@color/MainBlue"
+	            android:id="@+id/JobbtnGetBack"
+	            />
+        </LinearLayout>
+        
         <Button 
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="投递简历"
             android:textColor="@color/white"
             android:textSize="28sp"
-            android:layout_marginLeft="15dp"
             android:background="@color/MainBlue"
             android:id="@+id/QQ"
+            android:layout_alignParentRight="true"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
