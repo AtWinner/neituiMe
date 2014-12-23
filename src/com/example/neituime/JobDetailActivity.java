@@ -210,6 +210,26 @@ public class JobDetailActivity extends Activity{
 				dialog.dismiss();				
 			}
 		}, R.id.JobDetailDialogSend);
+		dialog.setOnclickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				DoShare();
+				dialog.dismiss();
+			}
+		}, R.id.JobDetailDialogShare);
+	}
+	/**
+	 * 执行分享
+	 */
+	private void DoShare()
+	{
+		Intent intent=new Intent(Intent.ACTION_SEND);   
+        intent.setType("text/plain");   
+        intent.putExtra(Intent.EXTRA_SUBJECT, "分享");   
+        intent.putExtra(Intent.EXTRA_TEXT, "我在内推网发现了一个很棒的职位哦！\n" + URL);    
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   
+        startActivity(Intent.createChooser(intent, getTitle()));  
 	}
 	/**
 	 * 投递简历
