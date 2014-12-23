@@ -15,14 +15,14 @@
 	    <TextView
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:text="个人中心"
+	        android:text="分享一下"
 	        android:id="@+id/JobDetailDialogShare"
 	        android:padding="10dp"
 	        ></TextView>
 	    <TextView
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:text="关于"
+	        android:text="投递简历"
 	        android:id="@+id/JobDetailDialogSend"
 	        android:padding="10dp"
 	        ></TextView>

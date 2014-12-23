@@ -18,7 +18,7 @@
 	        android:id="@+id/loadingImageView" 
 	        android:layout_width="50dp" 
 	        android:layout_height="50dp" 
-	        android:background="@anim/progress_round"/> 
+	        android:background="@drawable/ball"/> 
 		<TextView 
 	        android:id="@+id/id_tv_loadingmsg" 
 	        android:layout_width="wrap_content" 

@@ -6,6 +6,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.Gravity;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +30,13 @@ public class myProgressDialog extends Dialog {
         customProgressDialog = new myProgressDialog(context, R.style.CustomProgressDialog);
         customProgressDialog.setContentView(R.layout.loading_dialog);
         customProgressDialog.getWindow().getAttributes().gravity = Gravity.CENTER;
-         
+        ImageView imageView = (ImageView) customProgressDialog.findViewById(R.id.loadingImageView);
+//      AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getBackground();
+//      animationDrawable.start();
+        Animation operatingAnim = AnimationUtils.loadAnimation(context, R.anim.loading_dialog_tips);
+        LinearInterpolator lin = new LinearInterpolator();
+		operatingAnim.setInterpolator(lin);
+		imageView.startAnimation(operatingAnim);
         return customProgressDialog;
     }
   
@@ -36,10 +45,6 @@ public class myProgressDialog extends Dialog {
         if (customProgressDialog == null){
             return;
         }
-         
-        ImageView imageView = (ImageView) customProgressDialog.findViewById(R.id.loadingImageView);
-        AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getBackground();
-        animationDrawable.start();
     }
   
     /**

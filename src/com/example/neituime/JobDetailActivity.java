@@ -191,7 +191,25 @@ public class JobDetailActivity extends Activity{
 	 */
 	private void ShowAlertDialog()
 	{
-		JobDetailAlertDialog dialog = new JobDetailAlertDialog(JobDetailActivity.this, Width, Height);
+		final JobDetailAlertDialog dialog = new JobDetailAlertDialog(JobDetailActivity.this, Width, Height);
+		dialog.setTextSize(20, R.id.JobDetailDialogShare);
+		dialog.setTextSize(20, R.id.JobDetailDialogSend);
+		if(CheckOnlineState.IsOnline(OnlineInfo))
+		{
+			dialog.IsOnLine();
+		}
+		else
+		{
+			dialog.IsOffLine();
+		}
+		dialog.setOnclickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				GoToSend();
+				dialog.dismiss();				
+			}
+		}, R.id.JobDetailDialogSend);
 	}
 	/**
 	 * 投递简历
@@ -547,20 +565,16 @@ public class JobDetailActivity extends Activity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		UID = data.getStringExtra("UID");
 		Token = data.getStringExtra("Token");
-		//Toast.makeText(JobDetailActivity.this, data.getStringExtra("UID")+"，"+ data.getStringExtra("Token"), Toast.LENGTH_SHORT).show();
 		SetData();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	private void showDialog()
 	{
-		if(progressDialog == null)
-		{
-			progressDialog = myProgressDialog.createDialog(JobDetailActivity.this);
-			progressDialog.setCancelable(false);
-			progressDialog.setOnKeyListener(new myOnKeyListener());
-			progressDialog.setMessage("拼命获取数据中...");
-		}
-		progressDialog.show();		
+		progressDialog = myProgressDialog.createDialog(JobDetailActivity.this);
+		progressDialog.setCancelable(false);
+		progressDialog.setOnKeyListener(new myOnKeyListener());
+		progressDialog.setMessage("拼命获取数据中...");
+		progressDialog.show();
 	}
 	
 }

@@ -1051,7 +1051,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 * @param millis
 	 *            指定当前线程睡眠多久，以毫秒为单位
 	 */
-	private void sleep(long millis) {
+	private void sleep(long millis) 
+	{
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
@@ -1060,14 +1061,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 	private void showDialog()
 	{
-		if(progressDialog == null)
-		{
-			progressDialog = myProgressDialog.createDialog(MainActivity.this);
-			progressDialog.setCancelable(false);
-			progressDialog.setOnKeyListener(new myOnKeyListener());
-			progressDialog.setMessage("拼命获取数据中...");
-		}
-		progressDialog.show();		
-		
+		progressDialog = myProgressDialog.createDialog(MainActivity.this);
+		progressDialog.setCancelable(false);
+		progressDialog.setOnKeyListener(new myOnKeyListener());
+		progressDialog.setMessage("拼命获取数据中...");
+		progressDialog.show();
 	}
 }
