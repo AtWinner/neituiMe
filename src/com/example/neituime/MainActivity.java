@@ -437,7 +437,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private void GotoAbout()
 	{
-		Toast.makeText(MainActivity.this, "text", Toast.LENGTH_SHORT).show();
 		Intent aboucIntent = new Intent(MainActivity.this, AboutMeActivity.class);
 		startActivity(aboucIntent);
 		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
