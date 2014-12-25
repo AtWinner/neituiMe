@@ -16,6 +16,8 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:text="个人中心"
+	        android:textColor="@color/white"
+	        android:background="@drawable/city_item_background"
 	        android:id="@+id/DialogUserCenter"
 	        android:padding="10dp"
 	        ></TextView>
@@ -24,6 +26,8 @@
 	        android:layout_height="wrap_content"
 	        android:text="关于"
 	        android:id="@+id/DialogAbout"
+	        android:textColor="@color/white"
+	        android:background="@drawable/city_item_background"
 	        android:padding="10dp"
 	        ></TextView>
 	</LinearLayout>

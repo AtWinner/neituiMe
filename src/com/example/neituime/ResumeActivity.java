@@ -360,6 +360,7 @@ public class ResumeActivity extends Activity {
 			public void onClick(View v) {
 				mThread mthread = new mThread(MSG_RESUME, ResumeUrl);
 				mthread.start();
+				showDialog("简历提交中...");
 			}
 		});
 		UserDetailInfo.addView(button);
@@ -381,22 +382,10 @@ public class ResumeActivity extends Activity {
 	}
 	private void showDialog(String showText)
 	{
-		if(progressDialog == null)
-		{
-			progressDialog = myProgressDialog.createDialog(ResumeActivity.this);
-			progressDialog.setCancelable(false);
-			progressDialog.setOnKeyListener(new myOnKeyListener());
-			progressDialog.setMessage("简历提交中...");
-		}
-		progressDialog.show();		
-	}
-	private void onClickShare()
-	{
-		Intent intent=new Intent(Intent.ACTION_SEND); 
-		intent.setType("text/plain"); 
-		intent.putExtra(Intent.EXTRA_SUBJECT, "分享"); 
-		intent.putExtra(Intent.EXTRA_TEXT, "text");  
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-		startActivity(Intent.createChooser(intent, getTitle())); 
+		progressDialog = myProgressDialog.createDialog(ResumeActivity.this);
+		progressDialog.setCancelable(false);
+		progressDialog.setOnKeyListener(new myOnKeyListener());
+		progressDialog.setMessage(showText);
+		progressDialog.show();
 	}
 }

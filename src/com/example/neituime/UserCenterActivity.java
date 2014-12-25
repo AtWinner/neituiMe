@@ -101,6 +101,15 @@ public class UserCenterActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_center_activity);
+		Intent beforeIntent = getIntent();
+		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
+		Token = beforeIntent.getStringExtra("Token");
+		if(Token.equals(""))
+		{
+			this.finish();
+			return;
+		}
+		Log.e(Token, LoginStyle);
 		init();
 		setParams();
 		bindEvent();
@@ -118,10 +127,6 @@ public class UserCenterActivity extends Activity {
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(UserCenterActivity.this, Height);
-		Intent beforeIntent = getIntent();
-		LoginStyle = beforeIntent.getStringExtra("LoginStyle");
-		Token = beforeIntent.getStringExtra("Token");
-		Log.e(Token, LoginStyle);
 		userCenterBottom = (LinearLayout)findViewById(R.id.userCenterBottom);
 		UserCenterGetBack = (ImageButton)findViewById(R.id.UserCenterGetBack);
 		UserCenterbtnGetBack = (Button)findViewById(R.id.UserCenterbtnGetBack);

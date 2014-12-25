@@ -1,31 +1,22 @@
 package com.example.adapter;
 
-import com.example.event.myOnTouchListenerChangeBackground;
-import com.example.neituime.MainActivity;
+import com.example.event.myOnTouchListenerChangeCityBackground;
 import com.example.neituime.R;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.Window;
-import android.webkit.WebView.FindListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class myAlertDialog 
 {
 	private Context context;
-	private AlertDialog dialog;
+	private Dialog dialog;
 	private LinearLayout DialogLinear;
 	private LinearLayout.LayoutParams DialogLinearParams;
 	private TextView DialogUserCenter;
@@ -34,7 +25,8 @@ public class myAlertDialog
 	public myAlertDialog(Context mcontext, int Width, int Height)
 	{
 		context = mcontext;
-		dialog = new AlertDialog.Builder(mcontext).create();
+		//dialog = new AlertDialog.Builder(mcontext).create();
+		dialog=new Dialog(mcontext, R.style.DialogStyle);
 		dialog.show();
 		//关键在下面的两行,使用window.setContentView,替换整个对话框窗口的布局
 		Window window = dialog.getWindow();
@@ -52,6 +44,12 @@ public class myAlertDialog
 		LinearLayout.LayoutParams noParams = (LinearLayout.LayoutParams)HaveNo.getLayoutParams();
 		noParams.height = Height / 13;
 		HaveNo.setLayoutParams(noParams);
+		LinearLayout.LayoutParams DialogUserCenterParams = (LinearLayout.LayoutParams)DialogUserCenter.getLayoutParams();
+		DialogUserCenterParams.height = Height / 13;
+		DialogUserCenter.setLayoutParams(DialogUserCenterParams);
+		LinearLayout.LayoutParams DialogAboutParams = (LinearLayout.LayoutParams)DialogAbout.getLayoutParams();
+		DialogAboutParams.height = Height / 13;
+		DialogAbout.setLayoutParams(DialogAboutParams);
 		bindEvent();
 	}
 	private void bindEvent()
@@ -104,8 +102,8 @@ public class myAlertDialog
 	 */
 	public void setOntouchColor()
 	{
-		DialogAbout.setOnTouchListener(new myOnTouchListenerChangeBackground());
-		DialogUserCenter.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		DialogAbout.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
+		DialogUserCenter.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
 	}
 	public void dismiss()
 	{

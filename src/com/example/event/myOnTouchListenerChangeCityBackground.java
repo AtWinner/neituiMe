@@ -1,25 +1,22 @@
 package com.example.event;
 
-import com.example.neituime.R;
-import com.example.neituime.R.drawable;
-
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 
-public class myOnTouchListenerChangeBackground implements OnTouchListener {
+import com.example.neituime.R;
+
+public class myOnTouchListenerChangeCityBackground implements OnTouchListener {
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			v.setBackgroundColor(Color.GRAY);
+			v.setBackgroundResource(R.drawable.city_item_background_white);
 			break;
 
 		case MotionEvent.ACTION_UP:
-			v.setBackgroundColor(Color.WHITE);
+			v.setBackgroundResource(R.drawable.city_item_background);
 			break;
 		}
 		return false;

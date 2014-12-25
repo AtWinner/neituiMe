@@ -11,6 +11,7 @@ import com.example.adapter.GridViewAdapter;
 import com.example.adapter.myAlertDialog;
 import com.example.adapter.myProgressDialog;
 import com.example.event.myOnKeyListener;
+import com.example.event.myOnTouchListenerChangeCityBackground;
 import com.example.model.neituiValue;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
@@ -650,6 +651,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		btnCity.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 		btnCity.setTextColor(Color.WHITE);
 		btnCity.setBackgroundResource(R.drawable.city_item_background);
+		btnCity.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
 //		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 //		@Override
 //		public void onItemSelected(AdapterView<?> arg0, View arg1,

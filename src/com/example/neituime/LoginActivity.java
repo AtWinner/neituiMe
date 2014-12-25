@@ -20,6 +20,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewDebug.IntToString;
@@ -132,7 +133,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				if (mTencent.isSessionValid() && mTencent.getOpenId() != null) 
+				if (mTencent.isSessionValid() && mTencent.getOpenId() != null && !UID.equals("0")) 
 				{
 					Toast.makeText(LoginActivity.this, "已登录", Toast.LENGTH_LONG).show();
 				}
@@ -172,6 +173,7 @@ public class LoginActivity extends Activity {
 			String PostStr = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=getauth&type=qq&authkey=dc94e7adc147d381e26e74b63434b132&";
 			String OpenId = mTencent.getOpenId();
 			PostStr += ("otherid=" + OpenId);
+			Log.e(PostStr, PostStr);
 			//Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG).show();
 			mThread mythread = new mThread(JSON_SUCCESS, PostStr);
 			mythread.start();
@@ -190,36 +192,49 @@ public class LoginActivity extends Activity {
 			case JSON_SUCCESS:
 				String JsonStr = (String)msg.obj;
 				AnalyzeJson analyze = new AnalyzeJson(JsonStr);
-				HashMap<String, String> userMap = analyze.GetUserInfoByJson();
-				//Toast.makeText(LoginActivity.this, JsonStr, Toast.LENGTH_LONG).show();
-				UID = userMap.get("uid");
-				Token = userMap.get("token");
-				SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
-				Editor editor = OnlineInfo.edit();
-				editor.putString("UID", UID);
-				editor.putString("Token", Token);
-				editor.putString("LoginStyle", "Tencent");
-				editor.commit();//将用户信息保存到本地，知道点击退出时删除
-				if(ResponseNumber == 1)
+				try
 				{
-					Intent userIntent = new Intent(LoginActivity.this, UserCenterActivity.class);
-					userIntent.putExtra("LoginStyle", "Tencent");
-					userIntent.putExtra("Token", userMap.get("token"));
-					userIntent.putExtra("ResponseNumber", ResponseNumber);
-					startActivity(userIntent);
-					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-					LoginActivity.this.finish();
+					HashMap<String, String> userMap = analyze.GetUserInfoByJson();
+					//Toast.makeText(LoginActivity.this, JsonStr, Toast.LENGTH_LONG).show();
+					UID = userMap.get("uid");
+					if(UID.equals("0"))
+					{
+						Toast.makeText(LoginActivity.this, "找不到您的信息，请您到内推网充实您的简历", Toast.LENGTH_SHORT).show();
+						break;
+					}
+					Token = userMap.get("token");
+					SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", Context.MODE_PRIVATE);
+					Editor editor = OnlineInfo.edit();
+					editor.putString("UID", UID);
+					editor.putString("Token", Token);
+					editor.putString("LoginStyle", "Tencent");
+					editor.commit();//将用户信息保存到本地，知道点击退出时删除
+					if(ResponseNumber == 1)
+					{
+						Intent userIntent = new Intent(LoginActivity.this, UserCenterActivity.class);
+						userIntent.putExtra("LoginStyle", "Tencent");
+						userIntent.putExtra("Token", userMap.get("token"));
+						userIntent.putExtra("ResponseNumber", ResponseNumber);
+						startActivity(userIntent);
+						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+						LoginActivity.this.finish();
+					}
+					else if(ResponseNumber == 2)
+					{
+						Intent resumeIntent = new Intent(LoginActivity.this, ResumeActivity.class);
+						resumeIntent.putExtra("Token", userMap.get("token"));
+						resumeIntent.putExtra("ResponseNumber", ResponseNumber);
+						resumeIntent.putExtra("JobID", JobID);
+						startActivity(resumeIntent);
+						overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+						LoginActivity.this.finish();
+					}
 				}
-				else if(ResponseNumber == 2)
+				catch(Exception e)
 				{
-					Intent resumeIntent = new Intent(LoginActivity.this, ResumeActivity.class);
-					resumeIntent.putExtra("Token", userMap.get("token"));
-					resumeIntent.putExtra("ResponseNumber", ResponseNumber);
-					resumeIntent.putExtra("JobID", JobID);
-					startActivity(resumeIntent);
-					overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
-					LoginActivity.this.finish();
+					Toast.makeText(LoginActivity.this, "找不到您的信息，请您到", Toast.LENGTH_SHORT).show();
 				}
+				
 				break;
 
 			case MSG_FAILED:
