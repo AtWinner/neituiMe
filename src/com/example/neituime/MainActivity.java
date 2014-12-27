@@ -651,31 +651,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		btnCity.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
 		btnCity.setTextColor(Color.WHITE);
 		btnCity.setBackgroundResource(R.drawable.city_item_background);
-		btnCity.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
-//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//		@Override
-//		public void onItemSelected(AdapterView<?> arg0, View arg1,
-//				int arg2, long arg3) {
-//			Kcity = GetDataSource.GetCity(arg2);
-//			if(IsFirst)
-//			{
-//				Page = 1;
-//				CheckNetwork check = new CheckNetwork();
-//				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
-//				{
-//					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
-//					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
-//					m.start();
-//				}
-//			}	
-//			IsFirst = true;
-//		}
-//		@Override
-//		public void onNothingSelected(AdapterView<?> arg0) {
-//			
-//			
-//		}
-//	});
 		btnCity.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -703,6 +678,32 @@ public class MainActivity extends Activity implements OnTouchListener {
 				scrollToContent();
 			}
 		});
+		
+		btnCity.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
+//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//		@Override
+//		public void onItemSelected(AdapterView<?> arg0, View arg1,
+//				int arg2, long arg3) {
+//			Kcity = GetDataSource.GetCity(arg2);
+//			if(IsFirst)
+//			{
+//				Page = 1;
+//				CheckNetwork check = new CheckNetwork();
+//				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
+//				{
+//					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
+//					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
+//					m.start();
+//				}
+//			}	
+//			IsFirst = true;
+//		}
+//		@Override
+//		public void onNothingSelected(AdapterView<?> arg0) {
+//			
+//			
+//		}
+//	});
 		
 		linearLayout.addView(btnCity);
 	}

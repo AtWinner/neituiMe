@@ -14,7 +14,7 @@ public class myOnTouchListenerChangeCityBackground implements OnTouchListener {
 		case MotionEvent.ACTION_DOWN:
 			v.setBackgroundResource(R.drawable.city_item_background_white);
 			break;
-
+		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			v.setBackgroundResource(R.drawable.city_item_background);
 			break;

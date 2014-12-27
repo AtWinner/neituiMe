@@ -17,7 +17,7 @@ public class myOnTouchListenerChangeBackground implements OnTouchListener {
 		case MotionEvent.ACTION_DOWN:
 			v.setBackgroundColor(Color.GRAY);
 			break;
-
+		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			v.setBackgroundColor(Color.WHITE);
 			break;
