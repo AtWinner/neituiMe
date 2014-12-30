@@ -84,6 +84,7 @@ public class ChooseBtnActivity extends Activity {
 		
 		RelativeLayout.LayoutParams EditParams = (RelativeLayout.LayoutParams)SearchEditText.getLayoutParams();
 		EditParams.width = Width * 5 / 6;
+		EditParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
 		SearchEditText.setLayoutParams(EditParams);
 		
 		RelativeLayout.LayoutParams ButtonParams = (RelativeLayout.LayoutParams)SearchButton.getLayoutParams();

@@ -105,7 +105,7 @@ public class WelcomeActivity extends Activity {
 		display.getSize(size);
 		int width = size.x;
 		int height = size.y;
-		Toast.makeText(WelcomeActivity.this, "width"+width+"height"+ height, Toast.LENGTH_LONG).show();
+		//Toast.makeText(WelcomeActivity.this, "width"+width+"height"+ height, Toast.LENGTH_LONG).show();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

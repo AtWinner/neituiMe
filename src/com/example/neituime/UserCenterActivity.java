@@ -205,6 +205,8 @@ public class UserCenterActivity extends Activity {
 		RelativeQuit.setOnTouchListener(new myOnTouchListenerChangeBackground());
 		RelativeMyResume.setOnClickListener(new mOnClickListener());
 		RelativeMyResume.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		txSuggestion.setOnClickListener(new mOnClickListener());
+		RelativeSuggestion.setOnClickListener(new mOnClickListener());
 	}
 	
 	private class mOnClickListener implements OnClickListener 
@@ -220,6 +222,10 @@ public class UserCenterActivity extends Activity {
 			case R.id.txHaveSend:
 				//Toast.makeText(UserCenterActivity.this, "text", Toast.LENGTH_SHORT).show();
 				break;
+			case R.id.txSuggestion:
+			case R.id.RelativeSuggestion:
+				ClickSuggestion();
+				break;
 			case R.id.RelativeQuit:
 				ClickQuit();
 				break;
@@ -229,6 +235,11 @@ public class UserCenterActivity extends Activity {
 			}
 			
 		}
+	}
+	private void ClickSuggestion()
+	{
+		Intent intent = new Intent(UserCenterActivity.this, AboutMeActivity.class);
+		startActivity(intent);
 	}
 	private void  ClickMyResume()
 	{

@@ -52,6 +52,7 @@
     <string name="Function">职能</string>
     <string name="Product">产品</string>
     <string name="SelectButtonTitle">选择我的常用标签</string>
-    
     <string name="JobDetail">职位细节</string>
+    <string name="mailName">neituimePost@163.com</string>
+    <string name="myQQNumber">361922032</string>
 </resources>

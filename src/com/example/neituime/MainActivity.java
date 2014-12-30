@@ -274,9 +274,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 		LinearLayout.LayoutParams QuitParams = new LayoutParams(width, height);
 		MainQuit.setLayoutParams(QuitParams);
 		CityArrow.setLayoutParams(QuitParams);
-		LinearLayout.LayoutParams userCenterParams = (LinearLayout.LayoutParams) MainActivityUserCenter.getLayoutParams();
+		RelativeLayout.LayoutParams userCenterParams = (RelativeLayout.LayoutParams) MainActivityUserCenter.getLayoutParams();
 		userCenterParams.width=ViewHeight;
 		userCenterParams.height=ViewHeight;
+		userCenterParams.leftMargin = (Width - ViewHeight) / 2;
 		MainActivityUserCenter.setLayoutParams(userCenterParams);
 		btnBity.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 		
@@ -335,6 +336,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 	}
 	private void ClickMainActivityUserCenter()
 	{
+		if(isCityVisible)
+		{//先把城市列表藏起来
+			scrollToContent();
+		}
 		final myAlertDialog mm = new myAlertDialog(MainActivity.this, Width, Height);
 		mm.setTextSize(20, R.id.DialogUserCenter);
 		mm.setTextSize(20, R.id.DialogAbout);
