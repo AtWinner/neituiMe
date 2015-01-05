@@ -2,10 +2,17 @@ package com.example.neituime;
 
 
 import java.util.UUID;
+
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
 import com.example.adapter.GetScreenSize;
 import com.example.network.CheckNetwork;
 import com.example.network.DoSend;
 import com.example.network.GetHtml;
+import com.example.network.UseBaiduMapAPI;
+import com.example.network.*;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -32,6 +39,9 @@ import android.widget.TextView;
 public class WelcomeActivity extends Activity {
 	private LinearLayout ImageLinearLayout;
 	private String uniqueId = "";//机器识别码
+	private LocationMode tempMode =  LocationMode.Hight_Accuracy;
+	private LocationClient mLocationClient;
+	private String tempcoor="gcj02";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,6 +106,22 @@ public class WelcomeActivity extends Activity {
 		
 		GetLocation();
 		getScreenSize();
+		
+		UseBaiduMap();
+	}
+	private void UseBaiduMap()
+	{
+		mLocationClient = ((LocationApplication)getApplication()).mLocationClient;
+	}
+	private void InitLocation()
+	{
+		LocationClientOption option = new LocationClientOption();
+		option.setLocationMode(tempMode);//设置定位模式
+		option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
+		int span=1000;
+		option.setScanSpan(span);//设置发起定位请求的间隔时间为5000ms
+		option.setIsNeedAddress(true);
+		mLocationClient.setLocOption(option);
 	}
 	@SuppressLint("NewApi")
 	private void getScreenSize()
