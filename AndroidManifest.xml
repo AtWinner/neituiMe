@@ -3,34 +3,46 @@
     package="com.example.neituime"
     android:versionCode="3"
     android:versionName="1.0.3" >
-	<uses-permission 
-        android:name="android.permission.INTERNET"/>
- 	<uses-permission 
- 	    android:name="android.permission.CHANGE_NETWORK_STATE"/>
- 	<uses-permission 
- 	    android:name="android.permission.ACCESS_NETWORK_STATE" />
- 	<uses-permission 
- 	    android:name="android.permission.CHANGE_WIFI_STATE" />
- 	<uses-permission 
- 	    android:name="android.permission.ACCESS_WIFI_STATE" />
- 	<uses-permission 
- 	    android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
-	<uses-permission 
- 	    android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-	<uses-permission 
-	    android:name="android.permission.ACCESS_FINE_LOCATION"/>
-	<uses-permission 
-	    android:name="android.permission.READ_PHONE_STATE"/>
+    <!--使用网络功能所需权限  -->  
+	<uses-permission  android:name="android.permission.INTERNET"/>
+ 	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+ 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+ 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+ 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<!-- SDK离线地图和cache功能需要读写外部存储器 -->  
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<!-- 获取设置信息和详情页直接拨打电话需要以下权限  -->  
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>  
+	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>  
+	<!-- 使用定位功能所需权限 -->  
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>  
+	<permission android:name="android.permission.BAIDU_LOCATION_SERVICE"></permission>  
+	<uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"></uses-permission>  
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>  
+	<uses-permission android:name="android.permission.ACCES_MOCK_LOCATION"></uses-permission>  
+	<uses-permission android:name="android.permission.ACCESS_GPS"/>  
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <application
+        android:name="com.example.neituime.LocationApplication"
         android:allowBackup="true"
         android:icon="@drawable/main_logo"
         android:label="@string/app_name"
 		android:theme="@style/AppTheme"
          >
+         <!-- 缺少service会导致定位功能无法启动 -->
+         <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" >
+                </action>
+            </intent-filter>
+        </service>
+         <!-- Activity信息 -->
         <activity
             android:name="com.example.neituime.WelcomeActivity"
             android:label="@string/app_name" >
@@ -77,7 +89,12 @@
             </intent-filter>
         </activity>
  		<activity android:name="com.tencent.plus.ImageActivity" />
-
+		<meta-data  
+            android:name="com.baidu.lbsapi.API_KEY"  
+            android:value="yaEFEnsloXIruiwZ84pvVpki" ></meta-data>
+		<intent-filter>  
+			<action android:name="com.baidu.location.service_v2.4"></action>  
+		</intent-filter>  
     </application>
 
 </manifest>

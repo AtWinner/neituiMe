@@ -7,10 +7,6 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 import com.example.adapter.GetScreenSize;
-import com.example.network.CheckNetwork;
-import com.example.network.DoSend;
-import com.example.network.GetHtml;
-import com.example.network.UseBaiduMapAPI;
 import com.example.network.*;
 
 import android.annotation.SuppressLint;
@@ -47,26 +43,19 @@ public class WelcomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.welcome);
-		try
-		{
-			CheckNetwork check = new CheckNetwork();
-			if(check.isNetworkConnected(this) || check.OpenNetwork(this))
-			{//发送邮件之前需要检查网络
-				PostMail();//发送邮件
-			}
-		}
-		catch(Exception e)
-		{
-			Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			Log.e("error", e.getMessage());
-		}
-		
-//		RelativeLayout WelcomePage = (RelativeLayout)findViewById(R.id.WelcomePage);
-//		ImageView Logo = new ImageView(getApplicationContext());
-//		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.main_page);
-//		Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 100, 100, 100, 100);//
-//		Logo.setImageBitmap(resizedBitmap);
-//		WelcomePage.addView(Logo);
+//		try
+//		{
+//			CheckNetwork check = new CheckNetwork();
+//			if(check.isNetworkConnected(this) || check.OpenNetwork(this))
+//			{//发送邮件之前需要检查网络
+//				PostMail();//发送邮件
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//			Log.e("error", e.getMessage());
+//		}
 		int screenWidth  = getWindowManager().getDefaultDisplay().getWidth();       // 屏幕宽  
 		int screenHeight = getWindowManager().getDefaultDisplay().getHeight();      // 屏幕高
 		screenHeight = GetScreenSize.getUsefulScreenHeight(WelcomeActivity.this, screenHeight);
@@ -105,21 +94,24 @@ public class WelcomeActivity extends Activity {
         }, 2000);  
 		
 		GetLocation();
-		getScreenSize();
-		
+		//getScreenSize();
 		UseBaiduMap();
 	}
 	private void UseBaiduMap()
 	{
 		mLocationClient = ((LocationApplication)getApplication()).mLocationClient;
+		InitLocation();
+		TextView tx= new TextView(WelcomeActivity.this);
+		((LocationApplication)getApplication()).mLocationResult=tx;
+		mLocationClient.start();
 	}
 	private void InitLocation()
 	{
 		LocationClientOption option = new LocationClientOption();
 		option.setLocationMode(tempMode);//设置定位模式
 		option.setCoorType(tempcoor);//返回的定位结果是百度经纬度，默认值gcj02
-		int span=1000;
-		option.setScanSpan(span);//设置发起定位请求的间隔时间为5000ms
+		int span=5000;
+		option.setScanSpan(Integer.MAX_VALUE);//设置发起定位请求的间隔时间为5000ms
 		option.setIsNeedAddress(true);
 		mLocationClient.setLocOption(option);
 	}
