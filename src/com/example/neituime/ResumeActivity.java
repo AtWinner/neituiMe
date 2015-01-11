@@ -326,10 +326,10 @@ public class ResumeActivity extends Activity {
 		AddTextView(State, AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 		
 
-		AddTextView("简历创建时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
+		AddTextView("最后一次修改时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("updatetime"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 
-		AddTextView("最后一次修改时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
+		AddTextView("简历创建时间", AdjustPageLayout.AdjustListTitleTextSize(Width), UserDetailInfo);
 		AddTextView(ResumeMap.get("createtime"), AdjustPageLayout.AdjustListInfoSize(Width), UserDetailInfo);
 		if(ResponseNumber == 2)
 			AddSentResumeButton();

@@ -21,6 +21,7 @@ public class myAlertDialog
 	private LinearLayout.LayoutParams DialogLinearParams;
 	private TextView DialogUserCenter;
 	private TextView DialogAbout;
+	private TextView DialogInfoCenter;
 	private LinearLayout HaveNo;
 	public myAlertDialog(Context mcontext, int Width, int Height)
 	{
@@ -33,6 +34,7 @@ public class myAlertDialog
 		window.setContentView(R.layout.main_activity_alertdialog);
 		DialogLinear = (LinearLayout)window.findViewById(R.id.DialogLinear);
 		DialogUserCenter = (TextView)window.findViewById(R.id.DialogUserCenter);
+		DialogInfoCenter = (TextView)window.findViewById(R.id.DialogInfoCenter);
 		DialogAbout = (TextView)window.findViewById(R.id.DialogAbout);
 		dialog.getWindow().setGravity(Gravity.CENTER);
 		WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
@@ -50,6 +52,7 @@ public class myAlertDialog
 		LinearLayout.LayoutParams DialogAboutParams = (LinearLayout.LayoutParams)DialogAbout.getLayoutParams();
 		DialogAboutParams.height = Height / 13;
 		DialogAbout.setLayoutParams(DialogAboutParams);
+		DialogInfoCenter.setLayoutParams(DialogAboutParams);
 		bindEvent();
 	}
 	private void bindEvent()
@@ -79,6 +82,9 @@ public class myAlertDialog
 		case R.id.DialogAbout:
 			DialogAbout.setTextSize(size);
 			break;
+		case R.id.DialogInfoCenter:
+			DialogInfoCenter.setTextSize(size);
+			break;
 		}
 	}
 	public void setGravity(int gravity)
@@ -94,6 +100,9 @@ public class myAlertDialog
 			break;
 		case R.id.DialogAbout:
 			DialogAbout.setOnClickListener(click);
+			break;
+		case R.id.DialogInfoCenter:
+			DialogInfoCenter.setOnClickListener(click);
 			break;
 		}
 	}

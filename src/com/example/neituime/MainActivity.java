@@ -344,6 +344,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		final myAlertDialog mm = new myAlertDialog(MainActivity.this, Width, Height);
 		mm.setTextSize(20, R.id.DialogUserCenter);
 		mm.setTextSize(20, R.id.DialogAbout);
+		mm.setTextSize(20, R.id.DialogInfoCenter);
 		mm.setOnclickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -359,6 +360,14 @@ public class MainActivity extends Activity implements OnTouchListener {
 				mm.dismiss();
 			}
 		}, R.id.DialogUserCenter);
+		mm.setOnclickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				GotoInfoCenter();
+				mm.dismiss();
+			}
+		}, R.id.DialogInfoCenter);
 		mm.setGravity(Gravity.BOTTOM);
 		mm.setOntouchColor();
 	}
@@ -438,6 +447,15 @@ public class MainActivity extends Activity implements OnTouchListener {
 			startActivityForResult(loginIntent, ResponseNumber);
 			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 		}
+	}
+	/**
+	 * 前往消息中心
+	 */
+	private void GotoInfoCenter()
+	{
+		Intent aboucIntent = new Intent(MainActivity.this, InformationActivity.class);
+		startActivity(aboucIntent);
+		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
 	}
 	/**
 	 * 点击关于时触发的操作

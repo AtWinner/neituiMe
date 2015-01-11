@@ -24,6 +24,15 @@
 	    <TextView
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
+	        android:text="消息中心"
+	        android:textColor="@color/white"
+	        android:background="@drawable/city_item_background"
+	        android:id="@+id/DialogInfoCenter"
+	        android:padding="10dp"
+	        ></TextView>
+	    <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
 	        android:text="关于"
 	        android:id="@+id/DialogAbout"
 	        android:textColor="@color/white"
