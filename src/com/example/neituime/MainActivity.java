@@ -453,9 +453,20 @@ public class MainActivity extends Activity implements OnTouchListener {
 	 */
 	private void GotoInfoCenter()
 	{
-		Intent aboucIntent = new Intent(MainActivity.this, InformationActivity.class);
-		startActivity(aboucIntent);
-		overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		SharedPreferences OnlineInfo = getSharedPreferences("OnlineInfo", 0);
+		if(CheckOnlineState.IsOnline(OnlineInfo))
+		{
+			//Toast.makeText(MainActivity.this, OnlineInfo.getString("LoginStyle", ""), Toast.LENGTH_SHORT).show();
+			Intent aboucIntent = new Intent(MainActivity.this, InformationActivity.class);
+			aboucIntent.putExtra("LoginStyle", OnlineInfo.getString("LoginStyle",""));
+			aboucIntent.putExtra("Token", OnlineInfo.getString("Token",""));
+			startActivity(aboucIntent);
+			overridePendingTransition(R.anim.new_dync_in_from_right, R.anim.new_dync_out_to_left);
+		}
+		else
+		{
+			Toast.makeText(MainActivity.this, "请先到个人中心登录", Toast.LENGTH_SHORT).show();
+		}
 	}
 	/**
 	 * 点击关于时触发的操作
