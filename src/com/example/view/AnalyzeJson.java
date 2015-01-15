@@ -1,6 +1,8 @@
 package com.example.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,6 +149,7 @@ public class AnalyzeJson {
 		}
 		return map;
 	}
+
 	public HashMap<String, String> GetSendResumeInfo()
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -164,5 +167,50 @@ public class AnalyzeJson {
 		}
 		
 		return map;
+	}
+	/**
+	 * 解析消息中心的json数据
+	 * @return
+	 */
+	public List<HashMap<String, String>> GetMessageCenter()
+	{
+		List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+		try
+		{
+			JSONObject myJson = new JSONObject(JsonStr);
+			if(myJson.getString("message").equals("ok") && myJson.getString("className").equals("success"))
+			{
+				JSONArray array = myJson.getJSONArray("messages");
+				int arrayLength = array.length();
+				for(int i = 0; i < arrayLength; i++)
+				{
+					HashMap<String, String> map = new HashMap<String, String>();
+					try 
+					{
+						JSONObject JsonItem = array.getJSONObject(i);
+						map.put("type", JsonItem.get("type").toString());
+						map.put("lastcontent", JsonItem.get("lastcontent").toString());
+						map.put("createdate", JsonItem.get("createdate").toString());
+						map.put("realname", JsonItem.get("realname").toString());
+						map.put("touid", JsonItem.get("touid").toString());
+						map.put("avatar", JsonItem.get("avatar").toString());
+						map.put("noreadnum", JsonItem.get("noreadnum").toString());
+						list.add(map);
+					} 
+					catch (JSONException e) 
+					{
+						Log.e("JsonItemError", e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Log.e("AnalyzeJsonError", e.getMessage());
+		}
+		
+		return list;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.GridViewAdapter;
@@ -23,6 +24,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.tencent.tauth.Tencent;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -546,6 +548,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 				}
 				else
 					mPullRefreshGridView.onRefreshComplete();
+				
 			}
 
 			@Override
@@ -1104,4 +1107,40 @@ public class MainActivity extends Activity implements OnTouchListener {
 		progressDialog.setMessage("拼命获取数据中...");
 		progressDialog.show();
 	}
+//	@Override
+//	protected void onDestroy() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onDestroy", Toast.LENGTH_SHORT).show();
+//		super.onDestroy();
+//	}
+//	@Override
+//	protected void onPause() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onPause", Toast.LENGTH_SHORT).show();
+//		super.onPause();
+//	}
+//	@Override
+//	protected void onRestart() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onRestart", Toast.LENGTH_SHORT).show();
+//		super.onRestart();
+//	}
+//	@Override
+//	protected void onResume() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onResume", Toast.LENGTH_SHORT).show();
+//		super.onResume();
+//	}
+//	@Override
+//	protected void onStart() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onStart", Toast.LENGTH_SHORT).show();
+//		super.onStart();
+//	}
+//	@Override
+//	protected void onStop() {
+//		// TODO Auto-generated method stub
+//		Toast.makeText(MainActivity.this, "onStop", Toast.LENGTH_SHORT).show();
+//		super.onStop();
+//	}
 }

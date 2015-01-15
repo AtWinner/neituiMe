@@ -1,21 +1,38 @@
 package com.example.neituime;
 
+import java.util.HashMap;
+import java.util.List;
+
+import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.event.myOnTouchListenerChangeBackground;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
+import com.example.network.GetImage;
+import com.example.view.AnalyzeJson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
+import android.text.SpannableString;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -30,11 +47,16 @@ public class InformationActivity extends Activity {
 	private int Width;//屏幕宽
 	private int Height;//屏幕高
 	
+	private String Token;
+	
 	private ImageButton InfoGetBack;
 	private Button InfobtnGetBack;
 	private LinearLayout InfoLinearTop;
 	private LinearLayout Info_sub_root_lin;
 	private PullToRefreshScrollView InfoBodyScrollView;
+	
+	private mThread imageThread;
+	private mThread onloadThread;
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
@@ -42,9 +64,12 @@ public class InformationActivity extends Activity {
 		init();
 		setParams();
 		bindEvent();
+		DoRequest();
 	}
 	private void init()
 	{
+		Intent intent = getIntent();
+		Token = intent.getStringExtra("Token");
 		Page = 1;
 		Width  = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
@@ -70,10 +95,47 @@ public class InformationActivity extends Activity {
 	{
 		InfobtnGetBack.setOnClickListener(new myOnClickListener());
 		InfoGetBack.setOnClickListener(new myOnClickListener());
-		String url = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=messages&page=1&token=e00de96065df77805bf260f01f842161&nowtime=1420785672858";
-		mThread onloadThread = new mThread(JSON_SUCCESS, url);
+		InfoBodyScrollView.setOnRefreshListener(new com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) 
+			{
+				Toast.makeText(InformationActivity.this, "pulldown", Toast.LENGTH_SHORT).show();
+			}
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) 
+			{
+				Toast.makeText(InformationActivity.this, "pullup", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	private void DoRequest()
+	{
+		if(Token == null || Token.equals(""))
+		{
+			Toast.makeText(InformationActivity.this, "请登录！", Toast.LENGTH_SHORT).show();
+			this.finish();
+			return;
+		}
+		String url = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=messages&page=" + Page + "&token=" + Token + "&nowtime=1420785672858";
+		
+		onloadThread = new mThread(JSON_SUCCESS, url);
 		onloadThread.start();
 	}
+	private Handler imageHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			switch(msg.what)
+			{
+			case IMG_SUCCESS:
+				int Item = msg.arg1;
+				ImageView imageView = (ImageView)findViewById(Item);
+				imageView.setImageBitmap((Bitmap)msg.obj);
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 	private Handler mHandler = new Handler(){
 
 		@Override
@@ -83,8 +145,12 @@ public class InformationActivity extends Activity {
 			{
 			case MSG_REFRESH:
 			case JSON_SUCCESS:
-				addView(msg.obj.toString() + msg.obj.toString());
+				AnalyzeJson analyzeJson = new AnalyzeJson(msg.obj.toString());
+				List<HashMap<String, String>> list = analyzeJson.GetMessageCenter();
+				addList(list);
+				loadImage(list);
 				break;
+			
 			}
 			super.handleMessage(msg);
 		}
@@ -94,10 +160,17 @@ public class InformationActivity extends Activity {
 	{
 		private int MSG;
 		private String URL;
+		private int Item;
 		public mThread(int message, String url)
 		{
 			MSG = message;
 			URL = url;
+		}
+		public mThread(int message, String url, int Item)
+		{
+			MSG = message;
+			URL = url;
+			this.Item = Item;
 		}
 		@Override
 		public void run()
@@ -113,6 +186,12 @@ public class InformationActivity extends Activity {
 					GetHtml GH = new GetHtml();
 					String JsonStr = GH.GetJsonByUrl(URL);
 					mHandler.obtainMessage(MSG, JsonStr).sendToTarget();
+				}
+			case IMG_SUCCESS:
+				if(check.isNetworkConnected(InformationActivity.this) || check.OpenNetwork(InformationActivity.this))
+				{
+					Bitmap bitmap = GetImage.returnBitMap(URL);
+					imageHandler.obtainMessage(MSG, Item, Item, bitmap).sendToTarget();
 				}
 				break;
 			}
@@ -131,12 +210,134 @@ public class InformationActivity extends Activity {
 			}
 		}
 	}
-	private void addView(String innerText)
+	private void addList(List<HashMap<String, String>> list)
 	{
-		TextView tx = new TextView(InformationActivity.this);
-		tx.setText(innerText);
-		Info_sub_root_lin.addView(tx);
+		int Item = 0;
+		for(HashMap<String, String> map : list)
+		{
+			addView(map, Item);
+			Item++;
+		}
 	}
-	
+	/**
+	 * 根据HashMap创建列表项数据
+	 * @param map 哈希表
+	 * @param Item 根据在list中的位置确定，要作为每个列表的id
+	 */
+	private void addView(HashMap<String, String> map, int Item)
+	{
+		int itemNum = 7;
+		//外侧LinearLayout
+		LinearLayout out = new LinearLayout(InformationActivity.this);
+		out.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout.LayoutParams outParams = new LayoutParams(LayoutParams.MATCH_PARENT, Height / itemNum);
+		out.setLayoutParams(outParams);
+		Info_sub_root_lin.addView(out);
+		//ImageView
+		ImageView logo = new ImageView(InformationActivity.this);
+		logo.setId(Item);
+		LinearLayout.LayoutParams logoparams = new LayoutParams((int)(Height / itemNum * 0.8), (int)(Height / itemNum * 0.8));
+		logoparams.gravity = Gravity.LEFT;
+		logoparams.leftMargin = (int)(Height / itemNum * 0.1);
+		logoparams.topMargin = (int)(Height / itemNum * 0.1);
+		logoparams.rightMargin = (int)(Height / itemNum * 0.1);
+		logo.setLayoutParams(logoparams);
+		logo.setImageResource(R.drawable.main_logo);
+		out.addView(logo);
+		
+		
+		//内侧LinearLayout
+		int innerHeight = (int)(Height / itemNum * 0.8);
+		int innerWidth = Width - 20 - (int)(Height / itemNum);
+		LinearLayout inner = new LinearLayout(InformationActivity.this);
+		inner.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout.LayoutParams innerParams = new LayoutParams(innerWidth, LayoutParams.WRAP_CONTENT);
+		inner.setLayoutParams(innerParams);
+		//内侧左侧LinearLayout
+		LinearLayout innerLeft = new LinearLayout(InformationActivity.this);
+		innerLeft.setOrientation(LinearLayout.VERTICAL);
+		LinearLayout.LayoutParams innerLeftParams = new LayoutParams((int)(innerWidth * 0.8), LayoutParams.WRAP_CONTENT);
+		innerLeft.setLayoutParams(innerLeftParams);
+		
+		
+		//上面的TextView
+		TextView TXTop = new TextView(InformationActivity.this);
+		LinearLayout.LayoutParams TXTopParams = new LayoutParams(LayoutParams.MATCH_PARENT, innerHeight / 2);
+		TXTop.setLayoutParams(TXTopParams);
+		TXTop.setText(map.get("realname"));
+		TXTop.setPadding(5, 0, 0, 0);
+		TXTop.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 22));
+		TXTop.setGravity(Gravity.CENTER_VERTICAL);
+		innerLeft.addView(TXTop);
+
+		
+		//下面的TextView
+		TextView TXBottom = new TextView(InformationActivity.this);
+		LinearLayout.LayoutParams TXBottomParams = new LayoutParams(LayoutParams.MATCH_PARENT, innerHeight / 2);
+		TXBottom.setLayoutParams(TXBottomParams);
+		TXBottom.setText(map.get("lastcontent"));
+		TXBottom.setPadding(5, 0, 0, 0);
+		TXBottom.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width) - 3);
+		TXBottom.setGravity(Gravity.CENTER_VERTICAL);
+		innerLeft.addView(TXBottom);
+		inner.addView(innerLeft);
+		
+		
+		//右面的TextView
+		TextView TXMiddle = new TextView(InformationActivity.this);
+		LinearLayout.LayoutParams TXMiddleParams = new LayoutParams((int)(innerWidth * 0.2), LayoutParams.MATCH_PARENT);
+		TXMiddle.setGravity(Gravity.CENTER_VERTICAL);
+		TXMiddle.setText(map.get("createdate"));
+		TXMiddle.setLayoutParams(TXMiddleParams);
+		inner.addView(TXMiddle);
+		
+		out.addView(inner);
+		
+		//下面设置事件
+		out.setOnTouchListener(new myOnTouchListenerChangeBackground());
+		final String type = map.get("type");
+		//这是系统消息，需要跳转到系统消息
+		out.setOnClickListener(new OnClickListener() {
+				
+				@Override
+			public void onClick(View arg0) {
+					
+				Toast.makeText(InformationActivity.this, type, Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+	}
+	/**
+	 * 获取logo图片
+	 * @param list
+	 */
+	private void loadImage(List<HashMap<String, String>> list)
+	{
+		int Item = 0;
+		for(HashMap<String, String> map : list)
+		{
+			String avatar = map.get("avatar");
+			loadImageItem(avatar, Item);
+			Item++;
+		}
+	}
+	/**
+	 * 加载每张图片
+	 * @param avatar 图片链接
+	 * @param Item ImageView的ID
+	 */
+	private void loadImageItem(String avatar, int Item)
+	{
+		imageThread= new mThread(IMG_SUCCESS, avatar, Item);
+		imageThread.start();
+		
+	}
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		mHandler.removeCallbacks(imageThread);
+		mHandler.removeCallbacks(onloadThread);
+		super.onStop();
+	}
 
 }

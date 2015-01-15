@@ -106,6 +106,8 @@ public class ResumeActivity extends Activity {
 		ResumeGetBack = (ImageButton)findViewById(R.id.ResumeGetBack);
 		ResumeBodyScrollView = (PullToRefreshScrollView)findViewById(R.id.ResumeBodyScrollView);
 		ResumeBodyScrollView.setMode(Mode.PULL_FROM_START);
+
+		
 		UserPhoto = (ImageView)findViewById(R.id.UserPhoto);
 		UserDetailInfo = (LinearLayout)findViewById(R.id.UserDetailInfo);
 		UserMainInfo = (LinearLayout)findViewById(R.id.UserMainInfo);
@@ -148,30 +150,27 @@ public class ResumeActivity extends Activity {
 			}
 		});
 		ResumeBodyScrollView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
-
-
 			@Override
 			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
 				new GetDataTask().execute();
 				
+				ResumeBodyScrollView.getLoadingLayoutProxy().setPullLabel("下拉刷新...\npp");  
 			}
 		});
+
 	}
 	 private class GetDataTask extends AsyncTask<Void, Void, String[]> {  
-		  
-	        @Override  
-	        protected String[] doInBackground(Void... params) {  
-	            return null;  
-	        }  
-	  
-	        @Override  
-	        protected void onPostExecute(String[] result) {  
-	        	mThread myThread = new mThread(MSG_REFRESH, ResumeURL);
-	    		myThread.start();
-	    		
-	            super.onPostExecute(result);  
-	        }  
-	    }  
+		 @Override  
+		 protected String[] doInBackground(Void... params) {  
+			 return null;  
+		 }  
+		 @Override  
+		 protected void onPostExecute(String[] result) {  
+			 mThread myThread = new mThread(MSG_REFRESH, ResumeURL);
+			 myThread.start();
+			 super.onPostExecute(result);  
+		 }  
+	 }
 	private Handler mHandler = new Handler()
 	{
 
