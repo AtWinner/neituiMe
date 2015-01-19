@@ -213,4 +213,58 @@ public class AnalyzeJson {
 		
 		return list;
 	}
+	
+	/**
+	 * 解析消息中心的json
+	 * @return
+	 */
+	public List<HashMap<String, String>> GetSystemInfoMessage()
+	{
+		List<HashMap<String, String>> list  = new ArrayList<HashMap<String, String>>();
+		try
+		{
+			JSONObject myJson = new JSONObject(JsonStr);
+			if(myJson.getString("message").equals("ok") && myJson.getString("className").equals("success"))
+			{
+				JSONArray array = myJson.getJSONArray("notices");
+				int arrayLength = array.length();
+				for(int i = 0; i < arrayLength; i++)
+				{
+					HashMap<String, String> map = new HashMap<String, String>();
+					try 
+					{
+						JSONObject JsonItem = array.getJSONObject(i);
+						map.put("id", JsonItem.get("id").toString());
+						map.put("type", JsonItem.get("type").toString());
+						map.put("fuid", JsonItem.get("fuid").toString());
+						map.put("uid", JsonItem.get("uid").toString());
+						map.put("message", JsonItem.get("message").toString());
+						map.put("createtime", JsonItem.get("createtime").toString());
+						map.put("status", JsonItem.get("status").toString());
+						map.put("oid", JsonItem.get("oid").toString());
+						map.put("frealname", JsonItem.get("frealname").toString());
+						map.put("trealname", JsonItem.get("trealname").toString());
+						map.put("avatar", JsonItem.get("avatar").toString());
+						map.put("rate", JsonItem.get("rate").toString());
+						map.put("attachurl", JsonItem.get("attachurl").toString());
+						map.put("file", JsonItem.get("file").toString());
+
+						list.add(map);
+					} 
+					catch (JSONException e) 
+					{
+						Log.e("JsonItemError", e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Log.e("AnalyzeJsonError", e.getMessage());
+		}
+		return list;
+	}
 }
