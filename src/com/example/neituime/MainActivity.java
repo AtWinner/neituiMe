@@ -841,7 +841,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		 if (keyCode == KeyEvent.KEYCODE_BACK) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			 
              if ((System.currentTimeMillis() - mExitTime) > 2000) {
                      Object mHelperUtils;
@@ -853,7 +853,11 @@ public class MainActivity extends Activity implements OnTouchListener {
                      System.exit(0);//会将进程完全杀死
              }
              return true;
-     }
+		}
+		if(keyCode == KeyEvent.KEYCODE_MENU)
+		{
+			return false;
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 

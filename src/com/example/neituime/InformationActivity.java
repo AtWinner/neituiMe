@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.IntToString;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -40,8 +41,8 @@ public class InformationActivity extends Activity {
 	private static final int JSON_SUCCESS = 1; // 获取Json成功
 	private static final int MSG_FAILED = 2; // 网络请求失败
 	private static final int IMG_SUCCESS = 3 ;// 获取图片成功
-	private static final int MSG_REFRESH = 4;// 刷新
-	private static final int MSG_RESUME= 5;//下载
+	private static final int MSG_REFRESH = 4;// 下拉刷新
+	private static final int LOAD_MORE = 5;//上拉加载更多
 	
 	private int Page;
 	private int Width;//屏幕宽
@@ -99,12 +100,18 @@ public class InformationActivity extends Activity {
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) 
 			{
-				Toast.makeText(InformationActivity.this, "pulldown", Toast.LENGTH_SHORT).show();
+				Page = 1;
+				String url = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=messages&page=" + Page + "&token=" + Token + "&nowtime=1420785672858";
+				onloadThread = new mThread(MSG_REFRESH, url);
+				onloadThread.start();
 			}
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) 
 			{
-				Toast.makeText(InformationActivity.this, "pullup", Toast.LENGTH_SHORT).show();
+				Page++;
+				String url = "http://www.neitui.me/?dev=android&version=1.0.4&name=devapi&json=1&handle=messages&page=" + Page + "&token=" + Token + "&nowtime=1420785672858";
+				onloadThread = new mThread(LOAD_MORE, url);
+				onloadThread.start();
 			}
 		});
 	}
@@ -121,7 +128,11 @@ public class InformationActivity extends Activity {
 		onloadThread = new mThread(JSON_SUCCESS, url);
 		onloadThread.start();
 	}
-	private Handler imageHandler = new Handler(){
+	/**
+	 * 加载图片的线程
+	 */
+	private Handler imageHandler = new Handler()
+	{
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
@@ -136,6 +147,9 @@ public class InformationActivity extends Activity {
 			super.handleMessage(msg);
 		}
 	};
+	/**
+	 * 加载json的线程
+	 */
 	private Handler mHandler = new Handler(){
 
 		@Override
@@ -144,15 +158,23 @@ public class InformationActivity extends Activity {
 			switch(msg.what)
 			{
 			case MSG_REFRESH:
+				Info_sub_root_lin.removeAllViews();
+			case LOAD_MORE:
 			case JSON_SUCCESS:
 				AnalyzeJson analyzeJson = new AnalyzeJson(msg.obj.toString());
 				List<HashMap<String, String>> list = analyzeJson.GetMessageCenter();
+				if(list == null || list.size() <= 0)
+				{
+					Toast.makeText(InformationActivity.this, "没有更多消息了！", Toast.LENGTH_SHORT).show();
+					break;
+				}
 				addList(list);
 				loadImage(list);
 				break;
 			
 			}
 			super.handleMessage(msg);
+			InfoBodyScrollView.onRefreshComplete();
 		}
 		
 	};
@@ -161,11 +183,22 @@ public class InformationActivity extends Activity {
 		private int MSG;
 		private String URL;
 		private int Item;
+		/**
+		 * 不加载图片时使用
+		 * @param message 消息类型
+		 * @param url 加载路径
+		 */
 		public mThread(int message, String url)
 		{
 			MSG = message;
 			URL = url;
 		}
+		/**
+		 * 加载图片的时候使用
+		 * @param message 消息类型
+		 * @param url 加载路径
+		 * @param Item Item
+		 */
 		public mThread(int message, String url, int Item)
 		{
 			MSG = message;
@@ -181,6 +214,7 @@ public class InformationActivity extends Activity {
 			{
 			case MSG_REFRESH:
 			case JSON_SUCCESS:
+			case LOAD_MORE:
 				if(check.isNetworkConnected(InformationActivity.this) || check.OpenNetwork(InformationActivity.this))
 				{
 					GetHtml GH = new GetHtml();
@@ -237,9 +271,9 @@ public class InformationActivity extends Activity {
 		ImageView logo = new ImageView(InformationActivity.this);
 		logo.setId(Item);
 		LinearLayout.LayoutParams logoparams = new LayoutParams((int)(Height / itemNum * 0.8), (int)(Height / itemNum * 0.8));
-		logoparams.gravity = Gravity.LEFT;
+		logoparams.gravity = Gravity.CENTER_VERTICAL;
 		logoparams.leftMargin = (int)(Height / itemNum * 0.1);
-		logoparams.topMargin = (int)(Height / itemNum * 0.1);
+//		logoparams.topMargin = (int)(Height / itemNum * 0.1);
 		logoparams.rightMargin = (int)(Height / itemNum * 0.1);
 		logo.setLayoutParams(logoparams);
 		logo.setImageResource(R.drawable.main_logo);
@@ -266,7 +300,7 @@ public class InformationActivity extends Activity {
 		TXTop.setLayoutParams(TXTopParams);
 		TXTop.setText(map.get("realname"));
 		TXTop.setPadding(5, 0, 0, 0);
-		TXTop.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 22));
+		TXTop.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 20));
 		TXTop.setGravity(Gravity.CENTER_VERTICAL);
 		innerLeft.addView(TXTop);
 
@@ -301,8 +335,13 @@ public class InformationActivity extends Activity {
 				
 				@Override
 			public void onClick(View arg0) {
-					
-				Toast.makeText(InformationActivity.this, type, Toast.LENGTH_SHORT).show();
+				if(type.equals("9"))
+				{
+					Intent intent = new Intent(InformationActivity.this, SystemInfoActivity.class);
+					intent.putExtra("Token", Token);
+					startActivity(intent);
+				}
+				//Toast.makeText(InformationActivity.this, type, Toast.LENGTH_SHORT).show();
 			}
 		});
 		
