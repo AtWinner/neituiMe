@@ -113,6 +113,7 @@ public class myAlertDialog
 	{
 		DialogAbout.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
 		DialogUserCenter.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
+		DialogInfoCenter.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
 	}
 	public void dismiss()
 	{

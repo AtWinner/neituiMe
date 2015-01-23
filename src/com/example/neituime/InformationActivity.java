@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
+import com.example.adapter.myProgressDialog;
+import com.example.event.myOnKeyListener;
 import com.example.event.myOnTouchListenerChangeBackground;
 import com.example.network.CheckNetwork;
 import com.example.network.GetHtml;
@@ -22,11 +24,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewDebug.IntToString;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -43,6 +49,8 @@ public class InformationActivity extends Activity {
 	private static final int IMG_SUCCESS = 3 ;// 获取图片成功
 	private static final int MSG_REFRESH = 4;// 下拉刷新
 	private static final int LOAD_MORE = 5;//上拉加载更多
+	
+	private myProgressDialog progressDialog = null;
 	
 	private int Page;
 	private int Width;//屏幕宽
@@ -127,6 +135,7 @@ public class InformationActivity extends Activity {
 		
 		onloadThread = new mThread(JSON_SUCCESS, url);
 		onloadThread.start();
+		showDialog();//显示加载框
 	}
 	/**
 	 * 加载图片的线程
@@ -174,7 +183,14 @@ public class InformationActivity extends Activity {
 			
 			}
 			super.handleMessage(msg);
+			progressDialog.dismiss();
 			InfoBodyScrollView.onRefreshComplete();
+			if(msg.what == MSG_REFRESH)
+			{
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				InfoBodyScrollView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+			}
 		}
 		
 	};
@@ -277,6 +293,7 @@ public class InformationActivity extends Activity {
 		logoparams.rightMargin = (int)(Height / itemNum * 0.1);
 		logo.setLayoutParams(logoparams);
 		logo.setImageResource(R.drawable.main_logo);
+	
 		out.addView(logo);
 		
 		
@@ -377,6 +394,14 @@ public class InformationActivity extends Activity {
 		mHandler.removeCallbacks(imageThread);
 		mHandler.removeCallbacks(onloadThread);
 		super.onStop();
+	}
+	private void showDialog()
+	{
+		progressDialog = myProgressDialog.createDialog(InformationActivity.this);
+		progressDialog.setCancelable(false);
+		progressDialog.setOnKeyListener(new myOnKeyListener());
+		progressDialog.setMessage("拼命获取数据中...");
+		progressDialog.show();
 	}
 
 }

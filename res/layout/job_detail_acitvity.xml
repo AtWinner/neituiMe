@@ -177,10 +177,9 @@
         <Button 
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="投递简历"
             android:textColor="@color/white"
             android:textSize="28sp"
-            android:background="@color/MainBlue"
+            android:background="@drawable/blue_white"
             android:id="@+id/QQ"
             android:layout_alignParentRight="true"
             />

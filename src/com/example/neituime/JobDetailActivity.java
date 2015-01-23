@@ -158,8 +158,9 @@ public class JobDetailActivity extends Activity{
 		RelativeLayout.LayoutParams JobBottomRelativeParams = (RelativeLayout.LayoutParams)JobBottomRelative.getLayoutParams();
 		JobBottomRelativeParams.height = height;
 		JobBottomRelative.setLayoutParams(JobBottomRelativeParams);
-		
-		Login.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+		RelativeLayout.LayoutParams LoginParms = (RelativeLayout.LayoutParams)Login.getLayoutParams();
+		LoginParms.width = LoginParms.height = height;
+		Login.setLayoutParams(LoginParms);
 	}
 	private void BindEvent()
 	{
@@ -268,14 +269,7 @@ public class JobDetailActivity extends Activity{
 	}
 	private void SetData()
 	{
-		if(CheckOnlineState.IsOnline(OnlineInfo))
-		{
-			Login.setText("投递简历");
-		}
-		else
-		{
-			Login.setText("投递简历[请登录]");
-		}
+		
 	}
 	private Handler mHandler = new Handler(){
 		@Override

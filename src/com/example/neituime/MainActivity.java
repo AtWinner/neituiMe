@@ -35,6 +35,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -861,9 +862,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi",
-			"Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu", "Airag", "Airedale", "Aisy Cendre",
-			"Allgauer Emmentaler" };
+	private String[] mStrings = { "" };
 	private Handler mHandler = new Handler()
 	{//主要负责的是对反馈回来的数据进行处理，并展现在GridView中
 		ArrayList<HashMap<String, Object>> al;
@@ -898,6 +897,9 @@ public class MainActivity extends Activity implements OnTouchListener {
 			}
 			progressDialog.dismiss();
 			mPullRefreshGridView.onRefreshComplete();
+			String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+					DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+			mPullRefreshGridView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 		}
 	};
 	private String GetUrl(String kcity, String keyword, int page)
