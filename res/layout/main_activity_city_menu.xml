@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--  第一个Tab 对应的布局  -->
-<RelativeLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -12,7 +12,6 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
 	    android:id="@+id/TopCity"
-	    android:layout_alignParentBottom="true"
 	    >
 		<Button
 			android:layout_width="wrap_content"
@@ -78,6 +77,6 @@
 	        </ScrollView>
 	    </LinearLayout>
 	</RelativeLayout>
-</RelativeLayout>
+</LinearLayout>
 
 

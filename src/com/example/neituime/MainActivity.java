@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
@@ -26,7 +27,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.tencent.tauth.Tencent;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +45,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -79,16 +85,11 @@ public class MainActivity extends Activity implements OnTouchListener {
 	private Tencent mTencent;
 	private static final String AppID = "101016468";
 	
-	private ImageButton MainQuit;
-	private ImageButton imageMainAcitvityLogo;
-	private ImageButton MainActivityUserCenter;
-	private ImageButton CityArrow;
 	private PullToRefreshGridView mPullRefreshGridView;
 	private GridView mGridView;
 	private SimpleAdapter sa;
 	private HorizontalScrollView scrollView;
-	private Button btnBity;
-	private TabHost cityTabHost;
+//	private Button btnBity;
 	private Button SelectCommon;
 	private Button SelectAll;
 	
@@ -186,9 +187,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
-		//getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);//隐藏虚拟按键
 		setContentView(R.layout.main_activity);
 		//结束
 		init();
@@ -198,6 +198,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 		CreateCityButton();
 		BindEvent();
 		ForGridView();
+		ActionBar bar = getActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);  
 	}
 	
 	private void init()
@@ -205,15 +207,10 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Width  = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(MainActivity.this, Height);
-		imageMainAcitvityLogo = (ImageButton)findViewById(R.id.imageMainAcitvityLogo);
 		scrollView = (HorizontalScrollView)findViewById(R.id.scrollView);
 		//CitySpinner = (Spinner)findViewById(R.id.city);
 		ButtonInfo = getSharedPreferences("ButtonInfo", MODE_PRIVATE);
 		setAlways = (ImageButton)findViewById(R.id.setAlways);
-		MainQuit = (ImageButton)findViewById(R.id.MainQuit);
-		CityArrow = (ImageButton)findViewById(R.id.CityArrow);
-		MainActivityUserCenter = (ImageButton)findViewById(R.id.MainActivityUserCenter);
-		btnBity = (Button)findViewById(R.id.btnBity);
 		mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.pull_refresh_grid);
 		mGridView = mPullRefreshGridView.getRefreshableView();
 		mListItems = new LinkedList<String>();
@@ -260,8 +257,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 	{
 		int ViewHeight = Height / 13;
 		int ViewWidth = ViewHeight * 13 / 9;
-		LinearLayout.LayoutParams LogoParams = new LinearLayout.LayoutParams(ViewWidth, ViewHeight);//Set the height and width for Logo.13:9
-		imageMainAcitvityLogo.setLayoutParams(LogoParams);
 		LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, (int)(ViewHeight));
 		scrollView.setLayoutParams(scrollParams);
 		LinearLayout.LayoutParams setAlwaysparams = new LayoutParams(ViewHeight , ViewHeight);
@@ -269,23 +264,12 @@ public class MainActivity extends Activity implements OnTouchListener {
 		setAlways.setLayoutParams(setAlwaysparams);
 		String[] items = getResources().getStringArray(R.array.cities);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
-		//CitySpinner.setAdapter(adapter);
 		int GridViewHeight = (int)(Height * 11) / 13;
 		RelativeLayout.LayoutParams GridViewParams = new RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, GridViewHeight);
 		mPullRefreshGridView.setLayoutParams(GridViewParams);
 		int height = Height / 13;
 		int width = height / 2;//返回图片的宽：高=7:11
-		LinearLayout.LayoutParams QuitParams = new LayoutParams(width, height);
-		MainQuit.setLayoutParams(QuitParams);
-		CityArrow.setLayoutParams(QuitParams);
-		RelativeLayout.LayoutParams userCenterParams = (RelativeLayout.LayoutParams) MainActivityUserCenter.getLayoutParams();
-		userCenterParams.width=ViewHeight;
-		userCenterParams.height=ViewHeight;
-		userCenterParams.leftMargin = (Width - ViewHeight) / 2;
-		MainActivityUserCenter.setLayoutParams(userCenterParams);
-		btnBity.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
-		
-		RelativeLayout.LayoutParams cityScrollParams = (RelativeLayout.LayoutParams)bodyCity.getLayoutParams();
+		LinearLayout.LayoutParams cityScrollParams = (LinearLayout.LayoutParams)bodyCity.getLayoutParams();
 		cityScrollParams.height = (int)(Height * 12 / 13);
 		bodyCity.setLayoutParams(cityScrollParams);
 		
@@ -295,14 +279,12 @@ public class MainActivity extends Activity implements OnTouchListener {
 		SelectCommon.setLayoutParams(cityBottomBtnParams);
 		SelectCommon.setTextColor(Color.BLACK);
 		SelectAll.setLayoutParams(cityBottomBtnParams);
+		
+		
 	}
 	private void BindEvent()
 	{
-		CityArrow.setOnClickListener(new MyListener());
-		btnBity.setOnClickListener(new MyListener());
 		setAlways.setOnClickListener(new MyListener());
-		imageMainAcitvityLogo.setOnClickListener(new  MyListener());
-		MainActivityUserCenter.setOnClickListener(new MyListener());
 		SelectCommon.setOnClickListener(new MyListener());
 		SelectAll.setOnClickListener(new MyListener());
 	}
@@ -311,19 +293,8 @@ public class MainActivity extends Activity implements OnTouchListener {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.CityArrow:
-			case R.id.btnBity:
-				ClickCityArrow();
-				break;
 			case R.id.setAlways:
 				ClicksetAlways();
-				break;
-			case R.id.imageMainAcitvityLogo:
-				ClickimageMainAcitvityLogo();
-				break;
-			case R.id.MainActivityUserCenter:
-				ClickMainActivityUserCenter();
-				Tip();//转一圈
 				break;
 			case R.id.SelectCommon:
 				ClickSelectCommonCity();
@@ -382,7 +353,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Animation operatingAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.usercenter_tip);
 		LinearInterpolator lin = new LinearInterpolator();
 		operatingAnim.setInterpolator(lin);
-		MainActivityUserCenter.startAnimation(operatingAnim);
 	}
 	/**
 	 * 点击CityArrow触发的操作
@@ -704,7 +674,7 @@ public class MainActivity extends Activity implements OnTouchListener {
 					}
 				}
 				thisBtn.setTextColor(Color.rgb(31, 102, 146));//再变蓝
-				btnBity.setText(innerText);
+//				btnBity.setText(innerText);
 				Page = 1;
 				Kcity = innerText;
 				CheckNetwork check = new CheckNetwork();
@@ -719,31 +689,6 @@ public class MainActivity extends Activity implements OnTouchListener {
 		});
 		
 		btnCity.setOnTouchListener(new myOnTouchListenerChangeCityBackground());
-//		CitySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//		@Override
-//		public void onItemSelected(AdapterView<?> arg0, View arg1,
-//				int arg2, long arg3) {
-//			Kcity = GetDataSource.GetCity(arg2);
-//			if(IsFirst)
-//			{
-//				Page = 1;
-//				CheckNetwork check = new CheckNetwork();
-//				if(check.isNetworkConnected(MainActivity.this) || check.OpenNetwork(MainActivity.this))
-//				{
-//					progressDialog = ProgressDialog.show(MainActivity.this, "请稍等...", "拼命数据获取中...", true);
-//					MThread m = new MThread(GetUrl(Kcity, Keyword, Page), REFRESH);
-//					m.start();
-//				}
-//			}	
-//			IsFirst = true;
-//		}
-//		@Override
-//		public void onNothingSelected(AdapterView<?> arg0) {
-//			
-//			
-//		}
-//	});
-		
 		linearLayout.addView(btnCity);
 	}
 	/**
@@ -811,22 +756,14 @@ public class MainActivity extends Activity implements OnTouchListener {
 			ButtonInfo = getSharedPreferences("ButtonInfo", MODE_PRIVATE);//需要重新获取一次设置信息
 			CreateButton();
 		}
-//		else
-//		{
-//			Toast.makeText(getApplicationContext(), "没改过", Toast.LENGTH_SHORT).show();
-//		}
 	}
 	
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem setModeItem = menu.findItem(MENU_SET_MODE);
-		setModeItem.setTitle(mPullRefreshGridView.getMode() == Mode.BOTH ? "Change to MODE_PULL_FROM_START"
-				: "Change to MODE_PULL_BOTH");
-
-		return super.onPrepareOptionsMenu(menu);
-	}
-
+	@Override  
+	public boolean onCreateOptionsMenu(Menu menu) {  
+	    MenuInflater inflater = getMenuInflater();  
+	    inflater.inflate(R.menu.main, menu);
+	    return super.onCreateOptionsMenu(menu);  
+	}  
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -835,6 +772,23 @@ public class MainActivity extends Activity implements OnTouchListener {
 						.setMode(mPullRefreshGridView.getMode() == Mode.BOTH ? Mode.PULL_FROM_START
 								: Mode.BOTH);
 				break;
+			case R.id.actionUserCenter:
+				GotoUserCenter();
+				break;
+			case R.id.actionInfoCenter:
+				GotoInfoCenter();
+				break;
+			case R.id.actionAbout:
+				GotoAbout();
+				break;
+			case R.id.action_city:
+				ClickCityArrow();
+				break;
+			case android.R.id.home:
+			case android.R.id.icon:
+				ClickimageMainAcitvityLogo();
+				break;
+
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -1113,40 +1067,30 @@ public class MainActivity extends Activity implements OnTouchListener {
 		progressDialog.setMessage("拼命获取数据中...");
 		progressDialog.show();
 	}
-//	@Override
-//	protected void onDestroy() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onDestroy", Toast.LENGTH_SHORT).show();
-//		super.onDestroy();
-//	}
-//	@Override
-//	protected void onPause() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onPause", Toast.LENGTH_SHORT).show();
-//		super.onPause();
-//	}
-//	@Override
-//	protected void onRestart() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onRestart", Toast.LENGTH_SHORT).show();
-//		super.onRestart();
-//	}
-//	@Override
-//	protected void onResume() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onResume", Toast.LENGTH_SHORT).show();
-//		super.onResume();
-//	}
-//	@Override
-//	protected void onStart() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onStart", Toast.LENGTH_SHORT).show();
-//		super.onStart();
-//	}
-//	@Override
-//	protected void onStop() {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(MainActivity.this, "onStop", Toast.LENGTH_SHORT).show();
-//		super.onStop();
-//	}
+	private void test()
+	{
+		Random random = new Random();
+		int id = random.nextInt();
+		//定义NotificationManager
+        String ns = Context.NOTIFICATION_SERVICE;
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+        CharSequence tickerText = "我的通知栏标题";
+        
+        int icon = R.drawable.message_logo;
+        long when = System.currentTimeMillis();
+        Notification notification = new Notification(icon, tickerText, when);
+        
+        //定义下拉通知栏时要展现的内容信息
+        Context context = getApplicationContext();
+        CharSequence contentTitle = "我的通知栏标展开标题";
+        CharSequence contentText = "我的通知栏展开详细内容";
+        Intent notificationIntent = new Intent(this, BootStartDemo.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+        notification.setLatestEventInfo(context, contentTitle, contentText,
+                contentIntent);
+         
+        //用mNotificationManager的notify方法通知用户生成标题栏消息通知
+        mNotificationManager.notify(id, notification);
+	}
 }

@@ -1,16 +1,14 @@
 package com.example.neituime;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 
 import com.example.adapter.AdjustPageLayout;
 import com.example.adapter.GetScreenSize;
 import com.example.adapter.JobDetailAlertDialog;
 import com.example.adapter.myProgressDialog;
+import com.example.adapter.setMyActionBar;
 import com.example.event.myOnKeyListener;
 import com.example.event.myOnTouchListenerChangeBackground;
 import com.example.neituime.R.string;
@@ -18,17 +16,12 @@ import com.example.network.DocumentsSelect;
 import com.example.network.GetHtml;
 import com.example.network.GetImage;
 import com.example.tencent.CheckOnlineState;
-import com.example.tencent.MyIUiListener;
 import com.example.view.AnalyzeJson;
-import com.tencent.connect.common.Constants;
-import com.tencent.open.utils.HttpUtils.HttpStatusException;
-import com.tencent.open.utils.HttpUtils.NetworkUnavailableException;
-import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,14 +35,14 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -78,10 +71,10 @@ public class JobDetailActivity extends Activity{
 	private int Height;
 	private String URL;
 	private Intent beforeIntent;
-	private ImageButton JobGetBack;
+//	private ImageButton JobGetBack;
 	private ImageButton Creater;
 	private ScrollView JobScrollview;
-	private Button JobbtnGetBack;
+//	private Button JobbtnGetBack;
 	private TextView CreaterInfo;
 	private TextView JobInfo;
 	private TextView JobTitle;
@@ -92,22 +85,25 @@ public class JobDetailActivity extends Activity{
 	private LinearLayout CompanyBody;
 	private LinearLayout DetailTop;
 	private LinearLayout DetailBottom;
-	private RelativeLayout JobBottomRelative;
+//	private RelativeLayout JobBottomRelative;
 	private  myProgressDialog progressDialog = null;
-	private Button Login;
+//	private Button Login;
 	private Tencent mTencent;
 	private SharedPreferences OnlineInfo;
 	
 	private int LabelHeight;
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.job_detail_acitvity);
 		init();
 		SetParams();
 		SetData();
 		BindEvent();
+		ActionBar bar = getActionBar();
+		setMyActionBar set = new setMyActionBar(bar);
+		set.setBarAttribute(true, false, "职位细节");
 		mThread m = new mThread();
 		m.start();
 	}
@@ -122,7 +118,7 @@ public class JobDetailActivity extends Activity{
 		Width = getWindowManager().getDefaultDisplay().getWidth();
 		Height = getWindowManager().getDefaultDisplay().getHeight();
 		Height = GetScreenSize.getUsefulScreenHeight(JobDetailActivity.this, Height);
-		JobGetBack = (ImageButton)findViewById(R.id.JobGetBack);
+//		JobGetBack = (ImageButton)findViewById(R.id.JobGetBack);
 		JobScrollview = (ScrollView)findViewById(R.id.JobScrollview);
 		CreaterInfo = (TextView)findViewById(R.id.CreaterInfo);
 		CreaterInfo.setTextSize(AdjustPageLayout.AdjustListTitleTextSize(Width));
@@ -133,14 +129,14 @@ public class JobDetailActivity extends Activity{
 		JobTitleDetail = (TextView)findViewById(R.id.JobTitleDetail);
 		JobTitleDetail.setTextSize(AdjustPageLayout.AdjustListInfoSize(Width));
 		JobMainLinear = (LinearLayout)findViewById(R.id.JobMainLinear);
-		JobbtnGetBack = (Button)findViewById(R.id.JobbtnGetBack);
+//		JobbtnGetBack = (Button)findViewById(R.id.JobbtnGetBack);
 		CompanyBody = (LinearLayout)findViewById(R.id.CompanyBody);
 		Creater = (ImageButton)findViewById(R.id.Creater);
 		CompanyLogo = (ImageButton)findViewById(R.id.CompanyLogo);
 		DetailBottom = (LinearLayout)findViewById(R.id.DetailBottom);
 		DetailTop = (LinearLayout)findViewById(R.id.DetailTop);
-		Login = (Button)findViewById(R.id.QQ);
-		JobBottomRelative = (RelativeLayout)findViewById(R.id.JobBottomRelative);
+//		Login = (Button)findViewById(R.id.QQ);
+//		JobBottomRelative = (RelativeLayout)findViewById(R.id.JobBottomRelative);
 		mTencent = Tencent.createInstance(AppID, JobDetailActivity.this);
 		showDialog();
 	}
@@ -148,78 +144,78 @@ public class JobDetailActivity extends Activity{
 	{
 		int height = Height / 13;
 		int width = height / 2;//返回图片的宽：高=7:11
-		LinearLayout.LayoutParams params = new LayoutParams(width, height);
-		JobGetBack.setLayoutParams(params);
+//		LinearLayout.LayoutParams params = new LayoutParams(width, height);
+//		JobGetBack.setLayoutParams(params);
 		LinearLayout.LayoutParams scrollParams = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(height * 12));
 		JobScrollview.setLayoutParams(scrollParams);
 		//JobMainLinear.setBackgroundResource(R.drawable.boder_detail);
-		JobbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
+//		JobbtnGetBack.setTextSize(AdjustPageLayout.AdjustTextSizeInYourNeed(Width, 30));
 		
-		RelativeLayout.LayoutParams JobBottomRelativeParams = (RelativeLayout.LayoutParams)JobBottomRelative.getLayoutParams();
-		JobBottomRelativeParams.height = height;
-		JobBottomRelative.setLayoutParams(JobBottomRelativeParams);
-		RelativeLayout.LayoutParams LoginParms = (RelativeLayout.LayoutParams)Login.getLayoutParams();
-		LoginParms.width = LoginParms.height = height;
-		Login.setLayoutParams(LoginParms);
+//		RelativeLayout.LayoutParams JobBottomRelativeParams = (RelativeLayout.LayoutParams)JobBottomRelative.getLayoutParams();
+//		JobBottomRelativeParams.height = height;
+//		JobBottomRelative.setLayoutParams(JobBottomRelativeParams);
+//		RelativeLayout.LayoutParams LoginParms = (RelativeLayout.LayoutParams)Login.getLayoutParams();
+//		LoginParms.width = LoginParms.height = height;
+//		Login.setLayoutParams(LoginParms);
 	}
 	private void BindEvent()
 	{
 		DetailBottom.setOnTouchListener(new myOnTouchListenerChangeBackground());
-		JobGetBack.setOnClickListener(new OnClickListener() {
+//		JobGetBack.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				JobDetailActivity.this.finish();
+//			}
+//		});
+//		JobbtnGetBack.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				JobDetailActivity.this.finish();
+//			}
+//		});
+//		Login.setOnClickListener(new OnClickListener() {
 			
-			@Override
-			public void onClick(View arg0) {
-				JobDetailActivity.this.finish();
-			}
-		});
-		JobbtnGetBack.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				JobDetailActivity.this.finish();
-			}
-		});
-		Login.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				ShowAlertDialog();
-			}
-		});
+//			@Override
+//			public void onClick(View arg0) {
+//				ShowAlertDialog();
+//			}
+//		});
 	}
-	/**
-	 * 显示自定义AlertDialog
-	 */
-	private void ShowAlertDialog()
-	{
-		final JobDetailAlertDialog dialog = new JobDetailAlertDialog(JobDetailActivity.this, Width, Height);
-		dialog.setTextSize(20, R.id.JobDetailDialogShare);
-		dialog.setTextSize(20, R.id.JobDetailDialogSend);
-		if(CheckOnlineState.IsOnline(OnlineInfo))
-		{
-			dialog.IsOnLine();
-		}
-		else
-		{
-			dialog.IsOffLine();
-		}
-		dialog.setOnclickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				GoToSend();
-				dialog.dismiss();				
-			}
-		}, R.id.JobDetailDialogSend);
-		dialog.setOnclickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				DoShare();
-				dialog.dismiss();
-			}
-		}, R.id.JobDetailDialogShare);
-	}
+//	/**
+//	 * 显示自定义AlertDialog
+//	 */
+//	private void ShowAlertDialog()
+//	{
+//		final JobDetailAlertDialog dialog = new JobDetailAlertDialog(JobDetailActivity.this, Width, Height);
+//		dialog.setTextSize(20, R.id.JobDetailDialogShare);
+//		dialog.setTextSize(20, R.id.JobDetailDialogSend);
+//		if(CheckOnlineState.IsOnline(OnlineInfo))
+//		{
+//			dialog.IsOnLine();
+//		}
+//		else
+//		{
+//			dialog.IsOffLine();
+//		}
+//		dialog.setOnclickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				GoToSend();
+//				dialog.dismiss();				
+//			}
+//		}, R.id.JobDetailDialogSend);
+//		dialog.setOnclickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				DoShare();
+//				dialog.dismiss();
+//			}
+//		}, R.id.JobDetailDialogShare);
+//	}
 	/**
 	 * 执行分享
 	 */
@@ -590,5 +586,26 @@ public class JobDetailActivity extends Activity{
 		progressDialog.setMessage("拼命获取数据中...");
 		progressDialog.show();
 	}
-	
+	@Override  
+	public boolean onCreateOptionsMenu(Menu menu) {  
+	    MenuInflater inflater = getMenuInflater();  
+	    inflater.inflate(R.menu.menu_jobdetail, menu);
+	    return super.onCreateOptionsMenu(menu);  
+	}  
+	@Override 
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.jobdetail_share:
+			DoShare();
+			break;
+		case R.id.jobdetail_send:
+			GoToSend();
+			break;
+		case android.R.id.home:
+		case android.R.id.icon:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

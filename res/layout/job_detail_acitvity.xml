@@ -139,50 +139,5 @@
            
         </ScrollView>  
     </LinearLayout>   
-    
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/JobBottomRelative"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="@color/MainBlue"
-        >
-        <LinearLayout 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentLeft="true"
-            >
-            <ImageButton 
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:id="@+id/JobGetBack"
-	            android:background="@drawable/arrow"
-	            />
-	        <Button 
-	            android:layout_width="wrap_content"
-	            android:layout_height="match_parent"
-	            android:text="返回"
-	            android:textColor="@color/white"
-	            android:textSize="30sp"
-	            android:gravity="center_vertical"
-	            android:fontFamily="黑体"
-	            android:background="@color/MainBlue"
-	            android:id="@+id/JobbtnGetBack"
-	            />
-        </LinearLayout>
-        
-        <Button 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:background="@drawable/blue_white"
-            android:id="@+id/QQ"
-            android:layout_alignParentRight="true"
-            />
-
-    </RelativeLayout>
+   
 </RelativeLayout>
