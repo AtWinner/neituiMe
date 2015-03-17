@@ -145,7 +145,7 @@ public class WelcomeActivity extends Activity {
 		return view.getMeasuredWidth();
 	}
 	/**
-	 * 获取控件的高度
+	 * 获取控件的高度 
 	 * @param view
 	 * @return
 	 */

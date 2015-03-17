@@ -80,10 +80,10 @@ public class LocationApplication extends Application {
 				sb.append(location.getAddrStr());
 				//运营商信息
 				sb.append("\noperationers : ");
-				sb.append(location.getOperators());
+				sb.append(location.getOperators()); 
 			}
 			logMsg(sb.toString());
-			Log.i("BaiduLocationApiDem", sb.toString());
+			Log.i("BaiduLocationApiDem\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na", sb.toString()+"");
 		}
 
 

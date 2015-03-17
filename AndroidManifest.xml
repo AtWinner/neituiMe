@@ -34,7 +34,7 @@
 		android:theme="@style/AppTheme"
          >
          <!-- 缺少service会导致定位功能无法启动 -->
-         <service
+         <service 
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >
